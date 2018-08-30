@@ -3,6 +3,11 @@
 *
 !/**/
 !/*.*
+# Build folder
+build
+
+# Mac
+.DS_Store
 
 # Prerequisites
 *.d
