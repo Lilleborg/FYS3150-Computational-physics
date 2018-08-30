@@ -1,8 +1,4 @@
 
-# files without ending
-*
-!/*/
-!/*.*
 # Build folder
 build
 
