@@ -40,3 +40,4 @@ build
 
 # C++
 *.user
+*.autosave
