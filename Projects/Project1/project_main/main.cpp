@@ -14,7 +14,7 @@ inline double exact_sol(double x) {return 1-(1-exp(-10.0))*x-exp(-10.0*x);}
 void gauss_general(uword n,vec &a,vec &b,vec &c,vec &f,vec &sol);
 void save_arrays(string filename,uword n, vec datapoints, vec solution);
 void gauss_specific(int n, vec &b, vec &f, vec &u);
-void arma_lu(int n,int a,int b,int c,vec f,vec datapoints);
+void arma_lu(int expo,int a,int b,int c,vec f,vec datapoints);
 
 int main(int argc, char *argv[])
 {
@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
             b_simpl(j) = (1.0+(j+1))/(double(j+1));
             }
         f_til_simpl = f_til;
+        vec f_LU = f_til;
         start = clock();
         gauss_general(nlong,a,b,c,f_til,sol);
         finish = clock();
@@ -76,7 +77,7 @@ int main(int argc, char *argv[])
             save_arrays(fileoutsimple,nlong,x,u_simpl);
         }
         // LU-decomp
-        arma_lu(n,-1,2,-1,f_til,x);
+        arma_lu(i,-1,2,-1,f_LU,x);
     }
 
     finishtotal = clock();
@@ -122,29 +123,29 @@ void save_arrays(string filename,uword n, const vec datapoints, const vec soluti
     outpoints.save(datafilename,raw_ascii);
 }
 
-void arma_lu(int n,int a,int b,int c,vec f,vec datapoints)
+void arma_lu(int expo,int a,int b,int c,const vec f,const vec datapoints)
 {
+    int n = int(pow(10.0,expo));
     uword nlong = n;
+    string n_string = to_string(expo);
     mat A(nlong,nlong,fill::eye);
     mat L(nlong,nlong);
     mat U(nlong,nlong);
-    vec x(nlong);
+    vec y(nlong);
     vec v(nlong);
-    A = b*A;    // Set diagonal to value b
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j <n; j++) {
-            if (j==i+1){
-                A(i,j) = c;
-            }
-            if (j==i-1){
-                A(i,j) = a;
-            }
-        }
+    A = b*A;    // Set main diagonal to value b
+    // Set lower and upper diagonal to a and c:
+    A(nlong-1,nlong-2) = a; A(nlong-2,nlong-1) = c; A(0,1) = c;
+    for (int i = 1; i < n-1; i++) {
+        A(i,i+1) = c;
+        A(i,i-1) = a;
     }
-
+    // Ax = f,
     lu(L, U, A);
-    x = solve(L, f);
-    v = solve(U, x);
+    // Ly = f
+    y = solve(L, f);
+    // Uv = y
+    v = solve(U, y);
     // v is the solution
-    save_arrays("LU_decomp",nlong,datapoints,v);
+    save_arrays(string("LU_decomp").append(n_string),nlong,datapoints,v);
 }
