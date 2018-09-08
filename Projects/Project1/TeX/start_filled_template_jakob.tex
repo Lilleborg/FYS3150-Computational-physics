@@ -1,0 +1,156 @@
+\documentclass{emulateapj}
+%\documentclass[12pt,preprint]{aastex}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{epsfig,floatflt}
+\usepackage{physics}
+
+
+
+\begin{document}
+
+\title{A spectacular title}
+
+\author{Ola D. Nordmann}
+
+\email{JAKOB@astro.uio.no}
+
+\altaffiltext{1}{Institute of Theoretical Astrophysics, University of
+  Oslo, P.O.\ Box 1029 Blindern, N-0315 Oslo, Norway}
+
+
+%\date{Received - / Accepted -}
+
+\begin{abstract}
+  State problem. Briefly describe method and data. Summarize main results.
+\end{abstract}
+\keywords{cosmic microwave background --- cosmology: observations --- methods: statistical}
+
+\section{Introduction}
+\label{sec:introduction}
+
+Discuss background, physical importance and possibly some history of
+the problem that is being studied in this paper.
+
+
+\section{Method}
+\label{sec:method}
+
+\subsection*{Jakob's \_ Generalized algorithm}
+
+\subsection*{Jakob's \_ Specialized algorithm}
+In our specific case, the Poisson equation REF, we know the value of each element along the tridiagonal matrix in the matrix representation $\vb{A}\vb{u} = \vb{f}$ REF. All elements along the main diagonal are set to $2$ and the first upper and lower diagonals are set to $-1$. We can use this fact to precalculate some of the steps in the general tridiagonal elimination algorithm REF, and also speed up the algorithm by reducing the number of FLOPS needed in the forward and backward substitution.
+
+We can precalculate all the new main diagonal elements $\tilde{b}_i$.
+\begin{align*}
+\qq*{General:}& \tilde{b}_i = b_i - \frac{a_{i-1}c_{i-1}}{\tilde{b}_i}
+\\
+\qq*{using:}& 
+\begin{cases} a_i = -1 \\ c_i = -1 \qc \\ b_i = 2 \end{cases} \text{for all } i
+\\
+&\qq*{and:}
+\tilde{b}_1 = b_1 \qand \tilde{f}_1 = f_1
+\\
+\qq*{Optimized:}& \tilde{b}_i = 2 - \frac{1}{\tilde{b}_{i-1}} 
+\end{align*}
+By starting with $\tilde{b}_1 = b_1 = 2$ we find an optimized analytical expression for the main diagonals that may be fully precalculated
+\begin{equation}
+\tilde{b}_1 = \frac{i+1}{i} .\label{Eq: Optimized main diagonals}
+\end{equation}
+
+We can optimize the forward substitution by reducing the number of FLOPS when updating the source function $f(x)$ on the righthand side.
+\begin{align*}
+\qq*{General:}& \tilde{f}_i = \tilde{f}_i - \frac{a_{i-1}}{\tilde{b}_{i-1}}\tilde{f}_{i-1}
+\\
+\qq*{Optimized:}& \tilde{f}_i = f_i + \frac{\tilde{f}_{i-1}}{\tilde{b}_{i-1}}
+\end{align*}
+where we know $\tilde{b}_{i-1}$ such that the optimized expression with only for the righthand side becomes
+
+\begin{equation}
+\tilde{f}_i = f_i + \frac{i-1}{i}\tilde{f}_{i-1} .\label{Eq: Optimized source function}
+\end{equation}
+which only needs 2 FLOPS.
+
+The backward substitution can also be optimized in a similar way
+\begin{align*}
+\qq*{General:}& v_{i-1} = \frac{\tilde{f}_{i-1} - c_{i-1}v_i}{\tilde{b}_{i-1}}
+\\
+\qq*{Optimized:}& v_{i-1} = \frac{i-1}{i}\qty(\tilde{f}_{i-1}+v_i)
+\end{align*}
+
+Describe method. Define data model and likelihood. Outline how the
+likelihood was computed (grid or MCMC).
+
+Define the power law model in terms of $Q$ and $n$. 
+
+\section{Data}
+\label{sec:data}
+
+Summarize properties of data. Which data are used (experiment,
+frequencies etc.)? Pixel resolution ($N_{\textrm{side}}$),
+$\ell_{\textrm{max}}$ -- everything necessary to repeat the analysis
+for other researchers.
+
+Show a sky map of the smoothed data. Use the Healpix routine
+``smoothing'' to do this; it works just like anafast. Smooth with a
+$7^{\circ}$ beam, and plot with ``map2gif''. Show the RMS pattern as
+well. 
+
+\section{Results}
+\label{sec:results}
+
+
+Show the 2D likelihood contours. Summarize constraints on $Q$ and
+$n$. 
+
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+Summarize results. Discuss their importance, referring to the
+discovery to the initial seeds for structure formation. Mention that
+these results are in good agreement with expectations from
+inflationary theory.
+
+
+
+%\begin{figure}[t]
+%
+%\mbox{\epsfig{figure=filename.eps,width=\linewidth,clip=}}
+%
+%\caption{Description of figure -- explain all elements, but do not
+%draw conclusions here.}
+%\label{fig:figure_label}
+%\end{figure}
+
+
+%
+%\begin{deluxetable}{lccc}
+%%\tablewidth{0pt}
+%\tablecaption{\label{tab:results}}
+%\tablecomments{Summary of main results.}
+%\tablecolumns{4}
+%\tablehead{Column 1  & Column 2 & Column 3 & Column 4}
+%\startdata
+%Item 1 & Item 2 & Item 3 & Item 4
+%\enddata
+%\end{deluxetable}
+
+
+
+\begin{acknowledgements}
+  Who do you want to thank for helping out with this project?
+\end{acknowledgements}
+
+\begin{thebibliography}{}
+
+\bibitem[G{\'o}rski et al.(1994)]{gorski:1994} G{\'o}rski, K. M.,
+  Hinshaw, G., Banday, A. J., Bennett, C. L., Wright, E. L., Kogut,
+  A., Smoot, G. F., and Lubin, P.\ 1994, ApJL, 430, 89
+
+\end{thebibliography}
+
+
+\end{document}
