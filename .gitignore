@@ -49,3 +49,4 @@ build
 *.aux
 *.log
 *synctex.gz
+*.bib
