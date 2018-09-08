@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     }
     mat errors(exponent,2);
     if (exponent == int(7)){
-        cout << "exponent = " << exponent << ". Saving errors!" << endl;
+        cout << "Max exponent = " << exponent << ". Saving errors to file!" << endl;
     }
     for (int i = 1; i <= exponent; ++i ){
         int n = int(pow(10.0,i));
@@ -74,17 +74,17 @@ int main(int argc, char *argv[])
         time = time_it(string("begin"),start,finish);
         gauss_general(nlong,a,b,c,f_til,sol);
         time = time_it(string("stop"),start,finish);
-        printf("Time used general method = %.7f\n",time);
+        printf("Time used general method = %f\n",time);
 
         timespes = time_it(string("begin"),start,finish);
         gauss_specific(n,b_simpl,f_til_simpl,u_simpl);
         timespes = time_it(string("stop"),start,finish);
-        printf("Time used specific method = %.7f\n",timespes);
+        printf("Time used specific method = %f\n",timespes);
         if (time-timespes < time_diff){
             cout << "The general method is as fast as the specific method!" << endl;
         }
         else{
-        printf("The specific method is = %.15f s faster than the general\n",(time-timespes));
+        printf("The specific method is = %fs faster than the general\n",(time-timespes));
         }
         if (exponent == int(7)){
             errors.at(i-1,0) = max_rel_error(u_simpl,exact);
@@ -92,7 +92,6 @@ int main(int argc, char *argv[])
         }
 
         if (i<4){
-            //save_arrays(fileoutsimple,nlong,x,u_simpl);
             save_arrays(fileout,nlong,x,sol,i);
         }
         if (i<4){
