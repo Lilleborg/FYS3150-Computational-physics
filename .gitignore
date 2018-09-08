@@ -48,4 +48,4 @@ build
 # TeX
 *.aux
 *.log
-*.gz
+*synctex.gz
