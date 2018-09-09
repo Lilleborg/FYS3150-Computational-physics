@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 
 
-n = 7
+n = 8
 error = np.loadtxt("build/max_rel_errors_"+str(n)+".dat",unpack=True)
 
 

@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     int exponent;
     clock_t start, finish;
     clock_t starttotal,finishtotal;
-    double time,timespes,timetot;
+    double time,timespes,timeLU,timetot;
     double time_diff = double (1e-8);
     timetot = time_it(string("begin"),starttotal,finishtotal);
     // Bad ussage test
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         exponent = atoi(argv[2]);
     }
     mat errors(exponent,2);
-    if (exponent == int(7)){
+    if (exponent == int(8)){
         cout << "Max exponent = " << exponent << ". Saving errors to file!" << endl;
     }
     for (int i = 1; i <= exponent; ++i ){
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
         else{
         printf("The specific method is = %fs faster than the general\n",(time-timespes));
         }
-        if (exponent == int(7)){
+        if (exponent == int(8)){
             errors.at(i-1,0) = max_rel_error(u_simpl,exact);
             errors(i-1,1) = h;
         }
@@ -96,14 +96,14 @@ int main(int argc, char *argv[])
         }
         if (i<4){
             // LU-decomp
-            time = time_it(string("begin"),start,finish);
+            timeLU = time_it(string("begin"),start,finish);
             arma_lu(i,-1,2,-1,f_LU,x);
-            time = time_it(string("stop"),start,finish);
-            printf("Time used LU-decomposition = %.7f\n",n,n,time);
+            timeLU = time_it(string("stop"),start,finish);
+            printf("Time used LU-decomposition = %.7f\n",timeLU);
         }
 
     }
-    if (exponent == int(7)){
+    if (exponent == int(8)){
         errors.save(string("max_rel_errors_").append(to_string(exponent)).append(".dat"),raw_ascii);
     }
     timetot = time_it(string("stop"),starttotal,finishtotal);
@@ -191,8 +191,9 @@ double time_it(string user,clock_t &start, clock_t &finish){
         return time;
     }
     if (user == string("stop")){
+        //printf("%f",double(start));
         finish = clock();
-        double time = double((finish-start))/double(CLOCKS_PER_SEC);
+        double time = double(finish-start)/double(CLOCKS_PER_SEC);
         return time;
     }
     return time;
