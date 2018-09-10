@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     timetot = time_it(string("begin"),starttotal,finishtotal);
     // Bad ussage test
     if(argc!=3){
-        printf("Bad ussage bro; want [number of grid points in base 10, 10^n; data text file name]\n");
+        printf("Bad ussage bro; want [data file name starting; number of grid points in base 10, 10^n]\n");
         exit(1);
     }
     else{
