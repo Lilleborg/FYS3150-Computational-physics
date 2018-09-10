@@ -50,3 +50,4 @@ build
 *.log
 *synctex.gz
 *.bib
+TeXs__Reports
