@@ -8,8 +8,8 @@ test = "gauss_elim_"
 n = 3
 for k in range(1,n+1):
 	try:
-		numerical = np.loadtxt("build/"+test+str(k)+"sol.dat")
-		x = np.loadtxt("build/"+test+str(k)+"points.dat")
+		numerical = np.loadtxt("../build/"+test+str(k)+"sol.dat")
+		x = np.loadtxt("../build/"+test+str(k)+"points.dat")
 		
 	except:
 		print "Failed in loading datafiles"
@@ -31,9 +31,9 @@ plt.tight_layout()
 plt.figure(2)
 for k in range(1,n+1):
 	try:
-		numerical = np.loadtxt("build/"+test+str(k)+"sol.dat")
-		x = np.loadtxt("build/"+test+str(k)+"points.dat")
-		LU = np.loadtxt("build/LU_decomp"+str(k)+"sol.dat")
+		numerical = np.loadtxt("../build/"+test+str(k)+"sol.dat")
+		x = np.loadtxt("../build/"+test+str(k)+"points.dat")
+		LU = np.loadtxt("../build/LU_decomp"+str(k)+"sol.dat")
 	except:
 		print "Failed in loading datafiles"
 		exit()
