@@ -192,11 +192,11 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
 
 void test_largest_offdiagonal(){
     uword n = 10; // test dimensions
-    mat A(n,n,fill::randu); // fill matrix with random elements
-    uword kgoal = n/2+2, lgoal = n/2+2;   // set indices for max value
+    mat A(n,n,fill::ones); // fill matrix with random elements
+    uword kgoal = n/2-2, lgoal = n/2+2;   // set indices for max value
     int k,l;                        // computed values
     double max;
-    A(kgoal,lgoal) = 20.0;          // max value of matrix (not on main diagonal)
+    A(kgoal,lgoal) = 200.0;          // max value of matrix (not on main diagonal)
     cout << A << endl;
     largest_offdiagonal(n,A,k,l,max);
     if (int(kgoal) != k && int(lgoal) != l){
