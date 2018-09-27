@@ -13,15 +13,28 @@ void matrix_filling(uword N, double h, mat &A);
 void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max);
 void matrix_filling_prototype(uword N, double h, mat &A, string &cmd, double &rho0);
 void Jakobi_rotate(uword N, mat &A, int &l, int &k);
+void test_largest_offdiagonal();
 
 int main(int argc, char *argv[])
 {
     if (argc < 2){
-        cout << "---Please give commands: N, problem1/problem2 ---" << endl;
+        cout << "--- Please give commands: N, problem1/problem2 ---" << endl;
     }
+
     //Initialize matrices and parameters
-    uword N = atoi(argv[1]);
+    uword N = uword (atoi(argv[1]));
     string cmd = argv[2]; //Either "problem1" or "problem2"
+
+    if (argc == 4){
+        cout << "--- TESTING OPTION STARTED; if argv[3] == 1, only tests will be ran ---" << endl;
+        int testing = atoi(argv[3]);
+        // Tests:
+        test_largest_offdiagonal();
+        // Option for exiting:
+        if (testing == 1){
+            exit(1);
+        }
+        }
 
     double rhomax = 8.; double rho0 = 0.; //TEST FOR RHO
     double h = (rhomax-rho0)/N;
@@ -59,10 +72,10 @@ int main(int argc, char *argv[])
     int k, l;
     double max = 0.0001;
     int iterations = 0; int maxiter = 5*N*N;
-    double tolerance = 1E-6; //IMPLEMENT THIS
+    double tolerance = 1E-6;
 
     time = time_it(string("begin"),start,finish); //Start clock
-    while ( iterations <= maxiter && max > tolerance){ //NEED TO IMPLEMENT MAX < TOLERANCE
+    while ( iterations <= maxiter && max > tolerance){
 
         largest_offdiagonal(N, A, k, l, max);
         //cout << "k " << k << "l " << l << endl;
@@ -131,7 +144,7 @@ void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max){
         for (int j = i+1; j < N; j++){
              double a_kl = fabs(A(i,j));
              if (a_kl > max){
-                 max = fabs(a_kl); k = i; l = j;
+                 max = fabs(a_kl); k = i; l = j; // updating k and l values to represent the position of max element in A
              }
         }
     }
@@ -168,10 +181,33 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
 
 }
 
-void test_largest_diagonal(){
+
+void test_largest_offdiagonal(){
+    uword n = 10; // test dimensions
+    mat A(n,n,fill::randu); // fill matrix with random elements
+    uword kgoal = 60, lgoal = 10;   // set indices for max value
+    int k,l;                        // computed values
+    double max;
+    A(kgoal,lgoal) = 20.0;          // max value of matrix (not on main diagonal)
+    cout << A << endl;
+    largest_offdiagonal(n,A,k,l,max);
+    if (int(kgoal) != k && int(lgoal) != l){
+        printf("Test for largest off-diagonal NOT succesfull!\n");
+        printf("Found:\n");
+        printf("k = %d, l = %d, max element = %f\n",k,l,max);
+        printf("Expected:\n");
+        printf("kgoal = %d, lgoal = %d\n",int(kgoal),int(lgoal));
+    }
+    else{
+        printf("Test for largest off-diagonal finished succesfully!\n");
+        printf("Found:\n");
+        printf("k = %d, l = %d, max element = %f\n",k,l,max);
+        printf("Expected:\n");
+        printf("kgoal = %d, lgoal = %d\n",int(kgoal),int(lgoal));
+    }
+
 
 }
-
 
 double time_it(string user,clock_t &start, clock_t &finish){
     double time = 0.;
