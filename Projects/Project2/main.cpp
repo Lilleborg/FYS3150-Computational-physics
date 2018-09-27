@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     uword N = uword (atoi(argv[1]));
     string cmd = argv[2]; //Either "problem1" or "problem2"
 
+    //TESTING ALL ALGORITHMS
     if (argc == 4){
         cout << "--- TESTING OPTION STARTED; if argv[3] == 1, only tests will be ran ---" << endl;
         int testing = atoi(argv[3]);
