@@ -44,7 +44,13 @@ int main(int argc, char *argv[])
         //cout << "---Our initial matrix A is---" << endl;
         //cout << A << endl;
     }
-
+    if (cmd == "problem3"){
+        cout << "---Initializing solving of problem 2: Electron in HO-potential---" << endl;
+        vec omega(4); omega(0)=0.001; omega(1)=0.5; omega(2)=1.0; omega(3)=5.0;
+        matrix_filling_prototype(N, h, A, cmd, rho0);
+        //cout << "---Our initial matrix A is---" << endl;
+        //cout << A << endl;
+    }
 
     //Check with analytical solutions
     vec eigval; mat eigvec;
@@ -128,7 +134,7 @@ void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max){
     //Finds largest off-diagonal element value in a matrix A
      max = 0;
     for (int i = 0; i < N; i++){
-        for (int j = i+1; j < N; j++){
+        for (int j = i+1; j < N; j++){ //Loop over upper triangular part of matrix A
              double a_kl = fabs(A(i,j));
              if (a_kl > max){
                  max = fabs(a_kl); k = i; l = j;
@@ -140,7 +146,7 @@ void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max){
 void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, double &rho0){
     //Fills an empty matrix as a Toeplitz tridiagonal matrix
 
-    //Fill diagonals for problem 1
+    //Fill diagonals for problem 1 - BUCKLING BEAM
     if (cmd == "problem1"){
        double d_val= 2/h*h; double a_val = -1/(h*h);
 
@@ -151,7 +157,7 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
             A(i-1,i)= A (i,i-1);
         }
     }
-    //Fill diagonals for problem 2
+    //Fill diagonals for problem 2 - ONE ELECTRON IN HO
     if (cmd == "problem2"){
        double d_val; double e_val = -1./(h*h);
 
@@ -165,6 +171,7 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
            A(i-1,i) = A(i,i-1);
        }
     }
+
 
 }
 
@@ -186,6 +193,29 @@ double time_it(string user,clock_t &start, clock_t &finish){
     }
     return time;
 }
+
+/*
+void save_arrays(string filename,uword N, const vec datapoints, const vec solution, int data){
+    // Adding endpoints to arrays that are to be saved
+    vec outsol(n+2);
+    outsol(0) = 0.0; outsol.at(n+1)=0.0;
+    for (uword i=1;i<=n;i++){
+        outsol(i) = solution(i-1);
+    }
+    string solfilename = filename + "sol.dat";
+    string datafilename = filename + "points.dat";
+    outsol.save(solfilename,arma::raw_ascii);
+    if (data != 0){
+        vec outpoints(n+2);
+        outpoints(0)=0.0; outpoints.at(n+1)=1.0;
+        for (uword i = 1; i <=n; i++){
+            outpoints(i) = datapoints(i-1);
+        }
+        outpoints.save(datafilename,raw_ascii);
+
+    }
+}
+*/
 
 //-------------------------OLD VERSION OF MATRIX FILLING-------------------------
 void matrix_filling(uword N, const double h, mat &A){
