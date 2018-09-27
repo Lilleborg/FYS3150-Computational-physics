@@ -11,7 +11,7 @@ using namespace arma;
 double time_it(string user, clock_t &start,clock_t &finish );
 void matrix_filling(uword N, double h, mat &A);
 void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max);
-void matrix_filling_prototype(uword N, double h, mat &A, string &cmd, double &rho0);
+void matrix_filling_prototype(uword N, double h, mat &A, string &cmd, double &rho0, double &w);
 void Jakobi_rotate(uword N, mat &A, int &l, int &k);
 // Test-functions
 void test_largest_offdiagonal();
@@ -20,12 +20,8 @@ void test_eigenvals();
 int main(int argc, char *argv[])
 {
     if (argc < 2){
-        cout << "--- Please give commands: N, problem1/problem2 ---" << endl;
+        cout << "--- Please give commands: N, problem1/problem2/problem3, FIX THIS ---" << endl;
     }
-
-    //Initialize matrices and parameters
-    uword N = uword (atoi(argv[1]));
-    string cmd = argv[2]; //Either "problem1" or "problem2"
 
     //TESTING ALL ALGORITHMS
     if (argc == 4){
@@ -40,70 +36,142 @@ int main(int argc, char *argv[])
         }
         }
 
-    double rhomax = 8.; double rho0 = 0.; //TEST FOR RHO
-    double h = (rhomax-rho0)/N;
-    mat A = zeros<mat>(N,N);
-
-    //Function for measuring time
+    //FUNCTION FOR MEASURING TIME
     clock_t start, finish;
     double time,time_anal;
 
-    //Call on void that fills matrix as a Toeplitz
-    if (cmd == "problem1"){
-        cout << "---Initializing solving of problem 1: A buckling beam---" << endl;
-        matrix_filling(N, h, A);
-        //cout << "---Our initial matrix A is---" << endl;
-        //cout << A << endl;
-    }
-    if (cmd == "problem2"){
-        cout << "---Initializing solving of problem 2: Electron in HO-potential---" << endl;
-        matrix_filling_prototype(N, h, A, cmd, rho0);
-        //cout << "---Our initial matrix A is---" << endl;
-        //cout << A << endl;
-    }
-    if (cmd == "problem3"){
-        cout << "---Initializing solving of problem 2: Electron in HO-potential---" << endl;
-        vec omega(4); omega(0)=0.001; omega(1)=0.5; omega(2)=1.0; omega(3)=5.0;
-        matrix_filling_prototype(N, h, A, cmd, rho0);
-        //cout << "---Our initial matrix A is---" << endl;
-        //cout << A << endl;
-    }
+    //INITIALIZE PARAMETERS
+    uword N = uword (atoi(argv[1]));
+    string cmd = argv[2]; //Either "problem1", "problem2", "problem3"
+    mat A = zeros<mat>(N,N);
+    vec eigval; mat eigvec; //For analytical solutions
 
-    //Check with analytical solutions
-    vec eigval; mat eigvec;
-    time_anal = time_it(string("begin"),start,finish); //Start clock
-    eig_sym(eigval, eigvec, A);
-    cout << "The analytical eigenvalues of A are: " << endl;
-     cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
-    time_anal = time_it(string("stop"),start,finish); //Stop clock
-    printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
-
-    //Symmetry transformation
     int k, l;
-    double max = 0.0001;
+    double max = 0.0001; //Just to get while-loop started
     int iterations = 0; int maxiter = 5*N*N;
     double tolerance = 1E-6;
+    vec omega(4); omega(0)=0.001; omega(1)=0.5; omega(2)=1.0; omega(3)=5.0; double w; //Oscillator frequency
 
-    time = time_it(string("begin"),start,finish); //Start clock
-    while ( iterations <= maxiter && max > tolerance){
+    //MAIN ALGORITHM BASED ON CHOSEN PROBLEM TO SOLVE
+    if (cmd == "problem1"){
+        cout << "---Initializing solving of problem 1: A buckling beam---" << endl;
+        double rhomax = 1.; double rho0 = 0.;
+        double h = (rhomax-rho0)/N; //STEP SIZE AND VALUES FOR DIMLESS RHO
 
-        largest_offdiagonal(N, A, k, l, max);
-        //cout << "k " << k << "l " << l << endl;
-        Jakobi_rotate(N, A, l, k);
-        //cout << max << endl;
-        //cout << iterations << endl;
-        iterations++;
+        w = omega[2]; //Oscillator frequency
+        matrix_filling_prototype(N, h, A, cmd, rho0, w);
+        //cout << "---Our initial matrix A is---" << endl;
+        //cout << A << endl;
+
+        //ANALYTICAL SOLUTIONS
+        time_anal = time_it(string("begin"),start,finish); //Start clock
+        eig_sym(eigval, eigvec, A);
+        time_anal = time_it(string("stop"),start,finish); //Stop clock
+        //cout << "The analytical eigenvalues of A are: " << endl;
+        //cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
+        //printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
+
+        //SAVE ANALYTICAL SOLUTIONS TO FILE
+
+        time = time_it(string("begin"),start,finish); //Start clock
+        //SYMMETRY TRANSFORMATION
+        while ( iterations <= maxiter && max > tolerance){
+            largest_offdiagonal(N, A, k, l, max);
+            Jakobi_rotate(N, A, l, k);
+            iterations++;
+            }
+        time = time_it(string("stop"),start,finish); //Stop clock
+
+        //SAVE NUMERICAL SOLUTIONS TO FILE
+
+    }
+
+    if (cmd == "problem2"){
+        cout << "---Initializing solving of problem 2: Electron in HO-potential---" << endl;
+
+        double rhomax = 8.; double rho0 = 0.;
+        double h = (rhomax-rho0)/N; //STEP SIZE AND VALUES FOR DIMLESS RHO
+
+        w = omega[2]; //Oscillator frequency
+        matrix_filling_prototype(N, h, A, cmd, rho0, w);
+        //cout << "---Our initial matrix A is---" << endl;
+        //cout << A << endl;
+
+        //ANALYTICAL SOLUTIONS
+        time_anal = time_it(string("begin"),start,finish); //Start clock
+        eig_sym(eigval, eigvec, A);
+        time_anal = time_it(string("stop"),start,finish); //Stop clock
+        cout << "The analytical eigenvalues of A are: " << endl;
+        cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
+        //printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
+
+        //SAVE ANALYTICAL SOLUTIONS TO FILE
+
+        time = time_it(string("begin"),start,finish); //Start clock
+        //SYMMETRY TRANSFORMATION
+        while ( iterations <= maxiter && max > tolerance){
+            largest_offdiagonal(N, A, k, l, max);
+            Jakobi_rotate(N, A, l, k);
+            iterations++;
+            }
+        time = time_it(string("stop"),start,finish); //Stop clock
+        vec a = diagvec(A, k=0); a = sort(a);
+        cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the first eigenvalues are---" << endl;
+        cout << "lambda_0 = " << a[0] << " lambda_1 = "<< a[1] << " lambda_2 = " << a[2] << endl; //Extracted eigenvalues from A, transpose the vector and sort it according to values
+
+
+        //SAVE NUMERICAL SOLUTIONS TO FILE
+
+    }
+
+    if (cmd == "problem3"){
+        cout << "---Initializing solving of problem 2: Two electrons in HO-potential---" << endl;
+
+        double rhomax = 1.; double rho0 = 0.;
+        double h = (rhomax-rho0)/N; //STEP SIZE AND VALUES FOR DIMLESS RHO
+
+        for (int i = 0; i < 4; i++){
+            w = omega[i];
+            matrix_filling_prototype(N, h, A, cmd, rho0, w);
+            cout << "---Our initial matrix A is---" << endl;
+            cout << A << endl;
+
+            //ANALYTICAL SOLUTIONS
+            time_anal = time_it(string("begin"),start,finish); //Start clock
+            eig_sym(eigval, eigvec, A);
+            //cout << "The analytical eigenvalues of A are: " << endl;
+            //cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
+            time_anal = time_it(string("stop"),start,finish); //Stop clock
+            //printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
+
+            //SAVE ANALYTICAL SOLUTIONS TO FILE
+
+
+            time = time_it(string("begin"),start,finish); //Start clock
+            //SYMMETRY TRANSFORMATION
+            while ( iterations <= maxiter && max > tolerance){
+                largest_offdiagonal(N, A, k, l, max);
+                Jakobi_rotate(N, A, l, k);
+                iterations++;
+                }
+            time = time_it(string("stop"),start,finish); //Stop clock
+
+            //SAVE NUMERICAL SOLUTIONS TO FILE
         }
+    }
 
-    time = time_it(string("stop"),start,finish); //Stop clock
+    /*
     printf("Time spent on symmetry transformation for dim(A) = %d was t = %f s!\n", N ,time);
 
     vec a = diagvec(A, k=0); a = sort(a);
     cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the first eigenvalues are---" << endl;
     cout << "lambda_0 = " << a[0] << " lambda_1 = "<< a[1] << " lambda_2 = " << a[2] << endl; //Extracted eigenvalues from A, transpose the vector and sort it according to values
-    return 0;
+    */
 
+    return 0;
     }
+
+//----- VOIDS AND FUNCTIONS -----------------------------------------------------------------------
 
 void Jakobi_rotate(uword N, mat &A, int &l, int &k){
     //Jakobi with a k to honor our dear Jakob <3
@@ -160,7 +228,7 @@ void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max){
     }
 }
 
-void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, double &rho0){
+void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, double &rho0, double &w){
     //Fills an empty matrix as a Toeplitz tridiagonal matrix
 
     //Fill diagonals for problem 1 - BUCKLING BEAM
@@ -178,17 +246,32 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
     if (cmd == "problem2"){
        double d_val; double e_val = -1./(h*h);
 
-       A(N-1,N-1) = 2/(h*h) + (rho0 + (N-1)*h)*(rho0 + (N-1)*h);
-       A(0,0) = 2./(h*h);
+       A(N-1,N-1) = 2/(h*h) + w*w*(rho0 + (N-1)*h)*(rho0 + (N-1)*h);
+       A(0,0) = 2./(h*h) + w*w*(rho0 + h)*(rho0 + h);
        A(N-2, N-1) = e_val; A(N-1, N-2) = e_val; A(0,1) = e_val;
        for (int i = 1; i < N-1; i++) {
-           d_val= 2./(h*h) + (rho0 + i*h)*(rho0 + i*h);
+           d_val= 2./(h*h) + w*w*(rho0 + (i+1)*h)*(rho0 + (i+1)*h);
+           A(i, i) = d_val;
+           A(i, i-1) = e_val;
+           A(i-1,i) = A(i,i-1);
+       }
+    }
+    //Fill diagonals for problem 3 - TWO ELECTRONS IN HO
+    if (cmd == "problem3"){
+       double d_val; double e_val = -1./(h*h);
+
+       A(N-1, N-1) = 2/(h*h) + w*w*(rho0 + (N-1)*h)*(rho0 + (N-1)*h) + 1./(rho0 + (N-1)*h); // A(i,i) = 2/h^2 + w^2*rho_i^2 + 1/rho_i
+       A(0, 0) = 2./(h*h) + w* w* ( rho0 + h )*( rho0 + h) + 1./(rho0 + h);
+       A(N-2, N-1) = e_val; A(N-1, N-2) = e_val; A(0,1) = e_val;
+       for (int i = 1; i < N-1; i++) {
+           d_val= 2./(h*h) + w*w*(rho0 + (i+1)*h)*(rho0 + (i+1)*h) + 1./(rho0 + (i+1)*h);
            A(i, i) = d_val;
            A(i, i-1) = e_val;
            A(i-1,i) = A(i,i-1);
        }
     }
 }
+
 void test_eigenvals(){
     uword n = 4;
     int iterations = 5*n*n,k,l,i=0;
