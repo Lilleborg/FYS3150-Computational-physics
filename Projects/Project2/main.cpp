@@ -13,7 +13,9 @@ void matrix_filling(uword N, double h, mat &A);
 void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max);
 void matrix_filling_prototype(uword N, double h, mat &A, string &cmd, double &rho0);
 void Jakobi_rotate(uword N, mat &A, int &l, int &k);
+// Test-functions
 void test_largest_offdiagonal();
+void test_eigenvals();
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +33,7 @@ int main(int argc, char *argv[])
         int testing = atoi(argv[3]);
         // Tests:
         test_largest_offdiagonal();
+        test_eigenvals();
         // Option for exiting:
         if (testing == 1){
             exit(1);
@@ -185,10 +188,27 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
            A(i-1,i) = A(i,i-1);
        }
     }
-
-
 }
+void test_eigenvals(){
+    uword n = 4;
+    int iterations = 5*n*n,k,l,i=0;
+    double max = 1, tol = 1e-6;
+    mat A(n,n,fill::randu);
+    mat B = A.t()*A;    // B is symmetric
 
+    vec eigval;
+    mat eigvec;
+    eig_sym(eigval,eigvec,B);
+    //cout << eigval << " " << eigvec << endl;
+    while (i < iterations && max > tol){
+        largest_offdiagonal(n,B,k,l,max);
+        Jakobi_rotate(n,B,l,k);
+        i++;
+    }
+    vec calc_eigenval = sort(diagvec(B));
+    //cout << calc_eigenval << endl;
+    //for ()
+}
 
 void test_largest_offdiagonal(){
     uword n = 10; // test dimensions
@@ -197,7 +217,7 @@ void test_largest_offdiagonal(){
     int k,l;                        // computed values
     double max;
     A(kgoal,lgoal) = 200.0;          // max value of matrix (not on main diagonal)
-    cout << A << endl;
+
     largest_offdiagonal(n,A,k,l,max);
     if (int(kgoal) != k && int(lgoal) != l){
         printf("Test for largest off-diagonal NOT succesfull!\n");
