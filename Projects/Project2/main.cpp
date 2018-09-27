@@ -10,7 +10,7 @@ using namespace arma;
 //Functions
 double time_it(string user, clock_t &start,clock_t &finish );
 void matrix_filling(uword N, double h, mat &A);
-void largest_offdiagonal(uword N, mat &A, int &k, int &l);
+void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max);
 void matrix_filling_prototype(uword N, double h, mat &A, string &cmd, double &rho0);
 void Jakobi_rotate(uword N, mat &A, int &l, int &k);
 
@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
     if (cmd == "problem2"){
         cout << "---Initializing solving of problem 2: Electron in HO-potential---" << endl;
         matrix_filling_prototype(N, h, A, cmd, rho0);
-        //cout << "---Our initial matrix A is---" << endl;
-        //cout << A << endl;
+        cout << "---Our initial matrix A is---" << endl;
+        cout << A << endl;
     }
 
 
@@ -56,13 +56,19 @@ int main(int argc, char *argv[])
 
     //Symmetry transformation
     int k, l;
-    int iterations = 0; int maxiter = 100*N*N;
-    double tolerance = 1E-10; //IMPLEMENT THIS
+    double max = 0.0001;
+    int iterations = 0; int maxiter = 10*N*N;
+    double tolerance = 1E-6; //IMPLEMENT THIS
 
+    //-------------------------------
     time = time_it(string("begin"),start,finish); //Start clock
-    while (iterations <= maxiter){ //NEED TO IMPLEMENT MAX < TOLERANCE
-        largest_offdiagonal(N, A, k, l);
+    while ( iterations <= maxiter && max > tolerance){ //NEED TO IMPLEMENT MAX < TOLERANCE
+
+        largest_offdiagonal(N, A, k, l, max);
+        cout << "k " << k << "l " << l << endl;
         Jakobi_rotate(N, A, l, k);
+        cout << max << endl;
+        cout << iterations << endl;
         iterations++;
         }
 
@@ -73,7 +79,6 @@ int main(int argc, char *argv[])
     cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the eigenvalues are---" << endl;
     cout << sort(a.t()) << endl; //Extracted eigenvalues from A, transpose the vector and sort it according to values
     return 0;
-
 
     }
 
@@ -120,9 +125,9 @@ void Jakobi_rotate(uword N, mat &A, int &l, int &k){
     }
 }
 
-void largest_offdiagonal(uword N, mat &A, int &k, int &l){
+void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max){
     //Finds largest off-diagonal element value in a matrix A
-    double max = 0;
+     max = 0;
     for (int i = 0; i < N; i++){
         for (int j = i+1; j < N; j++){
              double a_kl = fabs(A(i,j));
@@ -149,13 +154,13 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
     }
     //Fill diagonals for problem 2
     if (cmd == "problem2"){
-       double d_val; double e_val = -1/(h*h);
+       double d_val; double e_val = -1./(h*h);
 
-       A(N-1,N-1) = 2/h*h + (rho0 + (N-1)*h)*(rho0 + (N-1)*h);
-       A(0,0) = 2/h*h + rho0;
-       A(N-2, N-1) = e_val; A(0,1) = e_val;
-       for (int i = 1; i < N; i++) {
-           d_val= 2/h*h + (rho0 + i*h)*(rho0 + i*h);
+       A(N-1,N-1) = 2/(h*h) + (rho0 + (N-1)*h)*(rho0 + (N-1)*h);
+       A(0,0) = 2./(h*h);
+       A(N-2, N-1) = e_val; A(N-1, N-2) = e_val; A(0,1) = e_val;
+       for (int i = 1; i < N-1; i++) {
+           d_val= 2./(h*h) + (rho0 + i*h)*(rho0 + i*h);
            A(i, i) = d_val;
            A(i, i-1) = e_val;
            A(i-1,i) = A(i,i-1);
