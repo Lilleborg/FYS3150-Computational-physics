@@ -168,6 +168,12 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
     }
 
 }
+
+void test_largest_diagonal(){
+
+}
+
+
 double time_it(string user,clock_t &start, clock_t &finish){
     double time = 0.;
     if (user == string("begin")){
