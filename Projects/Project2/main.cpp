@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     uword N = atoi(argv[1]);
     string cmd = argv[2]; //Either "problem1" or "problem2"
 
-    double rhomax = 1.; double rho0 = 0; //TEST FOR RHO
+    double rhomax = 8.; double rho0 = 0.; //TEST FOR RHO
     double h = (rhomax-rho0)/N;
     mat A = zeros<mat>(N,N);
 
@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
     if (cmd == "problem2"){
         cout << "---Initializing solving of problem 2: Electron in HO-potential---" << endl;
         matrix_filling_prototype(N, h, A, cmd, rho0);
-        cout << "---Our initial matrix A is---" << endl;
-        cout << A << endl;
+        //cout << "---Our initial matrix A is---" << endl;
+        //cout << A << endl;
     }
 
 
@@ -50,38 +50,37 @@ int main(int argc, char *argv[])
     vec eigval; mat eigvec;
     time_anal = time_it(string("begin"),start,finish); //Start clock
     eig_sym(eigval, eigvec, A);
-    cout << "The analytical eigenvalues of A are: \n" << eigval.t() << endl;
+    cout << "The analytical eigenvalues of A are: " << endl;
+     cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
     time_anal = time_it(string("stop"),start,finish); //Stop clock
     printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
 
     //Symmetry transformation
     int k, l;
     double max = 0.0001;
-    int iterations = 0; int maxiter = 10*N*N;
+    int iterations = 0; int maxiter = 5*N*N;
     double tolerance = 1E-6; //IMPLEMENT THIS
 
-    //-------------------------------
     time = time_it(string("begin"),start,finish); //Start clock
     while ( iterations <= maxiter && max > tolerance){ //NEED TO IMPLEMENT MAX < TOLERANCE
 
         largest_offdiagonal(N, A, k, l, max);
-        cout << "k " << k << "l " << l << endl;
+        //cout << "k " << k << "l " << l << endl;
         Jakobi_rotate(N, A, l, k);
-        cout << max << endl;
-        cout << iterations << endl;
+        //cout << max << endl;
+        //cout << iterations << endl;
         iterations++;
         }
 
     time = time_it(string("stop"),start,finish); //Stop clock
     printf("Time spent on symmetry transformation for dim(A) = %d was t = %f s!\n", N ,time);
 
-    vec a = diagvec(A, k=0);
-    cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the eigenvalues are---" << endl;
-    cout << sort(a.t()) << endl; //Extracted eigenvalues from A, transpose the vector and sort it according to values
+    vec a = diagvec(A, k=0); a = sort(a);
+    cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the first eigenvalues are---" << endl;
+    cout << "lambda_0 = " << a[0] << " lambda_1 = "<< a[1] << " lambda_2 = " << a[2] << endl; //Extracted eigenvalues from A, transpose the vector and sort it according to values
     return 0;
 
     }
-
 
 void Jakobi_rotate(uword N, mat &A, int &l, int &k){
     //Jakobi with a k to honor our dear Jakob <3
