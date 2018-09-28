@@ -17,6 +17,11 @@ void Jakobi_rotate(uword N, mat &A, int &l, int &k);
 void test_largest_offdiagonal();
 void test_eigenvals_eigenvec();
 
+
+//Save to arrays
+void save_arrays(string filename, const mat eigenvector, const vec eigenvalues);
+
+
 int main(int argc, char *argv[])
 {
     if (argc < 2){
