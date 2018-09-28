@@ -278,6 +278,14 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
     }
 }
 
+void save_arrays(string filename, const mat eigenvector, const vec eigenvalues){
+    string outfilename_vec = filename + "eigenvec.txt";
+    eigenvector.save(outfilename_vec,raw_ascii);
+    string outfilename_val = filename + "eigenval.txt";
+    eigenvalues.save(outfilename_val, raw_ascii);
+
+}
+
 void test_eigenvals_eigenvec(){
     uword n = 4;
     int in = int(n);
