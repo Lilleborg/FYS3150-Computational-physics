@@ -16,6 +16,8 @@ void Jakobi_rotate(uword N, mat &A, int &l, int &k);
 // Test-functions
 void test_largest_offdiagonal();
 void test_eigenvals();
+//Save to arrays
+void save_arrays(string filename, const mat eigenvector, const vec eigenvalues);
 
 int main(int argc, char *argv[])
 {
@@ -81,8 +83,13 @@ int main(int argc, char *argv[])
             iterations++;
             }
         time = time_it(string("stop"),start,finish); //Stop clock
-
+        vec a = diagvec(A, k=0); a = sort(a);
+        cout << eigvec << endl;
+        cout << a << endl;
         //SAVE NUMERICAL SOLUTIONS TO FILE
+        string filename = "problem1";
+        save_arrays(filename, eigvec, a);
+
 
     }
 
@@ -101,8 +108,8 @@ int main(int argc, char *argv[])
         time_anal = time_it(string("begin"),start,finish); //Start clock
         eig_sym(eigval, eigvec, A);
         time_anal = time_it(string("stop"),start,finish); //Stop clock
-        cout << "The analytical eigenvalues of A are: " << endl;
-        cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
+        //cout << "The analytical eigenvalues of A are: " << endl;
+        //cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
         //printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
 
         //SAVE ANALYTICAL SOLUTIONS TO FILE
@@ -116,9 +123,13 @@ int main(int argc, char *argv[])
             }
         time = time_it(string("stop"),start,finish); //Stop clock
         vec a = diagvec(A, k=0); a = sort(a);
-        cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the first eigenvalues are---" << endl;
-        cout << "lambda_0 = " << a[0] << " lambda_1 = "<< a[1] << " lambda_2 = " << a[2] << endl; //Extracted eigenvalues from A, transpose the vector and sort it according to values
-
+        //cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the first eigenvalues are---" << endl;
+        //cout << "lambda_0 = " << a[0] << " lambda_1 = "<< a[1] << " lambda_2 = " << a[2] << endl; //Extracted eigenvalues from A, transpose the vector and sort it according to values
+        cout << eigvec << endl;
+        cout << a << endl;
+        //SAVE NUMERICAL SOLUTIONS TO FILE
+        string filename = "problem2";
+        save_arrays(filename, eigvec, a);
 
         //SAVE NUMERICAL SOLUTIONS TO FILE
 
@@ -129,9 +140,10 @@ int main(int argc, char *argv[])
 
         double rhomax = 1.; double rho0 = 0.;
         double h = (rhomax-rho0)/N; //STEP SIZE AND VALUES FOR DIMLESS RHO
-
+        string filename;
         for (int i = 0; i < 4; i++){
             w = omega[i];
+            mat A = zeros<mat>(N,N);
             matrix_filling_prototype(N, h, A, cmd, rho0, w);
             cout << "---Our initial matrix A is---" << endl;
             cout << A << endl;
@@ -157,6 +169,12 @@ int main(int argc, char *argv[])
             time = time_it(string("stop"),start,finish); //Stop clock
 
             //SAVE NUMERICAL SOLUTIONS TO FILE
+            vec a = diagvec(A, k=0); a = sort(a);
+            cout << eigvec << endl;
+            cout << a << endl;
+            //SAVE NUMERICAL SOLUTIONS TO FILE
+            string filename = "problem3_w" + to_string(i) +"_";
+            save_arrays(filename, eigvec, a);
         }
     }
 
@@ -334,6 +352,10 @@ double time_it(string user,clock_t &start, clock_t &finish){
     return time;
 }
 
+
+//datapoints = analytical
+//solution = numerical
+
 /*
 void save_arrays(string filename,uword N, const vec datapoints, const vec solution, int data){
     // Adding endpoints to arrays that are to be saved
@@ -356,6 +378,15 @@ void save_arrays(string filename,uword N, const vec datapoints, const vec soluti
     }
 }
 */
+
+
+void save_arrays(string filename, const mat eigenvector, const vec eigenvalues){
+    string outfilename_vec = filename + "eigenvec.txt";
+    eigenvector.save(outfilename_vec,raw_ascii);
+    string outfilename_val = filename + "eigenval.txt";
+    eigenvalues.save(outfilename_val, raw_ascii);
+
+}
 
 //-------------------------OLD VERSION OF MATRIX FILLING-------------------------
 void matrix_filling(uword N, const double h, mat &A){
