@@ -289,7 +289,7 @@ void test_eigenvals_eigenvec(){
         Jakobi_rotate(n,B,l,k);
         i++;
         if (i % 100 == 0){  // only checks orthogonality for every 100th
-
+            //start testing
         }
     }
     vec calc_eigenval = sort(diagvec(B));
