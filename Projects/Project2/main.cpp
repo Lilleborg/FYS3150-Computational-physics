@@ -162,6 +162,14 @@ int main(int argc, char *argv[])
             time = time_it(string("stop"),start,finish); //Stop clock
 
             //SAVE NUMERICAL SOLUTIONS TO FILE
+            vec a = diagvec(A, k=0); a = sort(a);
+            cout << eigvec << endl;
+            cout << a << endl;
+            //SAVE NUMERICAL SOLUTIONS TO FILE
+            string filename = "problem3_w" + to_string(i) +"_";
+            save_arrays(filename, eigvec, a);
+
+
         }
     }
 
@@ -276,7 +284,7 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
        }
     }
 }
-
+/*
 void test_eigenvals_eigenvec(){
     uword n = 4;
     int in = int(n);
@@ -312,6 +320,7 @@ void test_eigenvals_eigenvec(){
         }
     }
 }
+*/
 
 void test_largest_offdiagonal(){
     uword n = 10; // test dimensions
@@ -354,7 +363,7 @@ double time_it(string user,clock_t &start, clock_t &finish){
     return time;
 }
 
-/*
+
 void save_arrays(string filename,uword N, const vec datapoints, const vec solution, int data){
     // Adding endpoints to arrays that are to be saved
     vec outsol(n+2);
@@ -375,7 +384,13 @@ void save_arrays(string filename,uword N, const vec datapoints, const vec soluti
 
     }
 }
-*/
+
+void save_arrays(string filename, const mat eigenvector, const vec eigenvalues){
+    string outfilename_vec = filename + "eigenvec.txt";
+    eigenvector.save(outfilename_vec,raw_ascii);
+    string outfilename_val = filename + "eigenval.txt";
+    eigenvalues.save(outfilename_val, raw_ascii);
+ }
 
 //-------------------------OLD VERSION OF MATRIX FILLING-------------------------
 void matrix_filling(uword N, const double h, mat &A){
