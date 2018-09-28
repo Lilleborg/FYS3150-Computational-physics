@@ -2,6 +2,7 @@
 #include <armadillo>
 #include <cmath>
 #include <string>
+#include <list>
 #include "time.h"
 
 using namespace std;
@@ -284,7 +285,7 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
        }
     }
 }
-/*
+
 void test_eigenvals_eigenvec(){
     uword n = 4;
     int in = int(n);
@@ -293,8 +294,10 @@ void test_eigenvals_eigenvec(){
     mat A(n,n,fill::randu);
     mat B = A.t()*A;    // B is symmetric
 
-    vec eigval;
-    mat eigvec;
+    vec eigval,eigvaltest;
+    mat eigvec,eigvectest;
+    list<int> orthotest;
+
     eig_sym(eigval,eigvec,B);
     //cout << eigval << " " << eigvec << endl;
     while (i < iterations && max > tol){
@@ -302,7 +305,7 @@ void test_eigenvals_eigenvec(){
         Jakobi_rotate(n,B,l,k);
         i++;
         if (i % 100 == 0){  // only checks orthogonality for every 100th
-            //start testing
+            eig_sym(eigvaltest,eigvectest,B);
         }
     }
     vec calc_eigenval = sort(diagvec(B));
@@ -320,7 +323,7 @@ void test_eigenvals_eigenvec(){
         }
     }
 }
-*/
+
 
 void test_largest_offdiagonal(){
     uword n = 10; // test dimensions
@@ -364,26 +367,6 @@ double time_it(string user,clock_t &start, clock_t &finish){
 }
 
 
-void save_arrays(string filename,uword N, const vec datapoints, const vec solution, int data){
-    // Adding endpoints to arrays that are to be saved
-    vec outsol(n+2);
-    outsol(0) = 0.0; outsol.at(n+1)=0.0;
-    for (uword i=1;i<=n;i++){
-        outsol(i) = solution(i-1);
-    }
-    string solfilename = filename + "sol.dat";
-    string datafilename = filename + "points.dat";
-    outsol.save(solfilename,arma::raw_ascii);
-    if (data != 0){
-        vec outpoints(n+2);
-        outpoints(0)=0.0; outpoints.at(n+1)=1.0;
-        for (uword i = 1; i <=n; i++){
-            outpoints(i) = datapoints(i-1);
-        }
-        outpoints.save(datafilename,raw_ascii);
-
-    }
-}
 
 void save_arrays(string filename, const mat eigenvector, const vec eigenvalues){
     string outfilename_vec = filename + "eigenvec.txt";
