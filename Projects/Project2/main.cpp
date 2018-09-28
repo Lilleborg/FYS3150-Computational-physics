@@ -293,7 +293,7 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
 void test_eigenvals(){
     uword n = 4;
     int iterations = 5*n*n,k,l,i=0;
-    double max = 1, tol = 1e-6;
+    double max = 1, tol = 1e-5;
     mat A(n,n,fill::randu);
     mat B = A.t()*A;    // B is symmetric
 
@@ -308,7 +308,18 @@ void test_eigenvals(){
     }
     vec calc_eigenval = sort(diagvec(B));
     //cout << calc_eigenval << endl;
-    //for ()
+    if (approx_equal(calc_eigenval,eigval,"absdiff",tol)){
+        printf("Test for eigenvalues from Jakobis method finished succesfully!\n");
+        cout << "Calculated eigenvalues" << calc_eigenval.t() << endl;
+        cout << "Expected eigenvalues" << eigval.t() << endl;
+    }
+    else{
+        printf("Test for eigenvalues from Jakobis method NOT succesfull\n");
+        printf("Found:\n");
+        for (int i = 0; i < int(n); ++i) {
+            printf("Eigenvalue %d: calc = %f, expected = %f\n",i,calc_eigenval[i],eigval[i]);
+        }
+    }
 }
 
 void test_largest_offdiagonal(){
