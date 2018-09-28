@@ -2,6 +2,7 @@
 #include <armadillo>
 #include <cmath>
 #include <string>
+#include <list>
 #include "time.h"
 
 using namespace std;
@@ -285,8 +286,10 @@ void test_eigenvals_eigenvec(){
     mat A(n,n,fill::randu);
     mat B = A.t()*A;    // B is symmetric
 
-    vec eigval;
-    mat eigvec;
+    vec eigval,eigvaltest;
+    mat eigvec,eigvectest;
+    list<int> orthotest;
+
     eig_sym(eigval,eigvec,B);
     //cout << eigval << " " << eigvec << endl;
     while (i < iterations && max > tol){
@@ -294,7 +297,7 @@ void test_eigenvals_eigenvec(){
         Jakobi_rotate(n,B,l,k);
         i++;
         if (i % 100 == 0){  // only checks orthogonality for every 100th
-            //start testing
+            eig_sym(eigvaltest,eigvectest,B);
         }
     }
     vec calc_eigenval = sort(diagvec(B));
