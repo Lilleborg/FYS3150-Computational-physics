@@ -285,7 +285,7 @@ void test_eigvec_ortho(){
             for (uword var = 0; var < 2; ++var) {
                 dotting0 = dot(eigvec.col(var),eigvec.col(var+1)); // should be zero
                 dotting1 = dot(eigvec.col(var),eigvec.col(var)); // should be one
-                if (abs(dotting0)>10*tol || abs(1-abs(dotting1))>10*tol){ // true if either dotting0 isnt 0 or dotting1 isnt 1
+                if (abs(dotting0)>tol || abs(1-abs(dotting1))>tol){ // true if either dotting0 isnt 0 or dotting1 isnt 1
                     orthotest(i) = 1;   // stores elements where test failed
                 }
             }
@@ -293,10 +293,10 @@ void test_eigvec_ortho(){
         i++;
     }
     if (sum(orthotest)<tol){
-        printf("Test for orthogonalaty of eigenvectors completed succesfully!\n");
+        printf("---Test for orthogonalaty of eigenvectors completed succesfully!---\n");
     }
     else{
-        printf("Test for orthogonalaty of eigenvectors NOT succesfull!\n");
+        printf("---Test for orthogonalaty of eigenvectors NOT succesful!---\n");
         uvec indexfailed = find(orthotest,1); // finds the index of first non-zero
         printf("The first fail on iteration %d\n",int(indexfailed(0)));
         printf("Of %d iterations testing every hundreth in total %.0f tests failed.\n",int(i),sum(orthotest));
@@ -316,15 +316,14 @@ void test_eigenvals(){
         Jakobi_rotate(n,B,l,k);
         i++;
     }
-
     vec calc_eigenval = sort(diagvec(B));   // calculated eigenvalues
     if (approx_equal(calc_eigenval,eigval,"absdiff",tol)){
-        printf("Test for eigenvalues from Jakobis method completed succesfully!\n");
+        printf("---Test for eigenvalues from Jakobis method completed succesfully!---\n");
         cout << "Calculated eigenvalues" << calc_eigenval.t() << endl;
         cout << "Expected eigenvalues" << eigval.t() << endl;
     }
     else{
-        printf("Test for eigenvalues from Jakobis method NOT succesfull\n");
+        printf("---Test for eigenvalues from Jakobis method NOT succesful---\n");
         printf("Found:\n");
         for (int i = 0; i < in; ++i) {
             printf("Eigenvalue %d: calc = %f, expected = %f\n",i,calc_eigenval[i],eigval[i]);
@@ -342,18 +341,18 @@ void test_largest_offdiagonal(){
 
     largest_offdiagonal(n,A,k,l,max);
     if (int(kgoal) != k && int(lgoal) != l){
-        printf("Test for largest off-diagonal NOT succesfull!\n");
+        printf("---Test for largest off-diagonal NOT succesful!---\n");
         printf("Found:\n");
         printf("k = %d, l = %d, max element = %f\n",k,l,max);
         printf("Expected:\n");
         printf("kgoal = %d, lgoal = %d\n",int(kgoal),int(lgoal));
     }
     else{
-        printf("Test for largest off-diagonal finished succesfully!\n");
+        printf("---Test for largest off-diagonal completed succesfully!---\n");
         printf("Found:\n");
-        printf("k = %d, l = %d, max element = %f\n",k,l,max);
+        printf("k = %d, l = %d, max element = %.0f\n",k,l,max);
         printf("Expected:\n");
-        printf("kgoal = %d, lgoal = %d\n",int(kgoal),int(lgoal));
+        printf("kgoal = %d, lgoal = %d, max element = %.0f\n",int(kgoal),int(lgoal),max);
     }
 }
 
