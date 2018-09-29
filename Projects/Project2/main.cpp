@@ -29,14 +29,14 @@ int main(int argc, char *argv[])
         cout << "--- Please give commands: N, problem1/problem2/problem3, FIX THIS ---" << endl;
     }
 
-    //TESTING ALL ALGORITHMS
+    //TESTING
     if (argc == 4){
         cout << "--- TESTING OPTION STARTED; if argv[3] == 1, only tests will be ran ---" << endl;
         int testing = atoi(argv[3]);
         // Tests:
         test_largest_offdiagonal();
         test_eigvec_ortho();
-        //test_eigenvals();
+        test_eigenvals();
         // Option for exiting:
         if (testing == 1){
             exit(1);
@@ -67,31 +67,29 @@ int main(int argc, char *argv[])
 
         w = omega[2]; //Oscillator frequency
         matrix_filling_prototype(N, h, A, cmd, rho0, w);
-        //cout << "---Our initial matrix A is---" << endl;
-        //cout << A << endl;
 
         //ANALYTICAL SOLUTIONS
         time_anal = time_it(string("begin"),start,finish); //Start clock
         eig_sym(eigval, eigvec, A);
         time_anal = time_it(string("stop"),start,finish); //Stop clock
-        //cout << "The analytical eigenvalues of A are: " << endl;
-        //cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
-        //printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
+        cout << "The analytical eigenvalues of A are: " << endl;
+        cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
+        printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
 
-        //SAVE ANALYTICAL SOLUTIONS TO FILE
-
-        time = time_it(string("begin"),start,finish); //Start clock
         //SYMMETRY TRANSFORMATION
+        time = time_it(string("begin"),start,finish); //Start clock
         while ( iterations <= maxiter && max > tolerance){
             largest_offdiagonal(N, A, k, l, max);
             Jakobi_rotate(N, A, l, k);
             iterations++;
         }
         time = time_it(string("stop"),start,finish); //Stop clock
-        //SAVE NUMERICAL SOLUTIONS TO FILE
 
+        vec a = sort(diagvec(A, k=0));
+        cout << "---The final matrix A was made with " << iterations << " symmetry transformations over " << time << "s---" << endl;
+        cout << "The first three eigenvalues are:" << endl;
+        cout << "lambda_0 = " << a[0] << " lambda_1 = "<< a[1] << " lambda_2 = " << a[2] << endl;
     }
-
     if (cmd == "problem2"){
         cout << "---Initializing solving of problem 2: Electron in HO-potential---" << endl;
 
@@ -100,8 +98,6 @@ int main(int argc, char *argv[])
 
         w = omega[2]; //Oscillator frequency
         matrix_filling_prototype(N, h, A, cmd, rho0, w);
-        //cout << "---Our initial matrix A is---" << endl;
-        //cout << A << endl;
 
         //ANALYTICAL SOLUTIONS
         time_anal = time_it(string("begin"),start,finish); //Start clock
@@ -109,25 +105,21 @@ int main(int argc, char *argv[])
         time_anal = time_it(string("stop"),start,finish); //Stop clock
         cout << "The analytical eigenvalues of A are: " << endl;
         cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
-        //printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
+        printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
 
-        //SAVE ANALYTICAL SOLUTIONS TO FILE
-
-        time = time_it(string("begin"),start,finish); //Start clock
         //SYMMETRY TRANSFORMATION
+        time = time_it(string("begin"),start,finish); //Start clock
         while ( iterations <= maxiter && max > tolerance){
             largest_offdiagonal(N, A, k, l, max);
             Jakobi_rotate(N, A, l, k);
             iterations++;
         }
         time = time_it(string("stop"),start,finish); //Stop clock
-        vec a = diagvec(A, k=0); a = sort(a);
-        cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the first eigenvalues are---" << endl;
-        cout << "lambda_0 = " << a[0] << " lambda_1 = "<< a[1] << " lambda_2 = " << a[2] << endl; //Extracted eigenvalues from A, transpose the vector and sort it according to values
 
-
-        //SAVE NUMERICAL SOLUTIONS TO FILE
-
+        vec a = sort(diagvec(A, k=0));
+        cout << "---The final matrix A was made with " << iterations << " symmetry transformations over " << time << "s---" << endl;
+        cout << "The first three eigenvalues are:" << endl;
+        cout << "lambda_0 = " << a[0] << " lambda_1 = "<< a[1] << " lambda_2 = " << a[2] << endl;
     }
 
     if (cmd == "problem3"){
@@ -139,22 +131,19 @@ int main(int argc, char *argv[])
         for (int i = 0; i < 4; i++){
             w = omega[i];
             matrix_filling_prototype(N, h, A, cmd, rho0, w);
-            cout << "---Our initial matrix A is---" << endl;
-            cout << A << endl;
 
+            /*  SHOULD THIS STIL BE HERE?
             //ANALYTICAL SOLUTIONS
             time_anal = time_it(string("begin"),start,finish); //Start clock
             eig_sym(eigval, eigvec, A);
-            //cout << "The analytical eigenvalues of A are: " << endl;
-            //cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
+            cout << "The analytical eigenvalues of A are: " << endl;
+            cout << "lambda_0 = " << eigval[0] << " lambda_1 = "<< eigval[1] << " lambda_2 = " << eigval[2] << endl;
             time_anal = time_it(string("stop"),start,finish); //Stop clock
-            //printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
+            printf("Time spent on finding analytical eigenvalues for dim(A) = %d was t = %f s!\n", N, time_anal);
+            */
 
-            //SAVE ANALYTICAL SOLUTIONS TO FILE
-
-
-            time = time_it(string("begin"),start,finish); //Start clock
             //SYMMETRY TRANSFORMATION
+            time = time_it(string("begin"),start,finish); //Start clock
             while ( iterations <= maxiter && max > tolerance){
                 largest_offdiagonal(N, A, k, l, max);
                 Jakobi_rotate(N, A, l, k);
@@ -164,15 +153,18 @@ int main(int argc, char *argv[])
 
             //SAVE NUMERICAL SOLUTIONS TO FILE
             vec a = diagvec(A, k=0); a = sort(a);
+            /* SHOULD THESE BE PRINTED?
             cout << eigvec << endl;
             cout << a << endl;
             cout << "w =" << w << endl;
+            */
             //SAVE NUMERICAL SOLUTIONS TO FILE
             string filename = "problem3_w" + to_string(i) +"_";
             save_arrays(filename, eigvec, a);
 
 
         }
+        printf("Solutions for two electron problem saved to file!\n");
     }
 
     /*
@@ -320,7 +312,6 @@ void test_eigvec_ortho(){
     }
 }
 
-/*
 void test_eigenvals(){
     uword n = 4;
     int in = int(n),iterations = 5*in*in,k,l,i=0;
@@ -336,12 +327,10 @@ void test_eigenvals(){
         }
 
     vec calc_eigenval = sort(diagvec(B));   // calculated eigenvalues
-    //cout << calc_eigenval << endl;
     if (approx_equal(calc_eigenval,eigval,"absdiff",tol)){
         printf("Test for eigenvalues from Jakobis method completed succesfully!\n");
         cout << "Calculated eigenvalues" << calc_eigenval.t() << endl;
         cout << "Expected eigenvalues" << eigval.t() << endl;
-        //cout << eigvec << " " << eigvec.col(1) << endl;
     }
     else{
         printf("Test for eigenvalues from Jakobis method NOT succesfull\n");
@@ -351,11 +340,10 @@ void test_eigenvals(){
         }
     }
 }
-*/
 
 void test_largest_offdiagonal(){
     uword n = 10; // test dimensions
-    mat A(n,n,fill::ones); // fill matrix with random elements
+    mat A(n,n,fill::randu); // fill matrix with random elements
     uword kgoal = n/2-2, lgoal = n/2+2;   // set indices for max value
     int k,l;                        // computed values
     double max;
