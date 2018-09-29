@@ -293,7 +293,7 @@ void test_eigvec_ortho(){
         i++;
     }
     if (sum(orthotest)<tol){
-        printf("---Test for orthogonalaty of eigenvectors completed succesfully!---\n");
+        printf("---Test for orthogonalaty of eigenvectors completed successfully!---\n");
     }
     else{
         printf("---Test for orthogonalaty of eigenvectors NOT succesful!---\n");
@@ -318,7 +318,7 @@ void test_eigenvals(){
     }
     vec calc_eigenval = sort(diagvec(B));   // calculated eigenvalues
     if (approx_equal(calc_eigenval,eigval,"absdiff",tol)){
-        printf("---Test for eigenvalues from Jakobis method completed succesfully!---\n");
+        printf("---Test for eigenvalues from Jakobis method completed successfully!---\n");
         cout << "Calculated eigenvalues" << calc_eigenval.t() << endl;
         cout << "Expected eigenvalues" << eigval.t() << endl;
     }
@@ -348,7 +348,7 @@ void test_largest_offdiagonal(){
         printf("kgoal = %d, lgoal = %d\n",int(kgoal),int(lgoal));
     }
     else{
-        printf("---Test for largest off-diagonal completed succesfully!---\n");
+        printf("---Test for largest off-diagonal completed successfully!---\n");
         printf("Found:\n");
         printf("k = %d, l = %d, max element = %.0f\n",k,l,max);
         printf("Expected:\n");
