@@ -345,14 +345,14 @@ void test_largest_offdiagonal(){
         printf("Found:\n");
         printf("k = %d, l = %d, max element = %f\n",k,l,max);
         printf("Expected:\n");
-        printf("kgoal = %d, lgoal = %d\n",int(kgoal),int(lgoal));
+        printf("kgoal = %d, lgoal = %d\n, max element = 200",int(kgoal),int(lgoal));
     }
     else{
         printf("---Test for largest off-diagonal completed successfully!---\n");
         printf("Found:\n");
         printf("k = %d, l = %d, max element = %.0f\n",k,l,max);
         printf("Expected:\n");
-        printf("kgoal = %d, lgoal = %d, max element = %.0f\n",int(kgoal),int(lgoal),max);
+        printf("kgoal = %d, lgoal = %d, max element = 200\n",int(kgoal),int(lgoal));
     }
 }
 
