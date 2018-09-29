@@ -287,21 +287,26 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
 }
 
 void test_eigvec_ortho(){
-    uword n = 4;
+    uword n = 3;
     int in = int(n),iterations = 5*in*in,k,l,i=0;
-    double max = 1, tol = 1e-5;
-    mat A(n,n,fill::randu),B = A.t()*A,eigvec,eigvectest;    // B is symmetric;
-    vec eigval,eigvaltest;
+    double max = 1, tol = 1e-5,dotting0,dotting1;
+    mat A(n,n,fill::randu),B = A.t()*A,eigvec;    // B is symmetric;
+    vec eigval;
     list<int> orthotest;
 
-    eig_sym(eigval,eigvec,B);
-    //cout << eigval << " " << eigvec << endl;
     while (i < iterations && max > tol){
         largest_offdiagonal(n,B,k,l,max);
         Jakobi_rotate(n,B,l,k);
         i++;
         if (i % 100 == 0){  // only checks orthogonality for every 100th
-            eig_sym(eigvaltest,eigvectest,B);
+            eig_sym(eigval,eigvec,B);
+            for (int j = 0;j<in;j++){
+                for (uword var = 0; var < total; ++var) {
+
+                }
+                dotting0 = dot(eigvec.col(0),eigvec.col(1)); // should be zero
+                        dotting1 = dot(eigvec.col(0),eigvec.col(0)) // should be one
+            }
 
         }
     }
@@ -310,30 +315,25 @@ void test_eigvec_ortho(){
 
 void test_eigenvals(){
     uword n = 4;
-    int in = int(n);
-    int iterations = 5*in*in,k,l,i=0;
+    int in = int(n),iterations = 5*in*in,k,l,i=0;
     double max = 1, tol = 1e-5;
-    mat A(n,n,fill::randu);
-    mat B = A.t()*A;    // B is symmetric
+    mat A(n,n,fill::randu),B = A.t()*A,eigvec;
+    vec eigval;
 
-    vec eigval,eigvaltest;
-    mat eigvec,eigvectest;
-    list<int> orthotest;
-
-    eig_sym(eigval,eigvec,B);
-    //cout << eigval << " " << eigvec << endl;
+    eig_sym(eigval,eigvec,B);   // finds excpected eigenvalues
     while (i < iterations && max > tol){
         largest_offdiagonal(n,B,k,l,max);
         Jakobi_rotate(n,B,l,k);
         i++;
         }
 
-    vec calc_eigenval = sort(diagvec(B));
+    vec calc_eigenval = sort(diagvec(B));   // calculated eigenvalues
     //cout << calc_eigenval << endl;
     if (approx_equal(calc_eigenval,eigval,"absdiff",tol)){
         printf("Test for eigenvalues from Jakobis method finished succesfully!\n");
         cout << "Calculated eigenvalues" << calc_eigenval.t() << endl;
         cout << "Expected eigenvalues" << eigval.t() << endl;
+        //cout << eigvec << " " << eigvec.col(1) << endl;
     }
     else{
         printf("Test for eigenvalues from Jakobis method NOT succesfull\n");
