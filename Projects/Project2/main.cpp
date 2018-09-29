@@ -166,15 +166,6 @@ int main(int argc, char *argv[])
         }
         printf("Solutions for two electron problem saved to file!\n");
     }
-
-    /*
-    printf("Time spent on symmetry transformation for dim(A) = %d was t = %f s!\n", N ,time);
-
-    vec a = diagvec(A, k=0); a = sort(a);
-    cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the first eigenvalues are---" << endl;
-    cout << "lambda_0 = " << a[0] << " lambda_1 = "<< a[1] << " lambda_2 = " << a[2] << endl; //Extracted eigenvalues from A, transpose the vector and sort it according to values
-    */
-
     return 0;
 }
 
@@ -324,7 +315,7 @@ void test_eigenvals(){
         largest_offdiagonal(n,B,k,l,max);
         Jakobi_rotate(n,B,l,k);
         i++;
-        }
+    }
 
     vec calc_eigenval = sort(diagvec(B));   // calculated eigenvalues
     if (approx_equal(calc_eigenval,eigval,"absdiff",tol)){
