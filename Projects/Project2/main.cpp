@@ -2,7 +2,6 @@
 #include <armadillo>
 #include <cmath>
 #include <string>
-#include <list>
 #include "time.h"
 
 using namespace std;
@@ -17,6 +16,7 @@ void Jakobi_rotate(uword N, mat &A, int &l, int &k);
 // Test-functions
 void test_largest_offdiagonal();
 void test_eigenvals();
+void test_eigvec_ortho();
 
 
 //Save to arrays
@@ -35,12 +35,13 @@ int main(int argc, char *argv[])
         int testing = atoi(argv[3]);
         // Tests:
         test_largest_offdiagonal();
+        test_eigvec_ortho();
         //test_eigenvals();
         // Option for exiting:
         if (testing == 1){
             exit(1);
         }
-        }
+    }
 
     //FUNCTION FOR MEASURING TIME
     clock_t start, finish;
@@ -85,9 +86,8 @@ int main(int argc, char *argv[])
             largest_offdiagonal(N, A, k, l, max);
             Jakobi_rotate(N, A, l, k);
             iterations++;
-            }
+        }
         time = time_it(string("stop"),start,finish); //Stop clock
-
         //SAVE NUMERICAL SOLUTIONS TO FILE
 
     }
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
             largest_offdiagonal(N, A, k, l, max);
             Jakobi_rotate(N, A, l, k);
             iterations++;
-            }
+        }
         time = time_it(string("stop"),start,finish); //Stop clock
         vec a = diagvec(A, k=0); a = sort(a);
         cout << "---The final matrix A was made with " << iterations << " symmetry transformations and the first eigenvalues are---" << endl;
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
                 largest_offdiagonal(N, A, k, l, max);
                 Jakobi_rotate(N, A, l, k);
                 iterations++;
-                }
+            }
             time = time_it(string("stop"),start,finish); //Stop clock
 
             //SAVE NUMERICAL SOLUTIONS TO FILE
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     */
 
     return 0;
-    }
+}
 
 //----- VOIDS AND FUNCTIONS -----------------------------------------------------------------------
 
@@ -195,20 +195,20 @@ void Jakobi_rotate(uword N, mat &A, int &l, int &k){
     //Need a test to choose t because t ~ -tau +- tau for large tau
     if ( A(k,l) != 0.0){
         double t, tau;
-       tau = (A(l, l)-A(k, k))/(2*A(k,l)); //Calculate tau with max element indices
+        tau = (A(l, l)-A(k, k))/(2*A(k,l)); //Calculate tau with max element indices
 
-       if (tau >= 0.){ // t = tan(theta)
-           t = 1./(tau + sqrt(1+tau*tau));
-       }
-       else{
-           t = -1./(-tau + sqrt(1+tau*tau));
-       }
-       c = 1./sqrt(1 + t*t); // c = cos(theta)
-       s = c*t; // s = sin(theta)
+        if (tau >= 0.){ // t = tan(theta)
+            t = 1./(tau + sqrt(1+tau*tau));
+        }
+        else{
+            t = -1./(-tau + sqrt(1+tau*tau));
+        }
+        c = 1./sqrt(1 + t*t); // c = cos(theta)
+        s = c*t; // s = sin(theta)
     }
     else {
-       c = 1.0;
-       s = 0.0;
+        c = 1.0;
+        s = 0.0;
     }
     double a_kk, a_ll;
     a_kk = A(k,k); a_ll = A(l,l);
@@ -220,25 +220,25 @@ void Jakobi_rotate(uword N, mat &A, int &l, int &k){
     double a_ik, a_il;
     for (int i = 0; i < N; i++){
         if (i != k && i != l){
-         a_ik = A(i,k); a_il = A(i,l);
+            a_ik = A(i,k); a_il = A(i,l);
 
-         A(i,k) = a_ik*c - a_il*s;
-         A(i,l) = a_il*c + a_ik*s;
-         A(k,i) = A(i,k);
-         A(l,i) = A(i,l);
+            A(i,k) = a_ik*c - a_il*s;
+            A(i,l) = a_il*c + a_ik*s;
+            A(k,i) = A(i,k);
+            A(l,i) = A(i,l);
         }
     }
 }
 
 void largest_offdiagonal(uword N, mat &A, int &k, int &l, double &max){
     //Finds largest off-diagonal element value in a matrix A
-     max = 0;
+    max = 0;
     for (int i = 0; i < N; i++){
         for (int j = i+1; j < N; j++){ //Loop over upper triangular part of matrix A
-             double a_kl = fabs(A(i,j));
-             if (a_kl > max){
-                 max = fabs(a_kl); k = i; l = j; // updating k and l values to represent the position of max element in A
-             }
+            double a_kl = fabs(A(i,j));
+            if (a_kl > max){
+                max = fabs(a_kl); k = i; l = j; // updating k and l values to represent the position of max element in A
+            }
         }
     }
 }
@@ -248,7 +248,7 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
 
     //Fill diagonals for problem 1 - BUCKLING BEAM
     if (cmd == "problem1"){
-       double d_val= 2/h*h; double a_val = -1/(h*h);
+        double d_val= 2/h*h; double a_val = -1/(h*h);
 
         A(N-1,N-1) = d_val; A(0,0) = d_val; A(N-2, N-1) = a_val; A(0,1) = a_val;
         for (int i = 1; i < N; i++) {
@@ -259,60 +259,67 @@ void matrix_filling_prototype(uword N, const double h, mat &A, string &cmd, doub
     }
     //Fill diagonals for problem 2 - ONE ELECTRON IN HO
     if (cmd == "problem2"){
-       double d_val; double e_val = -1./(h*h);
+        double d_val; double e_val = -1./(h*h);
 
-       A(N-1,N-1) = 2/(h*h) + w*w*(rho0 + (N-1)*h)*(rho0 + (N-1)*h);
-       A(0,0) = 2./(h*h) + w*w*(rho0 + h)*(rho0 + h);
-       A(N-2, N-1) = e_val; A(N-1, N-2) = e_val; A(0,1) = e_val;
-       for (int i = 1; i < N-1; i++) {
-           d_val= 2./(h*h) + w*w*(rho0 + (i+1)*h)*(rho0 + (i+1)*h);
-           A(i, i) = d_val;
-           A(i, i-1) = e_val;
-           A(i-1,i) = A(i,i-1);
-       }
+        A(N-1,N-1) = 2/(h*h) + w*w*(rho0 + (N-1)*h)*(rho0 + (N-1)*h);
+        A(0,0) = 2./(h*h) + w*w*(rho0 + h)*(rho0 + h);
+        A(N-2, N-1) = e_val; A(N-1, N-2) = e_val; A(0,1) = e_val;
+        for (int i = 1; i < N-1; i++) {
+            d_val= 2./(h*h) + w*w*(rho0 + (i+1)*h)*(rho0 + (i+1)*h);
+            A(i, i) = d_val;
+            A(i, i-1) = e_val;
+            A(i-1,i) = A(i,i-1);
+        }
     }
     //Fill diagonals for problem 3 - TWO ELECTRONS IN HO
     if (cmd == "problem3"){
-       double d_val; double e_val = -1./(h*h);
+        double d_val; double e_val = -1./(h*h);
 
-       A(N-1, N-1) = 2/(h*h) + w*w*(rho0 + (N-1)*h)*(rho0 + (N-1)*h) + 1./(rho0 + (N-1)*h); // A(i,i) = 2/h^2 + w^2*rho_i^2 + 1/rho_i
-       A(0, 0) = 2./(h*h) + w* w* ( rho0 + h )*( rho0 + h) + 1./(rho0 + h);
-       A(N-2, N-1) = e_val; A(N-1, N-2) = e_val; A(0,1) = e_val;
-       for (int i = 1; i < N-1; i++) {
-           d_val= 2./(h*h) + w*w*(rho0 + (i+1)*h)*(rho0 + (i+1)*h) + 1./(rho0 + (i+1)*h);
-           A(i, i) = d_val;
-           A(i, i-1) = e_val;
-           A(i-1,i) = A(i,i-1);
-       }
+        A(N-1, N-1) = 2/(h*h) + w*w*(rho0 + (N-1)*h)*(rho0 + (N-1)*h) + 1./(rho0 + (N-1)*h); // A(i,i) = 2/h^2 + w^2*rho_i^2 + 1/rho_i
+        A(0, 0) = 2./(h*h) + w* w* ( rho0 + h )*( rho0 + h) + 1./(rho0 + h);
+        A(N-2, N-1) = e_val; A(N-1, N-2) = e_val; A(0,1) = e_val;
+        for (int i = 1; i < N-1; i++) {
+            d_val= 2./(h*h) + w*w*(rho0 + (i+1)*h)*(rho0 + (i+1)*h) + 1./(rho0 + (i+1)*h);
+            A(i, i) = d_val;
+            A(i, i-1) = e_val;
+            A(i-1,i) = A(i,i-1);
+        }
     }
 }
 
 void test_eigvec_ortho(){
-    uword n = 3;
-    int in = int(n),iterations = 5*in*in,k,l,i=0;
-    double max = 1, tol = 1e-5,dotting0,dotting1;
-    mat A(n,n,fill::randu),B = A.t()*A,eigvec;    // B is symmetric;
-    vec eigval;
-    list<int> orthotest;
+    uword n = 3,i=0,iterations = 5000;
+    int k,l;
+    double max, tol = 1e-5,dotting0,dotting1;
+    mat A(n,n,fill::randu),B = 10*A.t()*10*A,eigvec;    // B is symmetric;
+    vec eigval,orthotest(iterations,fill::zeros);
 
-    while (i < iterations && max > tol){
+    while (i < iterations){
         largest_offdiagonal(n,B,k,l,max);
         Jakobi_rotate(n,B,l,k);
-        i++;
         if (i % 100 == 0){  // only checks orthogonality for every 100th
             eig_sym(eigval,eigvec,B);
-            for (int j = 0;j<in;j++){
-                for (uword var = 0; var < total; ++var) {
-
+            for (uword var = 0; var < 2; ++var) {
+                dotting0 = dot(eigvec.col(var),eigvec.col(var+1)); // should be zero
+                dotting1 = dot(eigvec.col(var),eigvec.col(var)); // should be one
+                if (abs(dotting0)>10*tol || abs(1-abs(dotting1))>10*tol){ // true if either dotting0 isnt 0 or dotting1 isnt 1
+                    orthotest(i) = 1;   // stores elements where test failed
                 }
-                dotting0 = dot(eigvec.col(0),eigvec.col(1)); // should be zero
-                        dotting1 = dot(eigvec.col(0),eigvec.col(0)) // should be one
             }
-
         }
+        i++;
     }
-
+    if (sum(orthotest)<tol){
+        printf("Test for orthogonalaty of eigenvectors completed succesfully!\n");
+    }
+    else{
+        printf("Test for orthogonalaty of eigenvectors NOT succesfull!\n");
+        uvec indexfailed = find(orthotest,1); // finds the index of first non-zero
+        printf("The first fail on iteration %d\n",int(indexfailed(0)));
+        printf("Of %d iterations testing every hundreth in total %.0f tests failed.\n",int(i),sum(orthotest));
+    }
 }
+
 /*
 void test_eigenvals(){
     uword n = 4;
@@ -331,7 +338,7 @@ void test_eigenvals(){
     vec calc_eigenval = sort(diagvec(B));   // calculated eigenvalues
     //cout << calc_eigenval << endl;
     if (approx_equal(calc_eigenval,eigval,"absdiff",tol)){
-        printf("Test for eigenvalues from Jakobis method finished succesfully!\n");
+        printf("Test for eigenvalues from Jakobis method completed succesfully!\n");
         cout << "Calculated eigenvalues" << calc_eigenval.t() << endl;
         cout << "Expected eigenvalues" << eigval.t() << endl;
         //cout << eigvec << " " << eigvec.col(1) << endl;
@@ -369,8 +376,6 @@ void test_largest_offdiagonal(){
         printf("Expected:\n");
         printf("kgoal = %d, lgoal = %d\n",int(kgoal),int(lgoal));
     }
-
-
 }
 
 double time_it(string user,clock_t &start, clock_t &finish){
@@ -394,7 +399,7 @@ void save_arrays(string filename, const mat eigenvector, const vec eigenvalues){
     eigenvector.save(outfilename_vec,raw_ascii);
     string outfilename_val = filename + "eigenval.txt";
     eigenvalues.save(outfilename_val, raw_ascii);
- }
+}
 
 //-------------------------OLD VERSION OF MATRIX FILLING-------------------------
 void matrix_filling(uword N, const double h, mat &A){
