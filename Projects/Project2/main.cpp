@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         int testing = atoi(argv[3]);
         // Tests:
         test_largest_offdiagonal();
-        test_eigenvals();
+        //test_eigenvals();
         // Option for exiting:
         if (testing == 1){
             exit(1);
@@ -166,6 +166,7 @@ int main(int argc, char *argv[])
             vec a = diagvec(A, k=0); a = sort(a);
             cout << eigvec << endl;
             cout << a << endl;
+            cout << "w =" << w << endl;
             //SAVE NUMERICAL SOLUTIONS TO FILE
             string filename = "problem3_w" + to_string(i) +"_";
             save_arrays(filename, eigvec, a);
@@ -312,7 +313,7 @@ void test_eigvec_ortho(){
     }
 
 }
-
+/*
 void test_eigenvals(){
     uword n = 4;
     int in = int(n),iterations = 5*in*in,k,l,i=0;
@@ -343,7 +344,7 @@ void test_eigenvals(){
         }
     }
 }
-
+*/
 
 void test_largest_offdiagonal(){
     uword n = 10; // test dimensions
