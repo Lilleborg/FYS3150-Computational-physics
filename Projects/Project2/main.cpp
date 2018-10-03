@@ -113,6 +113,10 @@ int main(int argc, char *argv[])
             largest_offdiagonal(N, A, k, l, max);
             Jakobi_rotate(N, A, l, k);
             iterations++;
+            if  (iterations % 1000 == 0){
+                cout << iterations << endl;
+                cout << max << endl;
+            }
         }
         time = time_it(string("stop"),start,finish); //Stop clock
 
