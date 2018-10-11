@@ -102,6 +102,7 @@ void get_initials(u_long body_number, vector<double>& pos,vector <double>& vel,v
     initial_acc[1] = acceleration((initial_pos[1]));
 
     pos = initial_pos[body_number];
+    cout << "norm pos " << l2_norm(pos) << endl;
     vel = initial_vel[body_number];
     acc = initial_acc[body_number];
 }
