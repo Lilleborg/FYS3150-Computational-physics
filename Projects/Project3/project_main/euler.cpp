@@ -12,5 +12,8 @@ void Euler::IntegrateOneStep(SolarSystem &system){
     for(PlanetaryObject &object : system.objects()) {
         object.position += object.velocity*m_dt;
         object.velocity += object.force / object.mass * m_dt; //Maybe remove m_dt and only use dt?
+
     }
 }
+
+
