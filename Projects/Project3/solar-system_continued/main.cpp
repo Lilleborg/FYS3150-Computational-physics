@@ -19,6 +19,7 @@ int main(int numArguments, char **arguments)
 
     // We don't need to store the reference, but just call the function without a left hand side
     solarSystem.createCelestialBody( vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 3e-6 );
+    //solarSystem.createCelestialBody( vec3(-1, 0, 0.), vec3(0, -2*M_PI, 0), 3e-6 );
 
     // To get a list (a reference, not copy) of all the bodies in the solar system, we use the .bodies() function
     vector<CelestialBody> &bodies = solarSystem.bodies();
