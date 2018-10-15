@@ -2,12 +2,12 @@
 #include <cmath>
 #include <cstdlib>
 #include "solarsystem.h"
-#include "euler.h"
+#include "solver.h"
 using namespace std;
 
 int main(int numArguments, char **arguments)
 {
-    int numTimesteps = 1000;
+    int numTimesteps = 10000;
     if(numArguments >= 2) numTimesteps = atoi(arguments[1]);
 
     SolarSystem solarSystem;
@@ -30,9 +30,9 @@ int main(int numArguments, char **arguments)
     }
 
     double dt = 0.001;
-    Euler integrator(dt);
+    Solver integrator(dt);
     for(int timestep=0; timestep<numTimesteps; timestep++) {
-        integrator.integrateOneStep(solarSystem);
+        integrator.Euler(solarSystem);
         solarSystem.writeToFile("positions.txt");
     }
 
