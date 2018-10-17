@@ -8,7 +8,8 @@ SOURCES += main.cpp \
     solarsystem.cpp \
     vec3.cpp \
     euler.cpp \
-    solver.cpp
+    solver.cpp \
+    test.cpp
 
 HEADERS += \
     celestialbody.h \
