@@ -16,9 +16,9 @@ public:
     vector<vector<vector<double>>> position_vector;
     vector<vector<vector<double>>> velocity_vector;
     */
-    vector<vec3> force_vector;
+    //vector<vec3> force_vector;
     vector<vec3> position_vector;
-    vector<vec3> velocity_vector;
+    //vector<vec3> velocity_vector;
 
 
     //3D vectors work like this: velocity_vector[0][0][0] = 1 <- all elements in first row are 1. Kinda like numpy :)

@@ -14,7 +14,6 @@ public:
     CelestialBody &createCelestialBody(vec3 position, vec3 velocity, double mass);
     void calculateForcesAndEnergy();
     int numberOfBodies() const;
-    static int steps;
 
     double totalEnergy() const;
     double potentialEnergy() const;

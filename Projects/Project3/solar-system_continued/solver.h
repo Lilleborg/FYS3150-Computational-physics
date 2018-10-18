@@ -6,7 +6,8 @@ class Solver
 {
 public:
     double m_dt;
-    Solver(double dt);
+    double m_steps;
+    Solver(double dt, double steps);
     void Euler(class SolarSystem &system);
     void Verlet(class SolarSystem &system);
 };
