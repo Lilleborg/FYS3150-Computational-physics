@@ -29,7 +29,7 @@ if __name__ == '__main__':
 	ax.plot(sun[0,:],sun[1,:],sun[2,:],'ro')
 	#ax.plot([rvec[0,0]],[rvec[1,0]],[rvec[2,0]],'yo')
 	
-	ax.set_xlabel('x [m]')
-	ax.set_ylabel('y [m]')
-	ax.set_zlabel('z [m]')
+	ax.set_xlabel('x [AU]')
+	ax.set_ylabel('y [AU]')
+	ax.set_zlabel('z [AU]')
 	plt.show()
