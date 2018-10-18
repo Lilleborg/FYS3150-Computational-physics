@@ -14,6 +14,7 @@ public:
     CelestialBody &createCelestialBody(vec3 position, vec3 velocity, double mass);
     void calculateForcesAndEnergy();
     int numberOfBodies() const;
+    static int steps;
 
     double totalEnergy() const;
     double potentialEnergy() const;
@@ -21,6 +22,7 @@ public:
     void writeToFile(std::string filename);
     vec3 angularMomentum() const;
     std::vector<CelestialBody> &bodies();
+
 
 private:
     std::vector<CelestialBody> m_bodies;

@@ -15,7 +15,18 @@ void Solver::Euler(SolarSystem &system)
         body.velocity += body.force / body.mass * m_dt;
     }
 }
+/*
+void Solver::Euler(SolarSystem &system)
+{
+    system.calculateForcesAndEnergy();
 
+    for(CelestialBody &body : system.bodies()) {
+        for (int i=0; i<SolarSystem::steps; i++){
+
+        }
+    }
+}
+*/
 
 void Solver::Verlet(SolarSystem &system)
 {

@@ -8,6 +8,7 @@ using namespace std;
 int main(int numArguments, char **arguments)
 {
     int numTimesteps = 10000;
+    SolarSystem::steps = numTimesteps;
     if(numArguments >= 2) numTimesteps = atoi(arguments[1]);
 
     SolarSystem solarSystem;
