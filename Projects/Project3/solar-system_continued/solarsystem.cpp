@@ -34,6 +34,7 @@ void SolarSystem::calculateForcesAndEnergy()
             body2.force = 0-body1.force;
         }
 
+        //JUST THE EXPRESSIONS
         m_kineticEnergy += 0.5*body1.mass*body1.velocity.lengthSquared();
         m_potentialEnergy -= GM_star*body2.mass/deltaRvector;
         m_angularMomentum = body2.mass*(cross(body2.position body2.velocity));
