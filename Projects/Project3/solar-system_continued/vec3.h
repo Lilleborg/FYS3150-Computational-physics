@@ -17,6 +17,7 @@ public:
     double dot(vec3 otherVector);
     void normalize();
     vec3 normalized();
+    void copy(vec3 rhs);
 
     // Getters and setters
     double x() const { return components[0]; }
@@ -30,6 +31,7 @@ public:
     void print();
     void print(std::string name);
     friend std::ostream& operator<<(std::ostream& os, const vec3& myVector); // Allows cout << myVector << endl;
+
 
     // Operators
     double &operator()(int index) { return components[index]; } // Allows access like myVector(0)

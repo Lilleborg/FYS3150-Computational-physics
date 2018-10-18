@@ -22,6 +22,7 @@ public:
     vec3 angularMomentum() const;
     std::vector<CelestialBody> &bodies();
 
+
 private:
     std::vector<CelestialBody> m_bodies;
     vec3 m_angularMomentum;

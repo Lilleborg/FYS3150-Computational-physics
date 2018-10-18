@@ -23,18 +23,30 @@ void SolarSystem::calculateForcesAndEnergy()
         // Reset forces on all bodies
         body.force.zeros();
     }
-
+    cout << "START" << endl;
     for(int i=0; i<numberOfBodies(); i++) {
         CelestialBody &body1 = m_bodies[i];
         for(int j=i+1; j<numberOfBodies(); j++) {
             CelestialBody &body2 = m_bodies[j];
             vec3 deltaRVector = body1.position - body2.position;
             double dr = deltaRVector.length();
-            body1.force += GM_star*body2.mass*deltaRVector/pow(dr,3);
-            body2.force = 0-body1.force;
+            body1.force += (GM_star*body2.mass*deltaRVector)/pow(dr,3);
+            body2.force -= body1.force;
+
+            //cout << "body1 = " << body1.force << "body2 = " << body2.force << endl;
+            deltaRVector.print();
+            cout << "----------" << i << "    " << j << endl;
+            //body1.force_vector.push_back(body1.force);
+            //body2.force_vector.push_back(body2.force);
         }
 
+        //JUST THE EXPRESSIONS
+        /*
         m_kineticEnergy += 0.5*body1.mass*body1.velocity.lengthSquared();
+        m_potentialEnergy -= GM_star*body1.mass/body1.position.length();
+        m_angularMomentum = body2.mass*(cross(body2.position body2.velocity));
+        */
+
     }
 }
 

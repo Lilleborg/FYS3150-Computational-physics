@@ -74,6 +74,13 @@ void vec3::zeros()
     components[2] = 0;
 }
 
+void vec3::copy(vec3 rhs)
+{
+    components[0] = rhs[0];
+    components[1] = rhs[1];
+    components[2] = rhs[2];
+}
+
 vec3 &vec3::operator+=(double rhs)
 {
     components[0] += rhs;
