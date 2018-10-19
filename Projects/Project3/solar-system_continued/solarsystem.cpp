@@ -28,9 +28,9 @@ void SolarSystem::calculateForcesAndEnergy()
         CelestialBody &body1 = m_bodies[i];
         for(int j=i+1; j<numberOfBodies(); j++) {
             CelestialBody &body2 = m_bodies[j];
-            vec3 deltaRVector = body1.position - body2.position;
+            vec3 deltaRVector = body2.position - body1.position;
             double dr = deltaRVector.length();
-            vec3 force = -1*(GM_star*body2.mass*deltaRVector)/pow(dr,3);
+            vec3 force = (GM_star*body2.mass*body1.mass*deltaRVector)/pow(dr,3);
             body1.force += force;
             body2.force -= force;
 
