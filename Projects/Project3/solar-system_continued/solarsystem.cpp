@@ -23,19 +23,20 @@ void SolarSystem::calculateForcesAndEnergy()
         // Reset forces on all bodies
         body.force.zeros();
     }
-    cout << "START" << endl;
+    //cout << "START" << endl;
     for(int i=0; i<numberOfBodies(); i++) {
         CelestialBody &body1 = m_bodies[i];
         for(int j=i+1; j<numberOfBodies(); j++) {
             CelestialBody &body2 = m_bodies[j];
             vec3 deltaRVector = body1.position - body2.position;
             double dr = deltaRVector.length();
-            body1.force += (GM_star*body2.mass*deltaRVector)/pow(dr,3);
-            body2.force -= body1.force;
+            vec3 force = (GM_star*body2.mass*deltaRVector)/pow(dr,3);
+            body1.force += force;
+            body2.force -= force;
 
             //cout << "body1 = " << body1.force << "body2 = " << body2.force << endl;
-            deltaRVector.print();
-            cout << "----------" << i << "    " << j << endl;
+            //deltaRVector.print();
+            //cout << "----------" << i << "    " << j << endl;
             //body1.force_vector.push_back(body1.force);
             //body2.force_vector.push_back(body2.force);
         }
@@ -49,6 +50,21 @@ void SolarSystem::calculateForcesAndEnergy()
 
     }
 }
+
+void SolarSystem::writeToFile()
+{   int i = 1;
+    for (CelestialBody &body: m_bodies)
+    {
+        vector<vec3> file = body.position_vector;
+        string i_string = to_string(i);
+        string filename = "positions" + i_string + ".txt";
+        ofstream outFile(filename);
+
+        for (const auto &e : file) outFile << e.x() << " " << e.y() <<  " " << e.z() << "\n";
+        i++;
+    }
+}
+
 
 int SolarSystem::numberOfBodies() const
 {
@@ -70,6 +86,7 @@ double SolarSystem::kineticEnergy() const
     return m_kineticEnergy;
 }
 
+/*
 void SolarSystem::writeToFile(string filename)
 {
     if(!m_file.good()) {
@@ -86,6 +103,8 @@ void SolarSystem::writeToFile(string filename)
         m_file << body.position.x() << "  " << body.position.y() << "  " << body.position.z() << "\n";
     }
 }
+*/
+
 
 vec3 SolarSystem::angularMomentum() const
 {
