@@ -7,12 +7,10 @@ SolarSystem::SolarSystem() :
     m_potentialEnergy(0)
 {
 }
-
 CelestialBody& SolarSystem::createCelestialBody(vec3 position, vec3 velocity, double mass) {
     m_bodies.push_back( CelestialBody(position, velocity, mass) );
     return m_bodies.back(); // Return reference to the newest added celstial body
 }
-
 void SolarSystem::calculateForcesAndEnergy()
 {
     m_kineticEnergy = 0;
@@ -33,12 +31,6 @@ void SolarSystem::calculateForcesAndEnergy()
             vec3 force = (GM_star*body2.mass*body1.mass*deltaRVector)/pow(dr,3);
             body1.force += force;
             body2.force -= force;
-
-            //cout << "body1 force = " << body1.force << "body2 force = " << body2.force << endl;
-            //deltaRVector.print();
-            //cout << "---------- i = " << i << "--------------- j = " << j << endl;
-            //body1.force_vector.push_back(body1.force);
-            //body2.force_vector.push_back(body2.force);
         }
 
         //JUST THE EXPRESSIONS
@@ -50,7 +42,6 @@ void SolarSystem::calculateForcesAndEnergy()
 
     }
 }
-
 void SolarSystem::writeToFile()
 {   int i = 1;
     for (CelestialBody &body: m_bodies)
@@ -64,8 +55,6 @@ void SolarSystem::writeToFile()
         i++;
     }
 }
-
-
 int SolarSystem::numberOfBodies() const
 {
     return m_bodies.size();
@@ -85,26 +74,6 @@ double SolarSystem::kineticEnergy() const
 {
     return m_kineticEnergy;
 }
-
-/*
-void SolarSystem::writeToFile(string filename)
-{
-    if(!m_file.good()) {
-        m_file.open(filename.c_str(), ofstream::out);
-        if(!m_file.good()) {
-            cout << "Error opening file " << filename << ". Aborting!" << endl;
-            terminate();
-        }
-    }
-
-    //m_file << numberOfBodies() << endl;
-    //m_file << "Comment line that needs to be here. Balle." << endl;
-    for(CelestialBody &body : m_bodies) {
-        m_file << body.position.x() << "  " << body.position.y() << "  " << body.position.z() << "\n";
-    }
-}
-*/
-
 
 vec3 SolarSystem::angularMomentum() const
 {

@@ -41,14 +41,6 @@ int main(int numArguments, char **arguments)
 
     //WRITE TO FILE
     solarSystem.writeToFile();
-
-    /*
-    Solver integrator(dt);
-    for(int timestep=0; timestep<numTimesteps; timestep++) {
-        integrator.Euler(solarSystem);
-        solarSystem.writeToFile("positions.txt");
-    }
-    */
     cout << "I just created my first solar system that has " << solarSystem.bodies().size() << " objects." << endl;
     return 0;
 }
