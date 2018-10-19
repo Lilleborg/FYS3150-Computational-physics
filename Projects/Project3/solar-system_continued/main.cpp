@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int numArguments, char **arguments)
 {
-    int numTimesteps = 10;
+    int numTimesteps = 100000;
     if(numArguments >= 2) numTimesteps = atoi(arguments[1]);
 
     SolarSystem solarSystem;
@@ -23,8 +23,8 @@ int main(int numArguments, char **arguments)
     //solarSystem.createCelestialBody( vec3(-1, 0, 0.), vec3(0, -2*M_PI, 0), 3e-6 );
 
     //TRY WITH OTHER INITIAL CONDITIONS
-    solarSystem.createCelestialBody( vec3(-1, 0, 0.), vec3(0, -2*M_PI, 0), 3e-6 );
-    solarSystem.createCelestialBody( vec3(1., 0, 0.), vec3(0, -2*M_PI, 0), 1.9/2*1e-3 );
+    //solarSystem.createCelestialBody( vec3(-1, 0, 0.), vec3(0, -2*M_PI, 0), 3e-6 );
+    solarSystem.createCelestialBody( vec3(1., 0., 0.), vec3(0, -2*M_PI, 0), (1.9/2)*1e-3 );
 
     // To get a list (a reference, not copy) of all the bodies in the solar system, we use the .bodies() function
     vector<CelestialBody> &bodies = solarSystem.bodies();
@@ -36,8 +36,8 @@ int main(int numArguments, char **arguments)
 
     double dt = 0.00001;
     Solver integrator(dt, numTimesteps);
-    //integrator.Euler(solarSystem);
-    integrator.Verlet(solarSystem);
+    integrator.Euler(solarSystem);
+    //integrator.Verlet(solarSystem);
 
     //WRITE TO FILE
     solarSystem.writeToFile();

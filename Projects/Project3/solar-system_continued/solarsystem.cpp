@@ -23,7 +23,7 @@ void SolarSystem::calculateForcesAndEnergy()
         // Reset forces on all bodies
         body.force.zeros();
     }
-    cout << "START CALCULATING FORCES" << endl;
+    //cout << "START CALCULATING FORCES" << endl;
     for(int i=0; i<numberOfBodies(); i++) {
         CelestialBody &body1 = m_bodies[i];
         for(int j=i+1; j<numberOfBodies(); j++) {
@@ -34,9 +34,9 @@ void SolarSystem::calculateForcesAndEnergy()
             body1.force += force;
             body2.force -= force;
 
-            cout << "body1 force = " << body1.force << "body2 force = " << body2.force << endl;
+            //cout << "body1 force = " << body1.force << "body2 force = " << body2.force << endl;
             //deltaRVector.print();
-            cout << "---------- i = " << i << "--------------- j = " << j << endl;
+            //cout << "---------- i = " << i << "--------------- j = " << j << endl;
             //body1.force_vector.push_back(body1.force);
             //body2.force_vector.push_back(body2.force);
         }

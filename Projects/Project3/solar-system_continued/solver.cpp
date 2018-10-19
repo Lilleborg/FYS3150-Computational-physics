@@ -13,13 +13,13 @@ void Solver::Euler(SolarSystem &system)
     for (int i=0; i< m_steps; i++){
         system.calculateForcesAndEnergy();
         for(CelestialBody &body : system.bodies()) {
-            cout << " BODY CYCLE - EULER " << endl;
+            //cout << " BODY CYCLE - EULER " << endl;
             body.position += body.velocity*m_dt;
             body.position_vector.push_back(body.position);
             body.velocity += body.force / body.mass * m_dt;
             //body.velocity_vector.push_back(body.velocity);
-            std::cout << "UPDATING POSITION " << std::endl;
-            body.position.print();
+            //std::cout << "UPDATING POSITION " << std::endl;
+            //body.position.print();
         }
     }
 }
