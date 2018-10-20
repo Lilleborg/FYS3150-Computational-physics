@@ -23,7 +23,7 @@ int main(int numArguments, char **arguments)
 
 
     //TRY WITH OTHER INITIAL CONDITIONS
-    //solarSystem.createCelestialBody( vec3(-1, 0, 0.), vec3(0, -2*M_PI, 0), 3e-6 );
+    //solarSystem.createCelestialBody( vec3(-2, 0, 0.), vec3(0, -1.569898451309285E-03*365, 0), 3e-4 );
     //solarSystem.createCelestialBody( vec3(1., 0., 0.), vec3(0, -2*M_PI, 0), (1.9/2)*1e-3 );
 
     // To get a list (a reference, not copy) of all the bodies in the solar system, we use the .bodies() function

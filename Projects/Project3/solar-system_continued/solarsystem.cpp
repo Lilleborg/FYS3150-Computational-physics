@@ -7,9 +7,10 @@ SolarSystem::SolarSystem() :
     m_potentialEnergy(0)
 {
 }
-CelestialBody& SolarSystem::createCelestialBody(vec3 position, vec3 velocity, double mass) {
+CelestialBody &SolarSystem::createCelestialBody(vec3 position, vec3 velocity, double mass) {
+    // Return reference to the newest added celestial body
     m_bodies.push_back( CelestialBody(position, velocity, mass) );
-    return m_bodies.back(); // Return reference to the newest added celstial body
+    return m_bodies.back();
 }
 void SolarSystem::calculateForcesAndEnergy()
 {
