@@ -19,7 +19,7 @@ def unpack(solver,exeptions = []):
 	return list_objects_pos,list_names
 
 if __name__ == '__main__':
-	solver = sys.argv[1]
+	solver = sys.argv[1] #Give "Verlet" or "Euler"
 	objects,names = unpack(solver,["Uranus"])
 	skip = int(len(objects[0][0])/1000.)
 	
