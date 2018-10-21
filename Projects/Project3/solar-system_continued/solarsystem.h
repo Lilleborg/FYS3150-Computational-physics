@@ -11,14 +11,14 @@ class SolarSystem
 {
 public:
     SolarSystem();
-    CelestialBody &createCelestialBody(vec3 position, vec3 velocity, double mass);
+    CelestialBody &createCelestialBody(vec3 position, vec3 velocity, double mass,string name);
     void calculateForcesAndEnergy();
     int numberOfBodies() const;
 
     double totalEnergy() const;
     double potentialEnergy() const;
     double kineticEnergy() const;
-    void writeToFile();
+    void writeToFile(string solver);
     vec3 angularMomentum() const;
     std::vector<CelestialBody> &bodies();
 

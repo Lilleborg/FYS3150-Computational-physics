@@ -2,38 +2,44 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import sys
+import glob
 
-def unpack(nr_objects,read_array):
-	list_of_objects = []
-	for i in range(nr_objects):
-		list_of_objects.append(read_array[:,i::nr_objects])
-	return list_of_objects
-
-def plotbody(pos,ax):
-	ax.plot(pos[0],pos[1],pos[2])
-
-
+def unpack(solver,exeptions = []):
+	path = "../build/"+solver + "/positions_"
+	list_of_files = glob.glob(path+'*.txt')
+	for exept in exeptions:
+		for ele in list_of_files:
+			if exept in ele:
+				list_of_files.remove(ele)
+	list_names = [i.strip(path)  for i in list_of_files]
+	list_names = [i.strip(".txt")  for i in list_names]
+	list_objects_pos = []
+	for files in list_of_files:
+		list_objects_pos.append(np.loadtxt(files,unpack=True))
+	return list_objects_pos,list_names
 
 if __name__ == '__main__':
-	positions = np.loadtxt('../build/positions_euler.txt', unpack=True)
-	nr_objects = 3
+	solver = sys.argv[1]
+	objects,names = unpack(solver,["Uranus"])
+	skip = int(len(objects[0][0])/1000.)
 	
-	sun = positions[:,::nr_objects]
-	earth = positions[:,1::nr_objects]
-	jupiter = positions[:,2::nr_objects]
-	#earth2 = positions[:,2::nr_objects]
+	plt.figure(0)
+	for pos,name in zip(objects,names):
+		plt.plot(pos[0,::skip],pos[1,::skip],label=name)
 	
-	fig = plt.figure(2)
+	plt.xlabel('x [AU]')
+	plt.ylabel('y [AU]')
+	plt.legend()
+
+	fig = plt.figure(1)
 	ax = fig.gca(projection='3d')
-	ax.plot(earth[0,::100],earth[1,::100],earth[2,::100],label = 'earth')
-	ax.plot(jupiter[0,::100],jupiter[1,::100],jupiter[2,::100],label = 'Jupiter')
-	#ax.plot(earth2[0,::100],earth2[1,::100],earth2[2,::100])
-	ax.plot(sun[0,::100],sun[1,::100],sun[2,::100],'ro')
-	#ax.plot([rvec[0,0]],[rvec[1,0]],[rvec[2,0]],'yo')
+	for pos,name in zip(objects,names):
+		ax.plot(pos[0,::skip],pos[1,::skip],pos[2,::skip],label=name)
 	
 	ax.set_xlabel('x [AU]')
 	ax.set_ylabel('y [AU]')
 	ax.set_zlabel('z [AU]')
 	plt.legend()
+	ax.set_zlim(-1,1)
 	
 	plt.show()

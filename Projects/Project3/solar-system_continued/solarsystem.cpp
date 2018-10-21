@@ -7,9 +7,9 @@ SolarSystem::SolarSystem() :
     m_potentialEnergy(0)
 {
 }
-CelestialBody &SolarSystem::createCelestialBody(vec3 position, vec3 velocity, double mass) {
+CelestialBody &SolarSystem::createCelestialBody(vec3 position, vec3 velocity, double mass, string name) {
     // Return reference to the newest added celestial body
-    m_bodies.push_back( CelestialBody(position, velocity, mass) );
+    m_bodies.push_back( CelestialBody(position, velocity, mass,name) );
     return m_bodies.back();
 }
 void SolarSystem::calculateForcesAndEnergy()
@@ -43,18 +43,19 @@ void SolarSystem::calculateForcesAndEnergy()
 
     }
 }
-void SolarSystem::writeToFile()
-{   int i = 1;
+void SolarSystem::writeToFile(string solver)
+{
     for (CelestialBody &body: m_bodies)
     {
         vector<vec3> file = body.position_vector;
-        string i_string = to_string(i);
-        string filename = "positions" + i_string + ".txt";
+        string filename = "./"+ solver + "/" + "positions_" + body.name + ".txt";
         ofstream outFile(filename);
-
         for (const auto &e : file) outFile << e.x() << " " << e.y() <<  " " << e.z() << "\n";
-        i++;
+
     }
+//    string filename_names = "object_names" + to_string(m_bodies.size()) + ".txt";
+//    ofstream outfilename(filename_names);
+//    for (const auto &body : m_bodies) outfilename << body.name << "\n";
 }
 int SolarSystem::numberOfBodies() const
 {
