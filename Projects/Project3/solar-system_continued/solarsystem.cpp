@@ -36,14 +36,6 @@ void SolarSystem::calculateForcesAndEnergy()
             m_potentialEnergy -= GM_star*body2.mass/deltaRVector.length();
             m_angularMomentum = body2.mass*(body2.velocity.cross(body2.position));
         }
-
-        //JUST THE EXPRESSIONS
-        /*
-        m_kineticEnergy += 0.5*body1.mass*body1.velocity.lengthSquared();
-        m_potentialEnergy -= GM_star*body1.mass/body1.position.length();
-        m_angularMomentum = body2.mass*(cross(body2.position body2.velocity));
-        */
-
     }
 }
 void SolarSystem::writeToFile(string solver)
@@ -56,6 +48,7 @@ void SolarSystem::writeToFile(string solver)
         for (const auto &e : file) outFile << e.x() << " " << e.y() <<  " " << e.z() << "\n";
 
     }
+
 //    string filename_names = "object_names" + to_string(m_bodies.size()) + ".txt";
 //    ofstream outfilename(filename_names);
 //    for (const auto &body : m_bodies) outfilename << body.name << "\n";

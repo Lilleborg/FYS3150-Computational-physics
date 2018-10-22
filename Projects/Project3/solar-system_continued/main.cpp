@@ -6,14 +6,17 @@
 #include <string>
 using namespace std;
 
-int testing_main();
+int testing_main(string Solver);
 
 int main(int numArguments, char **arguments)
 {
-    if (strcmp(arguments[1],"Test")){
-        int result = testing_main();
+    if(numArguments == 2){  // Test option, if only one cmd given and that is == "Test" testing will run and terminate after
+        cout << strcmp(arguments[1], "Test");
+    if (strcmp(arguments[1],"Test") == 0){
+        int result = testing_main("Verlet");
+        result = 0;
         return result;
-    }
+    }}
     int numTimesteps = 1e5;
     string solvertype = "Verlet";
     if(numArguments >= 3){
@@ -65,6 +68,19 @@ int main(int numArguments, char **arguments)
     return 0;
 }
 
-int testing_main(){
+int testing_main(string Solvertype){
     SolarSystem testsystem;
+    int success = 0;
+
+    testsystem.createCelestialBody( vec3(0,0,0), vec3(0,0,0), 1.0, "Sun");
+    testsystem.createCelestialBody( vec3(1,0,0), vec3(0,2*M_PI,0), 3e-6, "Earth" );
+
+    Solver integrator(dt, numTimesteps);
+    if (solvertype == "Euler"){
+        integrator.Euler(testsystem);
+    }
+    if(solvertype == "Verlet"){
+        integrator.Verlet(testsystem);
+
+    return success;
 }

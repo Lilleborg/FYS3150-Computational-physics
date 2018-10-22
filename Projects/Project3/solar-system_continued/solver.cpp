@@ -16,9 +16,11 @@ void Solver::Euler(SolarSystem &system)
             body.position_vector.push_back(body.position);
             body.velocity += (body.force / body.mass) * m_dt;
 
+            if(i % 100 == 0){       // saving only for each 100th time step
             system.kinetic_vector.push_back(system.kineticEnergy());
             system.potential_vector.push_back(system.potentialEnergy());
             system.ang_momentum_vector.push_back(system.angularMomentum());
+            }
         }
     }
 }
@@ -36,9 +38,11 @@ void Solver::Verlet(SolarSystem &system)
             system.calculateForcesAndEnergy();
             body.velocity += m_dt*0.5*(body.force/body.mass + acc2);
 
+            if(i % 100 == 0){       // saving only for each 100th time step
             system.kinetic_vector.push_back(system.kineticEnergy());
             system.potential_vector.push_back(system.potentialEnergy());
             system.ang_momentum_vector.push_back(system.angularMomentum());
+            }
         }
     }
 }
