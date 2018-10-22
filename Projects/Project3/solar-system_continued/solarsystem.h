@@ -21,6 +21,9 @@ public:
     void writeToFile(string solver);
     vec3 angularMomentum() const;
     std::vector<CelestialBody> &bodies();
+    std::vector<double> kinetic_vector;
+    std::vector<double> potential_vector;
+    std::vector<vec3> ang_momentum_vector;
 
 private:
     std::vector<CelestialBody> m_bodies;

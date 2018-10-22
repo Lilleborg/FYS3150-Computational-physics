@@ -15,6 +15,10 @@ void Solver::Euler(SolarSystem &system)
             body.position += body.velocity*m_dt;
             body.position_vector.push_back(body.position);
             body.velocity += (body.force / body.mass) * m_dt;
+
+            system.kinetic_vector.push_back(system.kineticEnergy());
+            system.potential_vector.push_back(system.potentialEnergy());
+            system.ang_momentum_vector.push_back(system.angularMomentum());
         }
     }
 }
@@ -31,7 +35,10 @@ void Solver::Verlet(SolarSystem &system)
             acc2.copy(acc);
             system.calculateForcesAndEnergy();
             body.velocity += m_dt*0.5*(body.force/body.mass + acc2);
-            //body.velocity_vector.push_back(body.velocity);
+
+            system.kinetic_vector.push_back(system.kineticEnergy());
+            system.potential_vector.push_back(system.potentialEnergy());
+            system.ang_momentum_vector.push_back(system.angularMomentum());
         }
     }
 }
