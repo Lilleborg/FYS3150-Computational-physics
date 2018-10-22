@@ -4,10 +4,10 @@ from mpl_toolkits.mplot3d import Axes3D
 import sys
 import glob
 
-def unpack(solver,exeptions = []):
+def unpack(solver,exceptions = []):
 	path = "../build/"+solver + "/positions_"
 	list_of_files = glob.glob(path+'*.txt')
-	for exept in exeptions:
+	for exept in exceptions:
 		for ele in list_of_files:
 			if exept in ele:
 				list_of_files.remove(ele)
@@ -19,8 +19,20 @@ def unpack(solver,exeptions = []):
 	return list_objects_pos,list_names
 
 if __name__ == '__main__':
-	solver = sys.argv[1]
-	objects,names = unpack(solver,["Uranus"])
+	try:
+		solver = sys.argv[1]
+		exceptions = sys.argv[2:]
+	except IndexError:
+		print 'Please provide solver type and optional exceptions in command line'
+		print 'Solver type not given, using data from Verlet with no exceptions'
+		solver = "Verlet"
+		exceptions = []
+	except ValueError:	
+		print 'User input not understood, using data from Verlet with no exceptions'
+		solver = "Verlet"	
+		exceptions = []
+
+	objects,names = unpack(solver,exceptions)
 	skip = int(len(objects[0][0])/1000.)
 	
 	plt.figure(0)
