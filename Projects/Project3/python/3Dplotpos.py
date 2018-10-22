@@ -19,6 +19,7 @@ def unpack(solver,exceptions = []):
 	return list_objects_pos,list_names
 
 if __name__ == '__main__':
+<<<<<<< HEAD
 	try:
 		solver = sys.argv[1]
 		exceptions = sys.argv[2:]
