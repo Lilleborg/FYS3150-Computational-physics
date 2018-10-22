@@ -14,12 +14,18 @@ int main(int numArguments, char **arguments)
         int result = testing_main();
         return result;
     }
-    int numTimesteps = 1e5;
+
+    int years = 1e5;
     string solvertype = "Verlet";
+
     if(numArguments >= 3){
-        numTimesteps = atoi(arguments[1]);
+        years = atoi(arguments[1]);
         solvertype = (arguments[2]);
     }
+
+    double dt = 0.001;
+    int numTimesteps = years/dt;
+
     SolarSystem solarSystem;
     // We create new bodies like this. Note that the createCelestialBody function returns a reference to the newly created body
     // This can then be used to modify properties or print properties of the body if desired
@@ -50,7 +56,6 @@ int main(int numArguments, char **arguments)
         cout << "The position of this object is " << body.position << " with velocity " << body.velocity << endl;
     }
 
-    double dt = 0.001;
     Solver integrator(dt, numTimesteps);
     if (solvertype == "Euler"){
         integrator.Euler(solarSystem);
