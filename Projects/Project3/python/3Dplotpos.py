@@ -15,11 +15,11 @@ def unpack(solver,exceptions = []):
 	list_names = [i.strip(".txt")  for i in list_names]
 	list_objects_pos = []
 	for files in list_of_files:
+		print files
 		list_objects_pos.append(np.loadtxt(files,unpack=True))
 	return list_objects_pos,list_names
 
 if __name__ == '__main__':
-<<<<<<< HEAD
 	try:
 		solver = sys.argv[1]
 		exceptions = sys.argv[2:]

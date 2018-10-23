@@ -32,22 +32,36 @@ void SolarSystem::calculateForcesAndEnergy()
             vec3 force = (GM_star*body2.mass*body1.mass*deltaRVector)/pow(dr,3);
             body1.force += force;
             body2.force -= force;
-            m_kineticEnergy += 0.5*body1.mass*body1.velocity.lengthSquared();
-            m_potentialEnergy -= GM_star*body2.mass/deltaRVector.length();
-            m_angularMomentum = body2.mass*(body2.velocity.cross(body2.position));
+            m_kineticEnergy += 0.5*body1.mass*body1.velocity.lengthSquared()+0.5*body2.mass*body2.velocity.lengthSquared();
+            m_potentialEnergy -= GM_star*body2.mass*body1.mass/deltaRVector.length();
+            m_angularMomentum += body1.mass*(body1.velocity.cross(body1.position))+body2.mass*(body2.velocity.cross(body2.position));
         }
     }
 }
 void SolarSystem::writeToFile(string solver)
 {
+    cout << "Writing files:" << endl;
     for (CelestialBody &body: m_bodies)
     {
         vector<vec3> file = body.position_vector;
         string filename = "./"+ solver + "/" + "positions_" + body.name + ".txt";
+        cout << filename << endl;
         ofstream outFile(filename);
         for (const auto &e : file) outFile << e.x() << " " << e.y() <<  " " << e.z() << "\n";
 
     }
+    // Writing energies and momentum
+    string filenamestart =  "./" + solver + "/";
+    string kineticname = filenamestart + "kinetic.txt";
+    string potentialname = filenamestart + "potential.txt";
+    string angname = filenamestart + "ang_momentum.txt";
+    cout << kineticname << "\n" << potentialname << "\n" << angname << endl;
+    ofstream kinetic(kineticname);
+    ofstream potential(potentialname);
+    ofstream ang(angname);
+    for (const auto &x : kinetic_vector) kinetic << x << "\n";
+    for (const auto &x : potential_vector) potential << x << "\n";
+    for (const auto &x : ang_momentum_vector) ang << x << "\n";
 
 //    string filename_names = "object_names" + to_string(m_bodies.size()) + ".txt";
 //    ofstream outfilename(filename_names);
