@@ -58,9 +58,9 @@ void SolarSystem::writeToFile(string solver,string dt_string)
     ofstream kinetic(kineticname);
     ofstream potential(potentialname);
     ofstream ang(angname);
-    for (const auto &x : kinetic_vector) kinetic << x << "\n";
-    for (const auto &x : potential_vector) potential << x << "\n";
-    for (auto &x : ang_momentum_vector) ang << x.length() << "\n";
+    for (const auto &x : kinetic_vector) kinetic << (x-kinetic_vector[0])/kinetic_vector[0] << "\n";
+    for (const auto &x : potential_vector) potential << (x-potential_vector[0])/potential_vector[0] << "\n";
+    for (auto &x : ang_momentum_vector) ang << (x.length()-ang_momentum_vector[0].length())/ang_momentum_vector[0].length() << "\n";
     cout << kineticname << "\n" << potentialname << "\n" << angname << endl;
 
 //    string filename_names = "object_names" + to_string(m_bodies.size()) + ".txt";

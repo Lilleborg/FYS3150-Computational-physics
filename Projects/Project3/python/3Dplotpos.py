@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import rcParams
 import sys
 import glob
 
@@ -12,7 +13,7 @@ def unpack(solver,exceptions = []):
 			if exept in ele:
 				list_of_files.remove(ele)
 	list_names = [i.strip(path)  for i in list_of_files]
-	list_names = [i.strip(".txt")  for i in list_names]
+	list_names = [i.strip("_.txt")  for i in list_names]
 	list_objects_pos = []
 	for files in list_of_files:
 		print files
@@ -36,6 +37,11 @@ if __name__ == '__main__':
 	objects,names = unpack(solver,exceptions)
 	skip = int(len(objects[0][0])/1000.)
 	
+	# Plotting
+	font = {'size'   : 12}
+	plt.matplotlib.rc('font', **font)
+	rcParams.update({'figure.autolayout': True})
+
 	plt.figure(0)
 	for pos,name in zip(objects,names):
 		plt.plot(pos[0,::skip],pos[1,::skip],label=name)
