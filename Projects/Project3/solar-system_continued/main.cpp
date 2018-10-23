@@ -38,7 +38,7 @@ int main(int numArguments, char **arguments)
     // We don't need to store the reference, but just call the function without a left hand side
     // WE SHOULD ADD A NAME FOR THE OBJECTS?
     solarSystem.createCelestialBody( vec3(-1.734173457390217E-01,9.736937590796603E-01,-1.582107821713564E-04), vec3(-1.720709737865684E-02,-3.125258586509626E-03,-1.120932427483096E-07)*365, 3e-6, "Earth" );
-    solarSystem.createCelestialBody( vec3(-4.259467773894452E+00,-3.361194945480983E+00,1.092145047021746E-01), vec3(4.586299412789570E-03,-5.564874896880609E-03,-7.945799167252124E-05)*365, 1.9/2*1e-3, "Jupiter");
+    //solarSystem.createCelestialBody( vec3(-4.259467773894452E+00,-3.361194945480983E+00,1.092145047021746E-01), vec3(4.586299412789570E-03,-5.564874896880609E-03,-7.945799167252124E-05)*365, 1.9/2*1e-3, "Jupiter");
 
     solarSystem.createCelestialBody( vec3(0,0,0), vec3(0,0,0), 1.0, "Sun");
 
