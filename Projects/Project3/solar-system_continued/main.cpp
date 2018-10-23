@@ -6,12 +6,19 @@
 #include <string>
 using namespace std;
 
-int testing_main(string Solver, double dt, int numTimesteps);
+int testing_main();
 
 int main(int numArguments, char **arguments)
 {
     int years = 2;
     string solvertype = "Verlet";
+
+    if(numArguments == 2){  // Test option, if only one cmd given and that is == "Test" testing will run and terminate after
+        if (strcmp(arguments[1],"Test") == 0){
+            int result = testing_main();
+            result = 0;
+            return result;
+        }}
 
     if(numArguments >= 3){
         years = atoi(arguments[1]);
@@ -19,15 +26,8 @@ int main(int numArguments, char **arguments)
     }
 
     double dt = 1e-5;
-    int numTimesteps = years/dt;
+    int numTimesteps = ceil(years/dt);
     cout << "Number of time steps " << numTimesteps << endl;
-
-    if(numArguments == 2){  // Test option, if only one cmd given and that is == "Test" testing will run and terminate after
-        if (strcmp(arguments[1],"Test") == 0){
-            int result = testing_main("Euler",dt,numTimesteps);
-            result = 0;
-            return result;
-        }}
 
     SolarSystem solarSystem;
     // We create new bodies like this. Note that the createCelestialBody function returns a reference to the newly created body
@@ -73,24 +73,84 @@ int main(int numArguments, char **arguments)
     return 0;
 }
 
-int testing_main(string Solvertype, double dt, int numTimesteps){
+int testing_main(){
     cout << "----Testing started----" << endl;
     int success = 0;            // bool variable
-    SolarSystem testsystem_E;   // system for testing Euler
-    SolarSystem testsystem_V;   // system for testing Verlet
-    // Initiating bodies
-    testsystem_E.createCelestialBody( vec3(0,0,0), vec3(0,0,0), 1.0, "Sun");
-    testsystem_E.createCelestialBody( vec3(1,0,0), vec3(0,2*M_PI,0), 3e-6, "Earth" );
-    testsystem_V.createCelestialBody( vec3(0,0,0), vec3(0,0,0), 1.0, "Sun");
-    testsystem_V.createCelestialBody( vec3(1,0,0), vec3(0,2*M_PI,0), 3e-6, "Earth" );
-    // Solving each system and writes to file for plotting
-    Solver integrator(dt, numTimesteps);
-    integrator.Euler(testsystem_E);
-    integrator.Verlet(testsystem_V);
 
-    testsystem_E.writeToFile("Euler_testing");
-    testsystem_V.writeToFile("Verlet_testing");
+    for (int i = 2; i < 7; ++i) {
+        vector <vec3> result_E;  // saving result of Eulertest for each dt
+        vector <vec3> result_V;  // saving result of Verlettest for each dt
+        double dt = 1/pow(10,i);
+        int numTimesteps = ceil(2/dt);
+        cout << "Testing with " << numTimesteps << " time steps" << endl;
+        SolarSystem testsystem_E;   // system for testing Euler
+        SolarSystem testsystem_V;   // system for testing Verlet
+        // Initiating bodies
+        testsystem_E.createCelestialBody( vec3(0,0,0), vec3(0,0,0), 1.0, "Sun");
+        testsystem_E.createCelestialBody( vec3(1,0,0), vec3(0,2*M_PI,0), 3e-6, "Earth" );
+        testsystem_V.createCelestialBody( vec3(0,0,0), vec3(0,0,0), 1.0, "Sun");
+        testsystem_V.createCelestialBody( vec3(1,0,0), vec3(0,2*M_PI,0), 3e-6, "Earth" );
 
+        // Solving each system and writes to file for plotting
+        Solver integrator(dt, numTimesteps);
+        integrator.Euler(testsystem_E);
+        integrator.Verlet(testsystem_V);
+
+        testsystem_E.writeToFile("Euler_testing","1e-" + to_string(i));
+        testsystem_V.writeToFile("Verlet_testing","1e-" + to_string(i));
+
+        // Testing conservation, testing against initial values
+        double tol = 1e-7;
+        double initial_kin_E = testsystem_E.kinetic_vector[0];
+        double initial_kin_V = testsystem_V.kinetic_vector[0];
+        double initial_pot_E = testsystem_E.potential_vector[0];
+        double initial_pot_V = testsystem_V.potential_vector[0];
+        double initial_ang_mom_modulus_E = testsystem_E.ang_momentum_vector[0].length();
+        double initial_ang_mom_modulus_V = testsystem_V.ang_momentum_vector[0].length();
+        vec3 equaling = vec3(); // [x = result kinetic, y = result pot, z = result momentum]
+        for (u_long k = 0; k < testsystem_E.kinetic_vector.size();k++){ // looping over the size of the saved vectors
+            // setting the value in equaling to 1 if the test fails
+            // Euler testing
+            if (abs(testsystem_E.kinetic_vector[k]-initial_kin_E)>tol){
+                equaling.setX(1);
+            }
+            if (abs(testsystem_E.potential_vector[k]-initial_pot_E)>tol){
+                equaling.setY(1);
+            }
+            if (abs(testsystem_E.ang_momentum_vector[k].length()-initial_ang_mom_modulus_E)>tol){
+                equaling.setZ(1);
+            }
+            //equaling.print("For Euler");
+            result_E.push_back(equaling);
+            equaling.zeros();   // resetting equaling
+            // Verlet testing
+            if (abs(testsystem_V.kinetic_vector[k]-initial_kin_V)>tol){
+                equaling.setX(1);
+            }
+            if (abs(testsystem_V.potential_vector[k]-initial_pot_V)>tol){
+                equaling.setY(1);
+            }
+            if (abs(testsystem_V.ang_momentum_vector[k].length()-initial_ang_mom_modulus_V)>tol){
+                equaling.setZ(1);
+            }
+            //equaling.print("For Verlet");
+            result_V.push_back(equaling);
+            equaling.zeros();
+        }
+    cout << "With dt = " << dt << endl;
+    cout << "For Euler:" << endl;
+    for (u_long k = 0; k < result_E.size();k++){ // looping over the size of the saved results
+        vec3 result = result_E[k];
+        cout << result << " ";
+    }
+    cout << endl;
+    cout << "For Verlet:" << endl;
+    for (u_long k = 0; k < result_V.size();k++){ // looping over the size of the saved results
+        vec3 result = result_V[k];
+        cout << result << " ";
+    }
+    cout << endl;
     cout << "----Testing ended----" << endl;
+    }
     return success;
 }
