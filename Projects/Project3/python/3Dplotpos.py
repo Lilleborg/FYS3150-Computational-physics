@@ -16,8 +16,9 @@ def unpack(solver,exceptions = []):
 	list_names = [i.strip(".txt")  for i in list_names]
 	list_objects_pos = []
 	for files in list_of_files:
-		print files
+		print '---Loading file---'
 		list_objects_pos.append(np.loadtxt(files,unpack=True))
+		print files
 	return list_objects_pos,list_names
 
 if __name__ == '__main__':
@@ -29,10 +30,15 @@ if __name__ == '__main__':
 	try:
 		plot_filename = sys.argv[2]
 	except IndexError:
-		print 'Filename for saving plots not given, defaulting to "plot_default_'+solver+'.pdf'
+		print 'Filename for saving plots not given, second cmd argument. Defaulting to "plot_default_'+solver+'.pdf'
 		plot_filename = 'plot_default_' + solver + '.pdf'
+	try:
+		title = sys.argv[3]
+	except IndexError:
+		print 'No title given, third cmd argument. Defaulting to "Positions '+solver+'"'
+		title = "Positions "+ solver
 	try :
-		exceptions = sys.argv[3:]
+		exceptions = sys.argv[4:]
 	except IndexError:
 		print 'No exceptions given.'
 		exceptions = []
@@ -53,7 +59,8 @@ if __name__ == '__main__':
 			plt.plot(pos[0,::skip],pos[1,::skip],'o',label=name)	
 		else:
 			plt.plot(pos[0,::skip],pos[1,::skip],label=name)
-	
+	plt.axis('equal')
+	plt.title(title)
 	plt.xlabel('x [AU]')
 	plt.ylabel('y [AU]')
 	plt.legend()
@@ -61,6 +68,7 @@ if __name__ == '__main__':
 
 	fig = plt.figure(1)
 	ax = fig.gca(projection='3d')
+	plt.title(title)
 	for pos,name in zip(objects,names):
 		if name == "arth":	#Fixing error from str.strip
 			name = "Earth"
