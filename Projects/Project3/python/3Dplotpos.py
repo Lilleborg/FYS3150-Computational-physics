@@ -74,6 +74,6 @@ if __name__ == '__main__':
 	ax.set_zlabel('z [AU]')
 	plt.legend()
 	ax.set_zlim(-1,1)
-	plt.savefig(plot_filename)
+	plt.savefig("3D"+plot_filename)
 	
 	plt.show()
