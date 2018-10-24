@@ -38,6 +38,7 @@ void SolarSystem::calculateForcesAndEnergy()
         }
     }
 }
+
 void SolarSystem::calculateForcesAndEnergy_GR()     // Method used for last exercise, perihelion precession
 {
     m_kineticEnergy = 0;
@@ -65,10 +66,11 @@ void SolarSystem::calculateForcesAndEnergy_GR()     // Method used for last exer
         }
     }
 }
+
 void SolarSystem::writeToFile(string solver,string dt_string)
 {
     cout << "Writing files:" << endl;
-    /*for (CelestialBody &body: m_bodies)
+    for (CelestialBody &body: m_bodies)
     {
         vector<vec3> file = body.position_vector;
         string filename = "./"+ solver + "/" + "positions_" + body.name + dt_string+ ".txt";
@@ -82,7 +84,7 @@ void SolarSystem::writeToFile(string solver,string dt_string)
         }
         cout << filename << endl;
 
-    }*/
+    }
     // Writing energies and momentum
     string filenamestart =  "./" + solver + "/";
     string kineticname = filenamestart + "kinetic" + dt_string + ".txt";

@@ -73,9 +73,9 @@ if __name__ == '__main__':
 		if name == "arth":	#Fixing error from str.strip
 			name = "Earth"
 		if name == "Sun":
-			plt.plot(pos[0,::skip],pos[1,::skip],pos[2,::skip],'o',label=name)	
+			plt.plot(pos[0],pos[1],pos[2],'o',label=name)	
 		else:
-			plt.plot(pos[0,::skip],pos[1,::skip],pos[2,::skip],label=name)
+			plt.plot(pos[0],pos[1],pos[2],label=name)
 	
 	ax.set_xlabel('x [AU]')
 	ax.set_ylabel('y [AU]')

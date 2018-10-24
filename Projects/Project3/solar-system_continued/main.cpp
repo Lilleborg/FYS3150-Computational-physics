@@ -4,9 +4,12 @@
 #include "solarsystem.h"
 #include "solver.h"
 #include <string>
+#include "time.h"
 using namespace std;
 
 int testing_main();
+vec3 InitialCondition_CM(SolarSystem &solarSystem);
+double time_it(string user, clock_t &start, clock_t &finish);
 
 int main(int numArguments, char **arguments)
 {
@@ -25,43 +28,35 @@ int main(int numArguments, char **arguments)
         solvertype = (arguments[2]);
     }
 
-    double dt = 1e-7;
+    double dt = 1e-5;
     int numTimesteps = ceil(years/dt);
     cout << "Number of time steps " << numTimesteps << endl;
 
     SolarSystem solarSystem;
-    // We create new bodies like this. Note that the createCelestialBody function returns a reference to the newly created body
-    // This can then be used to modify properties or print properties of the body if desired
-    // Use with: solarSystem.createCelestialBody( position, velocity, mass );
-
-
-    // We don't need to store the reference, but just call the function without a left hand side
-    // WE SHOULD ADD A NAME FOR THE OBJECTS?
 
     // INITIAL CONDITIONS WHEN SUN IS HELD IN CENTER
     //solarSystem.createCelestialBody(vec3(-1.752200603881933E-01,9.675633320786794E-01,-3.799746898985921E-05),vec3(-1.720124877602163E-02,-3.130282140938300E-03,-2.538590515321615E-07)*365,3e-6,"Earth");
-    //solarSystem.createCelestialBody(vec3(-4.261270488543623E+00,-3.367325372481964E+00, 1.093347180153562E-01),vec3(4.592148015424783E-03,-5.569898451309285E-03,-7.959975748130483E-05)*365,1.9/2*1e-3*10,"Jupiter");
-    solarSystem.createCelestialBody(vec3(0.3075,0,0),vec3(0,12.44,0),1.65e-7,"Mercury"); // Mercury perihelion precession values
+    //solarSystem.createCelestialBody(vec3(0.3075,0,0),vec3(0,12.44,0),1.65e-7,"Mercury"); // Mercury perihelion precession values
+    //solarSystem.createCelestialBody(vec3(-4.261270488543623E+00,-3.367325372481964E+00, 1.093347180153562E-01),vec3(4.592148015424783E-03,-5.569898451309285E-03,-7.959975748130483E-05)*365,1.9/2*1e-3,"Jupiter");
+    //solarSystem.createCelestialBody( vec3(0,0,0), vec3(0,0,0), 1.0, "Sun");
 
 
     // INITIAL CONDITIONS WHEN CENTER IS CENTER OF MASS
-//    solarSystem.createCelestialBody( vec3(-1.734173457390217E-01,9.736937590796603E-01,-1.582107821713564E-04), vec3(-1.720709737865684E-02,-3.125258586509626E-03,-1.120932427483096E-07)*365, 3e-6, "Earth" );
-//    solarSystem.createCelestialBody( vec3(-4.259467773894452E+00,-3.361194945480983E+00,1.092145047021746E-01), vec3(4.586299412789570E-03,-5.564874896880609E-03,-7.945799167252124E-05)*365, 1.9/2*1e-3, "Jupiter");
+    solarSystem.createCelestialBody( vec3(-1.734173457390217E-01,9.736937590796603E-01,-1.582107821713564E-04), vec3(-1.720709737865684E-02,-3.125258586509626E-03,-1.120932427483096E-07)*365, 3e-6, "Earth" );
+    solarSystem.createCelestialBody( vec3(-4.259467773894452E+00,-3.361194945480983E+00,1.092145047021746E-01), vec3(4.586299412789570E-03,-5.564874896880609E-03,-7.945799167252124E-05)*365, 1.9/2*1e-3, "Jupiter");
+    solarSystem.createCelestialBody(vec3(-1.581869997754351E+00,-3.828978953153063E-01, 3.059389984291728E-02), vec3(3.855008143708335E-03,-1.238923952632399E-02,-3.543305537962489E-04)*365, 3.3e-7, "Mars");
+    solarSystem.createCelestialBody( vec3(-3.859054833019958E-01,-1.654307689835696E-03,3.481192038201179E-02), vec3(-5.294168138166344E-03,-2.691453995673129E-02,-1.714386730721826E-03)*356, 1.65e-7,"Mercury");
+    solarSystem.createCelestialBody(vec3(7.293167005709342E-02,-7.175590811561052E-01,-1.415191215112003E-02), vec3(1.998700269409145E-02,1.911135291296663E-03,-1.127428703200971E-03)*365,2.45e-6,"Venus");
+    solarSystem.createCelestialBody(vec3(1.772328745814774E+01,9.063002917185520E+00,-1.959478058581542E-01), vec3(-1.819603624325987E-03,3.318475309448707E-03,3.577108114482214E-05)*365,5.55e-5, "Uranus");
+    solarSystem.createCelestialBody(vec3(2.868162693362844E+01,-8.591658348777845E+00,-4.840680053568654E-01), vec3(8.802822510921428E-04,3.025692572392946E-03,-8.295671458148408E-05)*365,1.03/2*1e-4, "Neptune");
+    solarSystem.createCelestialBody(vec3(4.789734457676079E-02,-1.005701578936080E+01,1.729539849045261E-01), vec3(5.271615540953220E-03,8.862373325538410E-06,-2.100595333499852E-04)*365,5.5/2*1e-4, "Saturn");
+    solarSystem.createCelestialBody(vec3(1.077826511187572E+01,-3.168642408143715E+01,2.729178542838963E-01), vec3(3.030812460422457E-03,3.426619083057393E-04,-9.199095031922107E-04)*365,1.31/2*1e-8, "Pluto");
+    solarSystem.createCelestialBody(vec3(-2.452925329376519E+00,-7.723977367789784E-01,4.275617365061914E-01), vec3(2.640404541258229E-03,-1.059141794461857E-02,-8.215714583514224E-04)*365,9.393/2*1e-10, "Ceres");
+    solarSystem.createCelestialBody(vec3(-2.039217469490588E+01,2.632421748180365E+01,-9.948727662866242E+00), vec3(1.551102962932346E-04,6.616059786287673E-04,-6.714831103374149E-05)*365,2.2/2*1e-16, "HalleysComet");
+    solarSystem.createCelestialBody( vec3(0,0,0), InitialCondition_CM(solarSystem), 1.0, "Sun");
 
-    solarSystem.createCelestialBody( vec3(0,0,0), vec3(0,0,0), 1.0, "Sun");
 
-//    solarSystem.createCelestialBody(vec3(-1.583672712165000E+00,-3.890283228691061E-01, 3.071411265610202E-02), vec3(3.860856746782269E-03,-1.239426308079003E-02,-3.544723197396996E-04)*365, 3.3e-7, "Mars");
-//    solarSystem.createCelestialBody( vec3(-3.877081979511674E-01,-7.784734690816700E-03,3.493213369519331E-02), vec3(-5.288319535531131E-03,-2.691956351115996E-02,-1.714528496530611E-03)*356, 1.65e-7,"Mercury");
-//    solarSystem.createCelestialBody(vec3(7.112895540792180E-02,-7.236895081570862E-01,-1.403169883793853E-02), vec3(1.999285129672666E-02,1.906111736867988E-03,-1.127570469009755E-03)*365,2.45e-6,"Venus");
-//    solarSystem.createCelestialBody(vec3(2.867982421897927E+01,-8.597788775778826E+00,-4.839477920436837E-01), vec3(8.861308537273553E-04,3.020669017964271E-03,-8.309848039026806E-05)*365,5.55e-5, "Uranus");
-
-
-
-    //TRY WITH OTHER INITIAL CONDITIONS
-    //solarSystem.createCelestialBody( vec3(-2, 0, 0.), vec3(0, -1.569898451309285E-03*365, 0), 3e-4 );
-    //solarSystem.createCelestialBody( vec3(1., 0., 0.), vec3(0, -2*M_PI, 0), (1.9/2)*1e-3 );
-
-    // To get a list (a reference, not copy) of all the bodies in the solar system, we use the .bodies() function
+    // Printing the initialized system
     vector<CelestialBody> &bodies = solarSystem.bodies();
 
     for(int i = 0; i<bodies.size(); i++) {
@@ -69,21 +64,42 @@ int main(int numArguments, char **arguments)
         cout << "The position of the " << body.name << " is " << body.position << " with velocity " << body.velocity << endl;
     }
 
+    //FUNCTION FOR MEASURING TIME
+    clock_t start, finish;
+    double time_anal;
+
     Solver integrator(dt, numTimesteps);
-    if (solvertype == "Euler"){
+    if (solvertype == "Euler"){  //TIMES = [0.338289, 0.341326, 0.295434, 0.334365, 0.348659]
+        time_anal = time_it(string("begin"),start,finish); //Start clock
         integrator.Euler(solarSystem);
+        time_anal = time_it(string("stop"),start,finish); //Stop clock
     }
-    if(solvertype == "Verlet"){
+    if(solvertype == "Verlet"){ //TIMES = [0.781746, 0.840888,  0.789265, 0.813777, 0.775908]
+        time_anal = time_it(string("begin"),start,finish); //Start clock
         integrator.Verlet(solarSystem);
+        time_anal = time_it(string("stop"),start,finish); //Stop clock
     }
     if(solvertype == "Verlet_perihelion"){
         integrator.Verlet_perihelion((solarSystem));
     }
 
-    //WRITE TO FILE
+    //WRITE TO FILE AND PRINT TIME
+    cout << "Time spent on numerical integration for " << solvertype << " method was t = " << time_anal << endl;
     solarSystem.writeToFile(solvertype);
-    cout << "I just created my first solar system that has " << solarSystem.bodies().size() << " objects." << endl;
+
     return 0;
+}
+
+
+vec3 InitialCondition_CM(SolarSystem &solarSystem) //Calculates the initial velocity of the sun
+{
+    double sun_mass = 1.;
+    vec3 init_vel;
+    vector<CelestialBody> &bodies = solarSystem.bodies();
+    for(int i=0; i<bodies.size(); i++) {
+        init_vel += -1*(bodies[i].velocity*bodies[i].mass)/sun_mass;
+    }
+    return init_vel;
 }
 
 int testing_main(){
@@ -166,4 +182,17 @@ int testing_main(){
     cout << "----Testing ended----" << endl;
     }
     return success;
+}
+double time_it(string user,clock_t &start, clock_t &finish){
+    double time = 0.;
+    if (user == string("begin")){
+        start = clock();
+        return time;
+    }
+    if (user == string("stop")){
+        finish = clock();
+        double time = double(finish-start)/double(CLOCKS_PER_SEC);
+        return time;
+    }
+    return time;
 }

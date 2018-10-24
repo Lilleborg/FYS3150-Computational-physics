@@ -32,7 +32,6 @@ void Solver::Verlet(SolarSystem &system)
     for (int i=0; i<m_steps; i++){
         system.calculateForcesAndEnergy();
         for(CelestialBody &body : system.bodies()) {
-            if (body.name != "Sun"){
                 vec3 acc = body.force/body.mass;
                 body.position_vector.push_back(body.position);  // adding current position to vector
                 rlength = body.position.length();               // length of current position
@@ -48,7 +47,6 @@ void Solver::Verlet(SolarSystem &system)
                 system.calculateForcesAndEnergy();
                 body.velocity += m_dt*0.5*(body.force/body.mass + acc2);
 
-            }} // bodies end
         if(i % int(m_steps/10) == 0){       // saving only 10 steps
             system.kinetic_vector.push_back(system.kineticEnergy());
             system.potential_vector.push_back(system.potentialEnergy());
@@ -56,7 +54,7 @@ void Solver::Verlet(SolarSystem &system)
         }
 
     } // time end
-}
+}}
 void Solver::Verlet_perihelion(SolarSystem &system)
 {
     for (int i=0; i<m_steps; i++){
