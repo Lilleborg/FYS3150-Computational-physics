@@ -73,15 +73,15 @@ if __name__ == '__main__':
 		if name == "arth":	#Fixing error from str.strip
 			name = "Earth"
 		if name == "Sun":
-			plt.plot(pos[0,::skip],pos[1,::skip],'o',label=name)	
+			plt.plot(pos[0,::skip],pos[1,::skip],pos[2,::skip],'o',label=name)	
 		else:
-			plt.plot(pos[0,::skip],pos[1,::skip],label=name)
+			plt.plot(pos[0,::skip],pos[1,::skip],pos[2,::skip],label=name)
 	
 	ax.set_xlabel('x [AU]')
 	ax.set_ylabel('y [AU]')
 	ax.set_zlabel('z [AU]')
 	plt.legend()
-	ax.set_zlim(-1,1)
+	#ax.set_zlim(-1,1)
 	plt.savefig("3D"+plot_filename)
 	
 	plt.show()
