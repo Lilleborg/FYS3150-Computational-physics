@@ -27,10 +27,6 @@ void SolarSystem::calculateForcesAndEnergy()
         CelestialBody &body1 = m_bodies[i];
         for(int j=i+1; j<numberOfBodies(); j++) {
             CelestialBody &body2 = m_bodies[j];
-            if( body2.name == "Sun"){
-                body2.position.zeros();
-                body2.velocity.zeros();
-            }
             vec3 deltaRVector = body2.position - body1.position;
             double dr = deltaRVector.length();
             vec3 force = (GM_star*body2.mass*body1.mass*deltaRVector)/pow(dr,3);
@@ -42,18 +38,51 @@ void SolarSystem::calculateForcesAndEnergy()
         }
     }
 }
+void SolarSystem::calculateForcesAndEnergy_GR()     // Method used for last exercise, perihelion precession
+{
+    m_kineticEnergy = 0;
+    m_potentialEnergy = 0;
+    m_angularMomentum.zeros();
+
+    for(CelestialBody &body : m_bodies) {
+        // Reset forces on all bodies
+        body.force.zeros();
+    }
+    //cout << "START CALCULATING FORCES" << endl;
+    for(int i=0; i<numberOfBodies(); i++) {
+        CelestialBody &body1 = m_bodies[i];
+        for(int j=i+1; j<numberOfBodies(); j++) {
+            CelestialBody &body2 = m_bodies[j];
+            vec3 deltaRVector = body2.position - body1.position;
+            double dr = deltaRVector.length();
+            double l = body1.position.cross(body1.velocity).length();
+            vec3 force = (GM_star*body2.mass*body1.mass*deltaRVector)/pow(dr,3)*(1+3*l*l/(dr*dr*c_squared));
+            body1.force += force;
+            body2.force -= force;
+            m_kineticEnergy += 0.5*body1.mass*body1.velocity.lengthSquared()+0.5*body2.mass*body2.velocity.lengthSquared();
+            m_potentialEnergy -= GM_star*body2.mass*body1.mass/deltaRVector.length();
+            m_angularMomentum += body1.mass*(body1.velocity.cross(body1.position))+body2.mass*(body2.velocity.cross(body2.position));
+        }
+    }
+}
 void SolarSystem::writeToFile(string solver,string dt_string)
 {
     cout << "Writing files:" << endl;
-    for (CelestialBody &body: m_bodies)
+    /*for (CelestialBody &body: m_bodies)
     {
         vector<vec3> file = body.position_vector;
         string filename = "./"+ solver + "/" + "positions_" + body.name + dt_string+ ".txt";
         ofstream outFile(filename);
+        if (body.name == "Sun"){
+            outFile << body.position.x() << " " << body.position.y() << " " << body.position.z() << "\n";
+            outFile << body.position.x() << " " << body.position.y() << " " << body.position.z() << "\n";
+        }
+        else{
         for (const auto &e : file) outFile << e.x() << " " << e.y() <<  " " << e.z() << "\n";
+        }
         cout << filename << endl;
 
-    }
+    }*/
     // Writing energies and momentum
     string filenamestart =  "./" + solver + "/";
     string kineticname = filenamestart + "kinetic" + dt_string + ".txt";
@@ -66,6 +95,16 @@ void SolarSystem::writeToFile(string solver,string dt_string)
     for (const auto &x : potential_vector) potential << (x-potential_vector[0])/potential_vector[0] << "\n";
     for (auto &x : ang_momentum_vector) ang << (x.length()-ang_momentum_vector[0].length())/ang_momentum_vector[0].length() << "\n";
     cout << kineticname << "\n" << potentialname << "\n" << angname << endl;
+
+    // Writing perihelion precession
+    string perihelionname = "./" + solver + "/" + "perihelion.txt";
+    ofstream perihelion(perihelionname);
+    for (CelestialBody &body : m_bodies){
+        if (body.name == "Mercury"){
+            for (const auto &x : body.peri_angl_vector) perihelion << x << "\n";
+        }
+    }
+    cout << perihelionname << endl;
 
 //    string filename_names = "object_names" + to_string(m_bodies.size()) + ".txt";
 //    ofstream outfilename(filename_names);

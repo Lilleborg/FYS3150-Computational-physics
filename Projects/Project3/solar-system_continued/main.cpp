@@ -25,7 +25,7 @@ int main(int numArguments, char **arguments)
         solvertype = (arguments[2]);
     }
 
-    double dt = 1e-5;
+    double dt = 1e-7;
     int numTimesteps = ceil(years/dt);
     cout << "Number of time steps " << numTimesteps << endl;
 
@@ -39,8 +39,10 @@ int main(int numArguments, char **arguments)
     // WE SHOULD ADD A NAME FOR THE OBJECTS?
 
     // INITIAL CONDITIONS WHEN SUN IS HELD IN CENTER
-    solarSystem.createCelestialBody(vec3(-1.752200603881933E-01,9.675633320786794E-01,-3.799746898985921E-05),vec3(-1.720124877602163E-02,-3.130282140938300E-03,-2.538590515321615E-07)*365,3e-6,"Earth");
-    solarSystem.createCelestialBody(vec3(-4.261270488543623E+00,-3.367325372481964E+00, 1.093347180153562E-01),vec3(4.592148015424783E-03,-5.569898451309285E-03,-7.959975748130483E-05)*365,1.9/2*1e-3,"Jupiter");
+    //solarSystem.createCelestialBody(vec3(-1.752200603881933E-01,9.675633320786794E-01,-3.799746898985921E-05),vec3(-1.720124877602163E-02,-3.130282140938300E-03,-2.538590515321615E-07)*365,3e-6,"Earth");
+    //solarSystem.createCelestialBody(vec3(-4.261270488543623E+00,-3.367325372481964E+00, 1.093347180153562E-01),vec3(4.592148015424783E-03,-5.569898451309285E-03,-7.959975748130483E-05)*365,1.9/2*1e-3*10,"Jupiter");
+    solarSystem.createCelestialBody(vec3(0.3075,0,0),vec3(0,12.44,0),1.65e-7,"Mercury"); // Mercury perihelion precession values
+
 
     // INITIAL CONDITIONS WHEN CENTER IS CENTER OF MASS
 //    solarSystem.createCelestialBody( vec3(-1.734173457390217E-01,9.736937590796603E-01,-1.582107821713564E-04), vec3(-1.720709737865684E-02,-3.125258586509626E-03,-1.120932427483096E-07)*365, 3e-6, "Earth" );
@@ -64,7 +66,7 @@ int main(int numArguments, char **arguments)
 
     for(int i = 0; i<bodies.size(); i++) {
         CelestialBody &body = bodies[i]; // Reference to this body
-        cout << "The position of " <<body.name << " is " << body.position << " with velocity " << body.velocity << endl;
+        cout << "The position of the " << body.name << " is " << body.position << " with velocity " << body.velocity << endl;
     }
 
     Solver integrator(dt, numTimesteps);
@@ -73,6 +75,9 @@ int main(int numArguments, char **arguments)
     }
     if(solvertype == "Verlet"){
         integrator.Verlet(solarSystem);
+    }
+    if(solvertype == "Verlet_perihelion"){
+        integrator.Verlet_perihelion((solarSystem));
     }
 
     //WRITE TO FILE
