@@ -7,3 +7,6 @@
 2. Project 2
 	1. [Article pdf](https://github.com/Lilleborg/FYS3150-Computational-physics/blob/master/Projects/Project2/Project_2___FYS4150_FYS3150.pdf)
 	2. [Main directory](https://github.com/Lilleborg/FYS3150-Computational-physics/tree/master/Projects/Project2)
+3. Project 3
+	1. 
+	2. [Main directory](https://github.com/Lilleborg/FYS3150-Computational-physics/tree/master/Projects/Project3)
