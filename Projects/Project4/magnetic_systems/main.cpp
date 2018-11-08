@@ -31,7 +31,7 @@ int main()
     });
     cout << double (sum_of_elems) / double (MC) << endl;
     return 0;
-}
+} // MAIN END
 
 void EnergyCalculation(const mat &Lattice, double &E, uword Nspins)
 {
