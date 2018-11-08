@@ -5,10 +5,11 @@
 using namespace std;
 using namespace arma;
 
-
+// DECLARE FUNCTIONS
 void print(std::vector<double> const &input);
 void EnergyCalculation(const mat &Lattice, double &E, uword Nspins);
 void MetropolisAlgorithm(uword Nspins, mat &Lattice, int MC, vector<double> &Energy, double T, vector<double> &MagneticMom);
+void write_double_vector(vector<double> const input, string filename, string path = "./txtfiles/");
 
 inline uword PeriodicBoundary(uword i, uword limit, uword add) { //Theft
   return (i+limit+add) % (limit);
@@ -26,6 +27,7 @@ int main()
     MetropolisAlgorithm(Nspins, Lattice, MC, Energy, T, MagneticMom);
 
     print(Energy);
+    write_double_vector(Energy,string ("energy_temp.txt"));
 
     return 0;
 } // MAIN END
@@ -39,7 +41,7 @@ void EnergyCalculation(const mat &Lattice, double &E, uword Nspins)
                     + Lattice(i, PeriodicBoundary(j, Nspins, 1)));
         }
     }
-}
+} // ENERGY CALCULATIONS END
 
 void MetropolisAlgorithm(uword Nspins, mat &Lattice, int MC, vector<double> &Energy, double T, vector<double> &MagneticMom)
 {
@@ -81,8 +83,15 @@ void MetropolisAlgorithm(uword Nspins, mat &Lattice, int MC, vector<double> &Ene
         }
 
     }
-}
+}   // METROPOLIS END
 
+void write_double_vector(vector<double> const input, string filename, string path){
+    ofstream ofile(path + filename);
+    cout << "Writing file " << filename << endl;
+    for (const auto &e : input) ofile << e << "\n";
+    cout << "Written" << endl;
+
+}   // WRITE DOUBLE VECTOR END
 
 //USED FOR PRINTING TYPE VECTOR IF NEEDED
 void print(std::vector<double> const &input) //Theft
@@ -90,4 +99,5 @@ void print(std::vector<double> const &input) //Theft
     for (uword i = 0; i < input.size(); i++) {
         std::cout << input.at(i) << ' ';
     }
+    cout << endl;
 }
