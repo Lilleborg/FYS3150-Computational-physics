@@ -19,13 +19,17 @@ int main()
     uword Nspins = 2;
     double T = 1.0 ;
     int MC = 1000;
+
     vector<double> Energy;
     vector<double> MagneticMom;
-    mat Lattice(Nspins, Nspins, fill::ones);
+    vector<double> SpecificHeat;
+    vector<double> Suscpeptibility;
+
+    mat Lattice(Nspins, Nspins, fill::ones); //Initiate lattice
 
     MetropolisAlgorithm(Nspins, Lattice, MC, Energy, T, MagneticMom);
 
-    print(Energy);
+    //print(Energy);
 
     return 0;
 }
@@ -46,41 +50,63 @@ void MetropolisAlgorithm(uword Nspins, mat &Lattice, int MC, vector<double> &Ene
     std::random_device rd;
     std::mt19937_64 gen(rd());
     std::uniform_real_distribution<double>RandomGenerator(0.0, 1.0);
-    double E0;
+    double E0 = 0;
     double E;
     double w;
+    double z;
+    double delta;
+    double TotalEnergy;
+    int rejected = 0;
+    int accepted = 0;
+
+
+    EnergyCalculation(Lattice, E0, Nspins);
+    TotalEnergy = E0;
 
     for (int i=0; i<MC; i++){
         E0 = 0.0;
         E = 0.0;
         w = 0.0;
+        z = 0.0;
 
         EnergyCalculation(Lattice, E0, Nspins); //Calculate initial energy
+        TotalEnergy += E0;
         cout << E0 << endl;
+
         //Choose random position in lattice and flip spin
         uword x = uword ((RandomGenerator(gen)*Nspins));
         uword y = uword ((RandomGenerator(gen)*Nspins));
         Lattice(x, y) *= -1;
+
         cout << Lattice << endl;
         //Calculate new energy
-        E = E0;
+
         EnergyCalculation(Lattice, E, Nspins);
-        if (E-E0 < 0.0){ //Keep energy if new one is lower
-            Energy.push_back(double (E0));
+        delta = E-E0;
+        if (delta <= 0.0){ //Keep energy if new one is lower
+            TotalEnergy += E;
+            Energy.push_back(double (E));
             MagneticMom.push_back(double (2*Lattice(x,y)));
+            accepted++;
         }
         else{ //If energy is larger
-            w = exp(-1*(E-E0)/T);
-            if (w >= double (RandomGenerator(gen))){ //If true, flip spin back again
+            w = exp(-delta/T);
+            if (w >= double (RandomGenerator(gen)) ){ //If true, flip spin back again
+                rejected++;
                 Lattice(x, y) *= -1;
             }
             else{ //Keep energy if not true
-                Energy.push_back(double (E0));
-                MagneticMom.push_back(double (2*Lattice(x,y)));
+                accepted++;
+                TotalEnergy += E;
+                Energy.push_back( double (E0) );
+                MagneticMom.push_back( double (2*Lattice(x,y)) );
+                //SpecificHeat.push_back( double 1./T * ())
+
             }
         }
 
     }
+    cout << TotalEnergy/MC << endl;
 }
 
 
