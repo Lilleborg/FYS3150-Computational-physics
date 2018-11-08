@@ -32,7 +32,7 @@ int main()
     //print(Energy);
 
     return 0;
-}
+} // MAIN END
 
 void EnergyCalculation(const mat &Lattice, double &E, uword Nspins)
 {
