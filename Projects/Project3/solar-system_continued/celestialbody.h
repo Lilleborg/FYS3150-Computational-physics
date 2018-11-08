@@ -14,6 +14,7 @@ public:
     double mass;
     string name;
     vector<vec3> position_vector;
+    vector <double> peri_angl_vector;   // vector for saving the perhilion precission
 
     //3D vectors work like this: velocity_vector[0][0][0] = 1 <- all elements in first row are 1. Kinda like numpy :)
 

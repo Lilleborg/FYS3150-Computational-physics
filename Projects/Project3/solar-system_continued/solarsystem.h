@@ -14,6 +14,7 @@ public:
     CelestialBody &createCelestialBody(vec3 position, vec3 velocity, double mass,string name);
     void calculateForcesAndEnergy();
     int numberOfBodies() const;
+    void calculateForcesAndEnergy_GR();
 
     double totalEnergy() const;
     double potentialEnergy() const;
@@ -32,6 +33,7 @@ private:
     double m_kineticEnergy;
     double m_potentialEnergy;
     double const GM_star = 4*M_PI*M_PI;
+    double const c_squared = 63239.7263*63239.7263;
 };
 
 #endif // SOLARSYSTEM_H

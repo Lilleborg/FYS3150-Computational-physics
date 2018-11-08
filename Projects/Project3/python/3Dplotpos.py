@@ -44,7 +44,6 @@ if __name__ == '__main__':
 		exceptions = []
 	
 	objects,names = unpack(solver,exceptions)
-	skip = int(len(objects[0][0])/1000.)
 	
 	# Plotting
 	font = {'size'   : 12}
@@ -56,9 +55,10 @@ if __name__ == '__main__':
 		if name == "arth":	#Fixing error from str.strip
 			name = "Earth"
 		if name == "Sun":
-			plt.plot(pos[0,::skip],pos[1,::skip],'o',label=name)	
+			plt.plot(pos[0],pos[1],'o',label=name)	
 		else:
-			plt.plot(pos[0,::skip],pos[1,::skip],label=name)
+			plt.plot(pos[0],pos[1],'-o',label=name,markevery=[0,-1])
+			
 	plt.axis('equal')
 	plt.title(title)
 	plt.xlabel('x [AU]')
@@ -73,15 +73,14 @@ if __name__ == '__main__':
 		if name == "arth":	#Fixing error from str.strip
 			name = "Earth"
 		if name == "Sun":
-			plt.plot(pos[0,::skip],pos[1,::skip],pos[2,::skip],'o',label=name)	
+			plt.plot(pos[0],pos[1],pos[2],'o',label=name)	
 		else:
-			plt.plot(pos[0,::skip],pos[1,::skip],pos[2,::skip],label=name)
+			plt.plot(pos[0],pos[1],pos[2],label=name)
 	
 	ax.set_xlabel('x [AU]')
 	ax.set_ylabel('y [AU]')
 	ax.set_zlabel('z [AU]')
 	plt.legend()
-	#ax.set_zlim(-1,1)
 	plt.savefig("3D"+plot_filename)
 	
 	plt.show()

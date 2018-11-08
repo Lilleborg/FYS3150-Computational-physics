@@ -1,6 +1,8 @@
 #ifndef SOLVER_H
 #define SOLVER_H
 
+#include "celestialbody.h"
+
 class Solver
 {
 public:
@@ -9,6 +11,12 @@ public:
     Solver(double dt, double steps);
     void Euler(class SolarSystem &system);
     void Verlet(class SolarSystem &system);
+    void Verlet_perihelion(class SolarSystem &system);
+
+private:
+    double rlength;
+    double peri_angl;
+    double get_perihelion_precession(vec3 position) const;
 };
 
 #endif // SOLVER_H
