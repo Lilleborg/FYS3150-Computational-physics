@@ -25,11 +25,8 @@ int main()
 
     MetropolisAlgorithm(Nspins, Lattice, MC, Energy, T, MagneticMom);
 
-    uword sum_of_elems = 0;
-    std::for_each(Energy.begin(), Energy.end(), [&] (uword n) {
-        sum_of_elems += n;
-    });
-    cout << double (sum_of_elems) / double (MC) << endl;
+    print(Energy);
+
     return 0;
 }
 
