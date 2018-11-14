@@ -21,7 +21,7 @@ int main()
     uword Nspins = 2;
     double T,E,M;    // temperatur, energy and magnetic moment
     T = 3.;
-    int MC = 1e2;      // # cycles
+    int MC = 1e5;      // # cycles
     double norm = 1.0/double(MC);
     double totspins = Nspins*Nspins;
 
@@ -51,14 +51,14 @@ int main()
         w(i) = exp(-dE(i)/T);
     }*/
     initialize_new_round(Nspins,Lattice,E,M);   // Sets up Lattice, calc M and E all spins up, WILL BE MORE USEFULL FOR MULTIPLE TEMPERATURES
-    Energies[0] = E/totspins;
+    Energies[0] = E;
     MagneticMom[0] = M*norm/totspins;
 
     // STARTING MC CYCLES
     for (int cycle = 0; cycle < MC; cycle ++){
 
         metropolis(Nspins,MC,T,gen,Lattice,w,E,M);  // One cycle through the lattice
-        Energies[cycle+1] = E/totspins;
+        Energies[cycle+1] = E;
         MagneticMom[cycle+1] = M*norm/totspins;
         // Update expectation values:
         ExpectationVals(0) += E; ExpectationVals(1) += E*E;
@@ -66,6 +66,7 @@ int main()
 
     }   // END MC CYCLES
     cout << w << endl;
+    cout << "Atotal average energy " << ExpectationVals(0)*norm << endl;
     // WRITE TO FILES
     string fileending = "energies_" + to_string(T) + ".bin";
     results_per_mc(Energies,MC,"energies_"+fileending);
@@ -90,11 +91,11 @@ void metropolis(uword Nspins, int MCs, double T,__1::mt19937_64 gen, imat &Latti
     // Looping over the hole lattice
     for (uword x = 0; x < Nspins; x++){
         for (uword y = 0; y < Nspins; y++){
-            uword xi = uword(rand()/(RAND_MAX*1.0)*Nspins);
-            uword yi = uword(rand()/(RAND_MAX*1.0)*Nspins);
+            uword xi = uword(RNG(gen)*Nspins);
+            uword yi = uword(RNG(gen)*Nspins);
             // Energy from spinn (xi,yi)
             //cout << xi << " " << yi << endl;
-            cout << Lattice << endl;
+            //cout << Lattice << endl;
             int dE =  2*Lattice(xi,yi)*
                     (Lattice(xi,PeriodicBoundary(yi,Nspins,-1))+
                      Lattice(PeriodicBoundary(xi,Nspins,-1),yi) +
@@ -109,14 +110,14 @@ void metropolis(uword Nspins, int MCs, double T,__1::mt19937_64 gen, imat &Latti
 
             //RNG(gen
             // rand()/(RAND_MAX*1.0)
-            if (rand()/(RAND_MAX*1.0) <= w(dE+8)){ // Accept or not
+            if (RNG(gen) <= w(dE+8)){ // Accept or not
                 //cout << "Sampling" << endl;
                 Lattice(xi,yi) *= -1;   // flip to new accepted config
                 M += double(2*Lattice(xi,yi));
-                cout << "E before " << E << endl;
-                cout << "dE " << dE << endl;
+                //cout << "E before " << E << endl;
+                //cout << "dE " << dE << endl;
                 E += double(dE);
-                cout << "E after " << E << endl;
+                //cout << "E after " << E << endl;
             }
         }
     }   // END X-DIRECTION, CONCLUDING LOP OVER LATTICE
