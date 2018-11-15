@@ -4,7 +4,13 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    functions.cpp \
+    exercises.cpp
 
 INCLUDEPATH += /usr/local/Cellar/armadillo/9.100.5_1/include/
 LIBS += -L/usr/local/Cellar/armadillo/9.100.5_1/lib/ -larmadillo
+
+HEADERS += \
+    functions.h \
+    exercises.h
