@@ -7,13 +7,14 @@ inline uword PeriodicBoundary(uword i, uword limit, int add) { //Theft
 // Set up the uniform distribution for x in [0, 1]
 uniform_real_distribution<double> RNG(0.0,1.0);
 
-void metropolis(uword Nspins,__1::mt19937_64 &gen, imat &Lattice, vec &w, double &E, double &M){
+int metropolis(uword Nspins,__1::mt19937_64 &gen, imat &Lattice, vec &w, double &E, double &M){
     // Looping over the hole lattice
-    for (uword x = 0; x < Nspins; x++){
-        for (uword y = 0; y < Nspins; y++){
+    int acc_counter = 0;
+    for (uword lattis = 0; lattis < Nspins*Nspins; lattis++){
             uword xi = uword(RNG(gen)*Nspins);
             uword yi = uword(RNG(gen)*Nspins);
             // Calculating energy change
+
             int dE =  2*Lattice(xi,yi)*
                     (Lattice(xi,PeriodicBoundary(yi,Nspins,-1))+
                      Lattice(PeriodicBoundary(xi,Nspins,-1),yi) +
@@ -23,27 +24,33 @@ void metropolis(uword Nspins,__1::mt19937_64 &gen, imat &Lattice, vec &w, double
                 Lattice(xi,yi) *= -1;   // flip to new accepted config
                 M += double(2*Lattice(xi,yi));
                 E += double(dE);
+                acc_counter++;
             }
-        }
     }   // END LOOP OVER LATTICE
+    return acc_counter;
 }   // METROPOLIS END
 
 
 void initialize_new_round(uword Nspins, imat &Lattice, double &Energy, double &MagneticMom,string Fillstyle){
     if (strcmp(Fillstyle.c_str(),"Up") == 0){   // Fill lattice with spin up
         Lattice.ones();
+        MagneticMom = Lattice.size();
     }
     if (strcmp(Fillstyle.c_str(),"Down") == 0){   // Fill lattice with spin down
         Lattice.ones();
         Lattice = Lattice*-1;
-        cout << Lattice << endl;
+        MagneticMom = -1.0*Lattice.size();
     }
     if (strcmp(Fillstyle.c_str(),"Random") == 0){   // Fill lattice with random spin directions
         mat randomLattice(size(Lattice),fill::randu); randomLattice = sign(randomLattice*2-1);
         Lattice = conv_to<imat>::from(randomLattice);
-        cout << Lattice << endl;
+        MagneticMom = 0.0;
+        for (uword x = 0; x < Nspins; ++x) {
+            for (uword y = 0; y < Nspins; ++y){
+                MagneticMom += Lattice(x,y);
+            }
+        }
     }
-    MagneticMom = Lattice.size();
 
     Energy = 0;
     for (uword i = 0; i< Nspins; i++){
@@ -63,8 +70,10 @@ void write_double_vector(vector<double> quantity,string filenamestart){
     for (const auto &e : quantity) file << e << "\n";
     file.close();
 }
-void results_per_mc(double *quantity,int MC, string filename){
+void write_double_array_bin(double *quantity,int MC, string filename){
     filename.insert(0,"../datafiles/");
+    filename.append(to_string(MC));
+    filename.append(".bin");
     cout << "Writing " << filename << endl;
     ofstream file(filename, ofstream::binary);
     file.write(reinterpret_cast<const char*> (quantity), MC*sizeof(double));
@@ -95,6 +104,7 @@ vec normalizing_expectations(double const T, double const MC, int const L, vec c
     return normed_exp;
 }
 
+// TODO: CHANGE HOW FILENAME GETS DEFINED, SHOULD BE ALL DONE OUTSIDE FUNCTION
 void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::__1::ofstream& ofile,string filename){
     cout << "OBS, Remember:\n Write_to_exp_values function takes the UN-NORMED expectation values as argument!" << endl;
     filename.insert(0,"../datafiles/");
@@ -109,7 +119,7 @@ void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::__1
     ofile << setw(15) << setprecision(8) << normed_values(3);   // Susceptibility
     ofile << setw(15) << setprecision(8) << normed_values(4) << endl;   // Abs Magnetic
     cout << "---------------" << endl;
-    cout << "written for temp " << T << endl;
+    cout << "written for temp " << T << " , file not closed yet" << endl;
     cout << "---------------\n" << endl;
 }   // WRITE EXP VALUES END
 

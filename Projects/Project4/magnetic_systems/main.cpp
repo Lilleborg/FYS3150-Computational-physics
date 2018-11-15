@@ -4,13 +4,14 @@
 
 int main(int numArguments, char **arguments)
 {
-    uword L = 2;
-    double T;    // temperatur, energy and magnetic moment
-    T = 1.;
-    int MC = 1e5;      // # cycles
+    int MC = 60000;      // # cycles
 
-    exe_b("test");
-    //exe_c(T,MC);
+    //exe_b();
+    exe_c(1.0,"Random",MC);
+    exe_c(2.4,"Random",MC);
+    exe_c(1.0,"Up",MC);
+    exe_c(2.4,"Up",MC);
+
     return 0;
 } // MAIN END
 
