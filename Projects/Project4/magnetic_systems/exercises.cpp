@@ -75,7 +75,7 @@ int exe_c(double const Temp, string Latticestart, int const MC){
     // Arrays
     //vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
     imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
-    double *Energies = new double[MC+1];  // FOR SAVING ENERGIES PER MC CYCLE, ONLY USED WHEN LOOKING AT PATH TO EQUILIBRIUM
+    double *Energies = new double[MC+1];  // FOR SAVING ENERGIES
     double *Magnetic = new double[MC+1];   // SAME AS "Energies", but for magnetic moment
     double *EnergyPerCycle = new double[MC+1];
     double *MagneticPerCycle = new double[MC+1];
@@ -124,3 +124,48 @@ int exe_c(double const Temp, string Latticestart, int const MC){
     cout << "------------" << endl;
     return 0;
 }   // EXE C END
+
+int exe_d(double const Temp, string Latticestart, int const MC){
+    cout << "Starting exe_d()" << endl;
+
+    // Initializing
+    double T = Temp ,E,M;    // temperatur, energy and magnetic moment
+    int MCbeforesample = 1e3;
+    if (T > 1.1){
+        int MCbeforesample = 1e4;
+    }
+    uword L = 20;           // Nr spins along one axis
+    double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
+    mt19937_64 gen(1234);
+    imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
+    vec Energies(MC-MCbeforesample+1);
+    vec temp_exp_vals(2,fill::zeros); // Vector for holding temporary expectation values
+    // Set up possible energy differences
+    vec w(17);
+    for (int dE = -8; dE <= 8; dE+=4) {
+        w(dE+8) = exp(-dE/T);
+    }
+    // Computing
+    initialize_new_round(L,Lattice,E,M,Latticestart);
+
+    for (int cycle = 0; cycle < MC; ++cycle) {
+        metropolis(L,gen,Lattice,w,E,M);
+        if (MCbeforesample<cycle){
+        Energies(cycle-MCbeforesample) = E;
+        temp_exp_vals(0) += E;
+        temp_exp_vals(1) += E*E;
+        }
+    }
+    // Writing to file
+    string filenames = "../datafiles/ExerciseD/"+Latticestart+"_T_";
+    filenames.append(to_string(T));
+    Energies /= MC;
+    cout << "Writing " << filenames + "Energy_levels.bin" << endl;
+    Energies.save(filenames + "Energy_levels.bin");
+    double variance = find_variance(temp_exp_vals(1),temp_exp_vals(0), MC-MCbeforesample);
+    cout << "Variance Energy " << variance << " for " << Energies.size() << " sampling points" << endl;
+
+    cout << "\nexe_d() done for T " << T << " " << Latticestart << endl;
+    cout << "------------" << endl;
+    return 0;
+}   // EXE D END

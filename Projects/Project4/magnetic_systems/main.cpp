@@ -1,17 +1,38 @@
 //#include <iostream>
 #include "functions.h"
 #include "exercises.h"
+#include "time.h"
 
 int main(int numArguments, char **arguments)
 {
-    int MC = 60000;      // # cycles
+    int result = 0;
+    clock_t time_start = clock();
+    if(numArguments == 2){  // If one cmd given, it reflects what exe to be run. Could be "ALL" to run all exes
 
-    //exe_b();
-    exe_c(1.0,"Random",MC);
-    exe_c(2.4,"Random",MC);
-    exe_c(1.0,"Up",MC);
-    exe_c(2.4,"Up",MC);
+        int MC_c = 60000;
+        if (strcmp(arguments[1],"ALL") == 0){   // RUN ALL EXERCISES
+            result += exe_b();
 
-    return 0;
+            result += exe_c(1.0,"Random",MC_c);
+            result += exe_c(2.4,"Random",MC_c);
+            result += exe_c(1.0,"Up",MC_c);
+            result += exe_c(2.4,"Up",MC_c);
+        }
+        if (strcmp(arguments[1],"B") == 0){   // RUN EXERCISE B
+            result += exe_b();
+        }
+        if (strcmp(arguments[1],"C") == 0){   // RUN EXERCISE C
+            result += exe_c(1.0,"Random",MC_c);
+            result += exe_c(2.4,"Random",MC_c);
+            result += exe_c(1.0,"Up",MC_c);
+            result += exe_c(2.4,"Up",MC_c);
+        }
+        if (strcmp(arguments[1],"D") == 0){   // RUN EXERCISE D
+            result += exe_d(1.0,"Up",1e6);
+        }
+    }   // ONE CMD END
+
+    cout << "Main running for " << string(arguments[1]) << " " <<  double((clock()-time_start)/CLOCKS_PER_SEC) << " seconds" << endl;
+    return result;
 } // MAIN END
 

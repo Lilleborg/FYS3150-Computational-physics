@@ -81,6 +81,12 @@ void write_double_array_bin(double *quantity,int MC, string filename){
     cout << filename << " closed" << endl;
 }   // RESULTS PER MC END
 
+double find_variance(double qq,double q,int const Norming){
+    qq /= Norming;
+    double qnormed = q/Norming;
+    return qq-qnormed*qnormed;
+}   // FIND VARIANCE END
+
 vec normalizing_expectations(double const T, double const MC, int const L, vec const Exp_vals){
     double MC_norming = 1.0/double(MC);
     double Spin_norming = 1.0/double(L*L);
@@ -122,6 +128,7 @@ void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofs
     cout << "written for temp " << T << " , file not closed yet" << endl;
     cout << "---------------\n" << endl;
 }   // WRITE EXP VALUES END
+
 
 
 // ----------------------------------------
