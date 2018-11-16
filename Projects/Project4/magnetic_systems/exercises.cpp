@@ -1,16 +1,18 @@
 #include "exercises.h"
 
-int exe_b(string filenamestart,uword L, double Temperature){
+int exe_b(uword L, double Temperature){
+    cout << "Starting exe_b()" << endl;
 
     vector <double> Exp_E_diffing;  // Holding absdiff of calculated exp_E vs exact_E for different lengths of MCcycles
+    vector <double> Exp_absM_diffing;
     vec normed_quantities;          // holding final quantities after norming
     vector <string> quantitynames = {"Exp E", "Heat Cap", "Exp M" , "Susceptibility","Exp Abs M"};
     double T,E,M;    // temperatur, energy and magnetic moment
-    int MCsFinal=0;    // updates to hold the number of MCcycles required
     T = Temperature;
     // Exact calculations
     double Z = 2*exp(-8.0/T)+2*exp(8.0/T)+12;   // Partition function for L=2
     double E_exact = -32.0/Z*sinh(8.0/T)/4;     // Exact energy for L=2
+    double absM_exact = 1.0/Z*(8.0*exp(8)+16)/4;
 
     // Seed CHANGE TO DEPEND ON MY_RANK EVENTUALLY
     //random_device rd;
@@ -45,14 +47,16 @@ int exe_b(string filenamestart,uword L, double Temperature){
 
         } // END MC CYCLES
         double exp_E = temp_exp_vals(0)/MC/L/L;
-        Exp_E_diffing.push_back(abs(exp_E-E_exact));
+        double exp_absM = temp_exp_vals(4)/MC/L/L;
+        Exp_E_diffing.push_back(abs(exp_E-E_exact)/abs(E_exact));
+        Exp_absM_diffing.push_back(abs(exp_absM-absM_exact)/absM_exact);
         if (Exp_E_diffing.back() < 1e-3){   // calc ~= exact
-            cout << "Expectation energy difference " << Exp_E_diffing.back() << " with " << MC << " number of cycles" << endl;
-            MCsFinal = MC;
-            normed_quantities = normalizing_expectations(T,MCsFinal,L,temp_exp_vals);
+            cout << "Relative error expectation energy " << Exp_E_diffing.back() << " with " << MC << " number of cycles" << endl;
+            normed_quantities = normalizing_expectations(T,MC,L,temp_exp_vals);
         }
     }   // LOOPING OVER I END
-    write_double_vector(Exp_E_diffing,"Exp_E_diffing");
+    write_double_vector(Exp_E_diffing,"/ExerciseB/Exp_E_diffing");
+    write_double_vector(Exp_absM_diffing,"/ExerciseB/Exp_absM_diffing");
     for (int i = 0; i < normed_quantities.size();i++){
         cout << normed_quantities(i) << " : "  << quantitynames[i] << endl;
     }
@@ -62,20 +66,61 @@ int exe_b(string filenamestart,uword L, double Temperature){
 }   // EXE B END
 
 int exe_c(double const Temp, string Latticestart, int const MC){
+    cout << "Starting exe_c()" << endl;
+
     double T = Temp,E,M;    // temperatur, energy and magnetic moment
-    uword L = 20;
+    uword L = 20;           // Nr spins along one axis
+    double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
+    mt19937_64 gen(1234);
     // Arrays
-    vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
-    imat Lattice(L, L, fill::ones);   // imat giving typedef <sword> matrix - armadillos integer type
+    //vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
+    imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
     double *Energies = new double[MC+1];  // FOR SAVING ENERGIES PER MC CYCLE, ONLY USED WHEN LOOKING AT PATH TO EQUILIBRIUM
-    double *MagneticMom = new double[MC+1];   // SAME AS "Energies", but for magnetic moment
+    double *Magnetic = new double[MC+1];   // SAME AS "Energies", but for magnetic moment
+    double *EnergyPerCycle = new double[MC+1];
+    double *MagneticPerCycle = new double[MC+1];
+    double *Accept_Counter = new double[MC+1];
 
     vec w(17);
     for (int dE = -8; dE <= 8; dE+=4) {
         w(dE+8) = exp(-dE/T);
     }
-    initialize_new_round(L,Lattice,E,M,"Up");
+    // Starting values
+    initialize_new_round(L,Lattice,E,M,Latticestart);
+    Energies[0] = E*norming;
+    Magnetic[0] = M*norming;
+    EnergyPerCycle[0] = Energies[0];
+    MagneticPerCycle[0] = Magnetic[0];
+    // STARTING MC CYCLES
+    int counter = 0;
+    for (int cycle = 0; cycle < MC; cycle ++){
+
+        Accept_Counter[cycle] =  metropolis(L,gen,Lattice,w,E,M);  // One cycle through the lattice
+        counter++;
+        Energies[cycle+1] = (Energies[cycle]+E*norming);
+        Magnetic[cycle+1] = Magnetic[cycle] + fabs(M)*norming;
+        EnergyPerCycle[cycle+1] = Energies[cycle+1]/counter;
+        MagneticPerCycle[cycle+1] = Magnetic[cycle+1]/counter;
 
 
+    } // END MC CYCLES
 
+    // WRITING TO FILE
+    string filenames = "ExerciseC/"+Latticestart+"_T_";
+    filenames.append(to_string(T));
+    write_double_array_bin(Energies,MC,filenames + "Energies_");
+    write_double_array_bin(Magnetic,MC,filenames + "AbsMagnetic_");
+    write_double_array_bin(EnergyPerCycle,MC,filenames + "Energy_per_mc_");
+    write_double_array_bin(MagneticPerCycle,MC,filenames + "Magnetic_per_mc_");
+    write_double_array_bin(Accept_Counter,MC,filenames + "Accept_per_mc_");
+
+    delete [] Energies;
+    delete [] Magnetic;
+    delete [] EnergyPerCycle;
+    delete [] MagneticPerCycle;
+    delete [] Accept_Counter;
+
+    cout << "\nexe_c() done for T " << T << " " << Latticestart << endl;
+    cout << "------------" << endl;
+    return 0;
 }   // EXE C END
