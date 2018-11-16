@@ -23,7 +23,7 @@ def plotting(MCcycles):
     axA = plt.gca()
 
     axE.set_title(r"Mean energy per MC cycle")
-    #axE.set_xscale("log")
+    axE.set_xscale("log")
     axE.set_xlabel(r"$MC$")
     axE.set_ylabel(r'$\langle E \rangle(MC)$')
     

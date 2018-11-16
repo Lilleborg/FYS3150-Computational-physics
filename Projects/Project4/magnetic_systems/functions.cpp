@@ -7,7 +7,7 @@ inline uword PeriodicBoundary(uword i, uword limit, int add) { //Theft
 // Set up the uniform distribution for x in [0, 1]
 uniform_real_distribution<double> RNG(0.0,1.0);
 
-int metropolis(uword Nspins,__1::mt19937_64 &gen, imat &Lattice, vec &w, double &E, double &M){
+int metropolis(uword Nspins,mt19937_64 &gen, imat &Lattice, vec &w, double &E, double &M){
     // Looping over the hole lattice
     int acc_counter = 0;
     for (uword lattis = 0; lattis < Nspins*Nspins; lattis++){
@@ -105,7 +105,7 @@ vec normalizing_expectations(double const T, double const MC, int const L, vec c
 }
 
 // TODO: CHANGE HOW FILENAME GETS DEFINED, SHOULD BE ALL DONE OUTSIDE FUNCTION
-void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::__1::ofstream& ofile,string filename){
+void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofstream& ofile,string filename){
     cout << "OBS, Remember:\n Write_to_exp_values function takes the UN-NORMED expectation values as argument!" << endl;
     filename.insert(0,"../datafiles/");
     vec normed_values = normalizing_expectations(T,MC,L,Exp_vals);
