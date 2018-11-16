@@ -9,13 +9,14 @@
 #include <iomanip>
 #include <math.h>
 #include <vector>
+#include <random>
 
 using namespace arma;
 using namespace std;
 
 uword PeriodicBoundary(uword i, uword limit, int add);
 void initialize_new_round(uword Nspins, imat& Lattice, double &Energy, double &MagneticMom, string Fillstyle);
-int metropolis(uword Nspins, __1::mt19937_64& gen, imat &Lattice, vec &w, double &E, double &M);
+int metropolis(uword Nspins, mt19937_64& gen, imat &Lattice, vec &w, double &E, double &M);
 vec normalizing_expectations(double const T, double const MC, int const L, vec const Exp_vals);
 
 void write_double_array_bin(double *quantity,int MC, string filename);
