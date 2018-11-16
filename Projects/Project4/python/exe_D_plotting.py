@@ -37,40 +37,43 @@ def plotting(MCcycles):
     figE.tight_layout()
     figE.subplots_adjust(top=0.88)
 
-energies = np.fromfile("../Datafiles/ExerciseD/Up_T_1.000000_Energy_levels_999000.bin")
+energies = np.fromfile("../Datafiles/ExerciseD/Up_T_2.400000_Energy_levels_999000.bin")
 #energies /= energies.shape
-def boltzmann(E,b,Z):
-    return np.exp(-E*b)/Z
+print(energies.max())
+def boltzmann_T_1(E,Z):
+    return np.exp(-E)/Z
+
+def boltzmann_T_2(E,Z):
+    return np.exp(-E/2.4)/Z
 
 hist_energy,bins_energy = np.histogram(energies, bins = 'auto',density =True)
 hist_energy = np.asarray(hist_energy)
 bins_energy = np.asarray(bins_energy)
 print (bins_energy)
-bins_energy /= energies.shape
-print (bins_energy)
+# bins_energy = energies.shape
+# print (bins_energy)
 print (hist_energy)
-print(np.exp(-bins_energy[0]*1.0001)/hist_energy[0])
-T = 1.0
+print(np.exp(-bins_energy[0])/hist_energy[0])
+
 
 # MinE = np.min(bins_energy)
 # MaxE = np.max(bins_energy)
 # Earray = np.linspace(MinE+MinE/100.,MaxE-MaxE/100.,100)
-tempbins = np.zeros(bins_energy.shape)
-tempnumbers = np.zeros_like(tempbins)
-tempbins[1:] = bins_energy[:-1]
-tempbins[0] = bins_energy[0]-([bins_energy[1]-bins_energy[0]])
-tempnumbers[1:] = hist_energy
-print(tempbins)
-print(tempnumbers)
-param,paramcov = curve_fit(boltzmann,tempbins,tempnumbers)
+# tempbins = np.zeros(bins_energy.shape)
+# tempnumbers = np.zeros_like(tempbins)
+# tempbins[1:] = bins_energy[:-1]
+# tempbins[0] = bins_energy[0]-([bins_energy[1]-bins_energy[0]])
+# tempnumbers[1:] = hist_energy
+# print(tempbins)
+# print(tempnumbers)
+#param,paramcov = curve_fit(boltzmann_T_1,bins_energy[:-1],hist_energy)
 
-print (param)
-y = boltzmann(bins_energy[:-1],*param)
-print(np.max(y),np.argmax(y),np.min(y),np.argmin(y))
+#print (param)
+#y = boltzmann_T_1(bins_energy[:-1],*param)
+#print(np.max(y),np.argmax(y),np.min(y),np.argmin(y))
 plt.figure(2)
 plt.bar(bins_energy[:-1],hist_energy)
-plt.plot(bins_energy[:-1],y)
-plt.figure(1)
+#plt.plot(bins_energy[:-1],y)
 
 
 plt.show()

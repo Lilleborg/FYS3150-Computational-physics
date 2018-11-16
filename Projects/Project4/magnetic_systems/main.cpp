@@ -34,7 +34,7 @@ int main(int numArguments, char **arguments)
         if (strcmp(arguments[1],"D") == 0){   // RUN EXERCISE D
             result += exe_d(1.0,"Up",1e6);
 //            result += exe_d(1.0,"Random",1e6);
-//            result += exe_d(2.4,"Up",1e6);
+           result += exe_d(2.4,"Up",1e6);
 //            result += exe_d(2.4,"Random",1e6);
         }
     }   // ONE CMD END
