@@ -29,7 +29,7 @@ int exe_b(uword L, double Temperature){
 
         vec w(17);
         for (int dE = -8; dE <= 8; dE+=4) {
-            w(dE+8) = exp(-dE/T);
+            w[dE+8] = exp(-dE/T);
         }
 
         initialize_new_round(L,Lattice,E,M,"Up");   // Sets up Lattice, calc M and E all spins up, WILL BE MORE USEFULL FOR MULTIPLE TEMPERATURES
@@ -42,12 +42,12 @@ int exe_b(uword L, double Temperature){
             Energies[cycle+1] = E;
             MagneticMom[cycle+1] = M;
             // Update expectation values:
-            temp_exp_vals(0) += E; temp_exp_vals(1) += E*E;
-            temp_exp_vals(2) += M; temp_exp_vals(3) += M*M; temp_exp_vals(4) += fabs(M);
+            temp_exp_vals[0] += E; temp_exp_vals[1] += E*E;
+            temp_exp_vals[2] += M; temp_exp_vals[3] += M*M; temp_exp_vals[4] += fabs(M);
 
         } // END MC CYCLES
-        double exp_E = temp_exp_vals(0)/MC/L/L;
-        double exp_absM = temp_exp_vals(4)/MC/L/L;
+        double exp_E = temp_exp_vals[0]/MC/L/L;
+        double exp_absM = temp_exp_vals[4]/MC/L/L;
         Exp_E_diffing.push_back(abs(exp_E-E_exact)/abs(E_exact));
         Exp_absM_diffing.push_back(abs(exp_absM-absM_exact)/absM_exact);
         if (Exp_E_diffing.back() < 1e-3){   // calc ~= exact
@@ -83,7 +83,7 @@ int exe_c(double const Temp, string Latticestart, int const MC){
 
     vec w(17);
     for (int dE = -8; dE <= 8; dE+=4) {
-        w(dE+8) = exp(-dE/T);
+        w[dE+8] = exp(-dE/T);
     }
     // Starting values
     initialize_new_round(L,Lattice,E,M,Latticestart);
