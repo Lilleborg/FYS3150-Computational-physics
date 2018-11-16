@@ -23,7 +23,7 @@ def plotting(MCcycles):
     axA = plt.gca()
 
     axE.set_title(r"Mean energy per MC cycle")
-    #axE.set_xscale("log")
+    axE.set_xscale("log")
     axE.set_xlabel(r"$MC$")
     axE.set_ylabel(r'$\langle E \rangle(MC)$')
     
@@ -50,7 +50,7 @@ def plotting(MCcycles):
             axM.legend()
             plt.tight_layout()
 
-            axA.plot(cycles[1:],Accept[1:],'-o',alpha= 0.5,label="T={:.2f}, {:s}".format(float(T),init))
+            axA.plot(cycles[1:],Accept[1:],alpha= 0.5,label="T={:.2f}, {:s}".format(float(T),init))
             axA.legend()
             plt.tight_layout()
 
