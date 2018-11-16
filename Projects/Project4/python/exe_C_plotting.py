@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 
 # Plotting style
 plt.style.use('bmh')
-font = {'size'   : 12}
+font = {'size'   : 16}
+plt.matplotlib.rc('text', usetex=True)
 plt.matplotlib.rc('font', **font)
 
 def plotting(MCcycles):
@@ -22,37 +23,46 @@ def plotting(MCcycles):
     figA = plt.figure("Accept_per_MC")
     axA = plt.gca()
 
-    axE.set_title(r"Mean energy per MC cycle")
+    axE.set_title(r"Mean energy")
     axE.set_xscale("log")
-    axE.set_xlabel(r"$MC$")
-    axE.set_ylabel(r'$\langle E \rangle(MC)$')
+    axE.set_xlabel(r"$MC$",fontsize = 15)
+    axE.set_ylabel(r'$\langle E \rangle(MC)$',fontsize = 15)
     
-    axM.set_title("Mean magnetisation per MC cycle")
+    axM.set_title("Mean magnetisation")
     axM.set_xscale("log")
-    axM.set_xlabel(r"$MC$")
-    axM.set_ylabel(r'$\langle |M|  \rangle (MC)$')
+    axM.set_xlabel(r"$MC$",fontsize = 15)
+    axM.set_ylabel(r'$\langle |M|  \rangle (MC)$',fontsize = 15)
 
+    axA.set_title("Accepted configurations")
     axA.set_xscale("log")
+    axA.set_xlabel(r"$MC$",fontsize = 15)
+    axA.set_ylabel(r'Number of accepted energies',fontsize = 15)
+
     for T in temps:
         for init in initial:
-            print("Loading ", path + init + "_T_" + T + Ename + str(MCcycles) + ".bin")
-            print("Loading ", path + init + "_T_" + T + Mname + str(MCcycles) + ".bin")
-            energies = np.fromfile(path + init + "_T_" + T + Ename + str(MCcycles) + ".bin")
-            absMagnetic = np.fromfile(path + init + "_T_" + T + Mname + str(MCcycles) + ".bin")
-            Accept = np.fromfile(path + init + "_T_" + T + Aname + str(MCcycles) + ".bin")
+            Efile = path + init + "_T_" + T + Ename + str(MCcycles) + ".bin"
+            Mfile = path + init + "_T_" + T + Mname + str(MCcycles) + ".bin"
+            Afile = path + init + "_T_" + T + Aname + str(MCcycles) + ".bin"
+            print("Loading ", Efile)
+            print("Loading ", Mfile)
+            print("Loading ", Afile)
+            energies = np.fromfile(Efile)
+            absMagnetic = np.fromfile(Mfile)
+            Accept = np.fromfile(Afile)
             cycles = np.arange(0,len(energies),1)
 
             axE.plot(cycles[1:],energies[1:],'-o',alpha= 0.5,label="T={:.2f}, {:s}".format(float(T),init))
             axE.legend()
-            plt.tight_layout()
 
             axM.plot(cycles[1:],absMagnetic[1:],'-o',alpha= 0.5,label="T={:.2f}, {:s}".format(float(T),init))
             axM.legend()
-            plt.tight_layout()
 
             axA.plot(cycles[1:],Accept[1:],alpha= 0.5,label="T={:.2f}, {:s}".format(float(T),init))
             axA.legend()
-            plt.tight_layout()
+
+    figE.tight_layout()
+    figM.tight_layout()
+    figA.tight_layout()
 
 plotting(60000)
 plt.show()

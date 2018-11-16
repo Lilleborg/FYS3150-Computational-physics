@@ -3,14 +3,14 @@
 
 #include <string>
 #include <cstring>
-#include <armadillo>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <math.h>
 #include <vector>
 #include <random>
-
+#define ARMA_NO_DEBUG
+#include <armadillo>
 using namespace arma;
 using namespace std;
 

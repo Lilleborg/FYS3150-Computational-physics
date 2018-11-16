@@ -54,6 +54,9 @@ int exe_b(uword L, double Temperature){
             cout << "Relative error expectation energy " << Exp_E_diffing.back() << " with " << MC << " number of cycles" << endl;
             normed_quantities = normalizing_expectations(T,MC,L,temp_exp_vals);
         }
+        if(i==23){
+        write_double_array_bin(Energies,MC,"/ExerciseB/Energies");
+        }
     }   // LOOPING OVER I END
     write_double_vector(Exp_E_diffing,"/ExerciseB/Exp_E_diffing");
     write_double_vector(Exp_absM_diffing,"/ExerciseB/Exp_absM_diffing");
@@ -138,7 +141,8 @@ int exe_d(double const Temp, string Latticestart, int const MC){
     double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
     mt19937_64 gen(1234);
     imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
-    vec Energies(MC-MCbeforesample+1);
+    //vec Energies(MC-MCbeforesample);
+    double *Energies = new double[MC-MCbeforesample];
     vec temp_exp_vals(2,fill::zeros); // Vector for holding temporary expectation values
     // Set up possible energy differences
     vec w(17);
@@ -150,21 +154,26 @@ int exe_d(double const Temp, string Latticestart, int const MC){
 
     for (int cycle = 0; cycle < MC; ++cycle) {
         metropolis(L,gen,Lattice,w,E,M);
-        if (MCbeforesample<cycle){
-        Energies(cycle-MCbeforesample) = E;
+        if (MCbeforesample<=cycle){
+        Energies[cycle-MCbeforesample] = E;
         temp_exp_vals(0) += E;
         temp_exp_vals(1) += E*E;
         }
     }
+//    cout << Energies.head(5) << endl;
+//    cout << Energies.tail(5) << endl;
+//    //Energies /= double(MC-MCbeforesample);
+//    cout << Energies.head(5) << endl;
+//    cout << Energies.tail(5) << endl;
     // Writing to file
-    string filenames = "../datafiles/ExerciseD/"+Latticestart+"_T_";
-    filenames.append(to_string(T));
-    Energies /= MC;
-    cout << "Writing " << filenames + "Energy_levels.bin" << endl;
-    Energies.save(filenames + "Energy_levels.bin");
+    string filename = "ExerciseD/"+Latticestart+"_T_";
+    filename.append(to_string(T)+"_Energy_levels_");//+to_string(MC-MCbeforesample)+".bin");
+    cout << "Writing " << filename << endl;
+    write_double_array_bin(Energies,MC-MCbeforesample,filename);
     double variance = find_variance(temp_exp_vals(1),temp_exp_vals(0), MC-MCbeforesample);
-    cout << "Variance Energy " << variance << " for " << Energies.size() << " sampling points" << endl;
+    cout << "Variance Energy " << variance << " for " << MC-MCbeforesample << " sampling points" << endl;
 
+    delete [] Energies;
     cout << "\nexe_d() done for T " << T << " " << Latticestart << endl;
     cout << "------------" << endl;
     return 0;
