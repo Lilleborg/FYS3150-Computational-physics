@@ -12,12 +12,16 @@ int main(int numArguments, char **arguments)
         cout << "stuff is actually happening!" << endl;
         int MC_c = 60000;
         if (strcmp(arguments[4],"ALL") == 0){   // RUN ALL EXERCISES
+            cout << "Running all exercises!\n";
+            cout << "------------------------"<< endl;
             result += exe_b();
 
             result += exe_c(1.0,"Random",MC_c);
             result += exe_c(2.4,"Random",MC_c);
             result += exe_c(1.0,"Up",MC_c);
             result += exe_c(2.4,"Up",MC_c);
+
+            result += exe_d(1.0,"Up",1e6);
         }
         if (strcmp(arguments[4],"B") == 0){   // RUN EXERCISE B
             result += exe_b();
@@ -35,10 +39,13 @@ int main(int numArguments, char **arguments)
         }
         if (strcmp(arguments[4],"D") == 0){   // RUN EXERCISE D
             result += exe_d(1.0,"Up",1e6);
+//            result += exe_d(1.0,"Random",1e6);
+           result += exe_d(2.4,"Up",1e6);
+//            result += exe_d(2.4,"Random",1e6);
         }
     }   // ONE CMD END
 
-    cout << "Main running for " << string(arguments[1]) << " " <<  double((clock()-time_start)/CLOCKS_PER_SEC) << " seconds" << endl;
+    cout << "Main running for " << string(arguments[1]) << " " <<  double((clock()-time_start)/double(CLOCKS_PER_SEC)) << " seconds" << endl;
     return result;
 } // MAIN END
 

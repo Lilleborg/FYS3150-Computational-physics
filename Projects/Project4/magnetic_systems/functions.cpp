@@ -61,6 +61,28 @@ void initialize_new_round(uword Nspins, imat &Lattice, double &Energy, double &M
     }
 }   // INITIALIZE NEW ROUND END
 
+vec normalizing_expectations(double const T, double const MC, int const L, vec const Exp_vals){
+    double MC_norming = 1.0/double(MC);
+    double Spin_norming = 1.0/double(L*L);
+    double TT_norming = 1.0/(T*T);
+    vec normed_exp(5,fill::zeros);
+
+    double exp_E = Exp_vals(0)*MC_norming;
+    double exp_EE = Exp_vals(1)*MC_norming;
+    double exp_M = Exp_vals(2)*MC_norming;
+    double exp_MM = Exp_vals(3)*MC_norming;
+    double exp_absM = Exp_vals(4)*MC_norming;
+
+    double Heat_cap = (exp_EE-exp_E*exp_E)*TT_norming*Spin_norming;
+    double Mag_susc = (exp_MM-exp_M*exp_M)*TT_norming*Spin_norming;
+
+    normed_exp(0) = exp_E*Spin_norming;
+    normed_exp(1) = Heat_cap;
+    normed_exp(2) = exp_M*Spin_norming;
+    normed_exp(3) = Mag_susc;
+    normed_exp(4) = exp_absM*Spin_norming;
+    return normed_exp;
+}
 
 // WRITE TO FILE FUNCTIONS-------------------------
 void write_double_vector(vector<double> quantity,string filenamestart){
@@ -87,29 +109,6 @@ double find_variance(double qq,double q,int const Norming){
     double qnormed = q/Norming;
     return qq-qnormed*qnormed;
 }   // FIND VARIANCE END
-
-vec normalizing_expectations(double const T, double const MC, int const L, vec const Exp_vals){
-    double MC_norming = 1.0/double(MC);
-    double Spin_norming = 1.0/double(L*L);
-    double TT_norming = 1.0/(T*T);
-    vec normed_exp(5,fill::zeros);
-
-    double exp_E = Exp_vals(0)*MC_norming;
-    double exp_EE = Exp_vals(1)*MC_norming;
-    double exp_M = Exp_vals(2)*MC_norming;
-    double exp_MM = Exp_vals(3)*MC_norming;
-    double exp_absM = Exp_vals(4)*MC_norming;
-
-    double Heat_cap = (exp_EE-exp_E*exp_E)*TT_norming*Spin_norming;
-    double Mag_susc = (exp_MM-exp_M*exp_M)*TT_norming*Spin_norming;
-
-    normed_exp(0) = exp_E*Spin_norming;
-    normed_exp(1) = Heat_cap;
-    normed_exp(2) = exp_M*Spin_norming;
-    normed_exp(3) = Mag_susc;
-    normed_exp(4) = exp_absM*Spin_norming;
-    return normed_exp;
-}
 
 // TODO: CHANGE HOW FILENAME GETS DEFINED, SHOULD BE ALL DONE OUTSIDE FUNCTION
 void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofstream& ofile,string filename){

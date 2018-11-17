@@ -3,7 +3,6 @@
 
 #include <string>
 #include <cstring>
-#include <armadillo>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -11,6 +10,8 @@
 #include <vector>
 #include <random>
 #include "mpi.h"
+#define ARMA_NO_DEBUG
+#include <armadillo>
 
 using namespace arma;
 using namespace std;
