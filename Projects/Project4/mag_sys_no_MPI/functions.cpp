@@ -111,7 +111,7 @@ double find_variance(double qq,double q,int const Norming){
 
 // TODO: CHANGE HOW FILENAME GETS DEFINED, SHOULD BE ALL DONE OUTSIDE FUNCTION
 void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofstream& ofile,string fullfilename){
-    cout << "OBS, Remember:\n Write_to_exp_values function takes the UN-NORMED expectation values as argument!" << endl;
+    //cout << "OBS, Remember:\n Write_to_exp_values function takes the UN-NORMED expectation values as argument!" << endl;
     vec normed_values = normalizing_expectations(T,MC,L,Exp_vals);
 
     ofile << setiosflags(ios::showpoint | ios::uppercase);

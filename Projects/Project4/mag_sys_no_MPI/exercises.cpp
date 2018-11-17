@@ -174,7 +174,7 @@ int exe_d(double const Temp, string Latticestart, int const MC){
 }   // EXE D END
 
 int exe_e(string Latticestart, int const MC){
-
+    cout << "Starting exe_E() " << Latticestart << " MC " << MC << endl;
     ofstream ofile;
     int MCbeforesample = 1e4;
     for (uword L = 20; L<41; L+=20){ //CHANGE TO L<101 LATER
@@ -184,7 +184,7 @@ int exe_e(string Latticestart, int const MC){
 
             cout << "Starting exe_E() for L = " << L << " " << Latticestart << " T " << T << endl;
             double E,M;    // temperatur, energy and magnetic moment
-            mt19937_64 gen(1234);
+            mt19937_64 gen(123+L);
 
             // Arrays
             vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
@@ -211,12 +211,14 @@ int exe_e(string Latticestart, int const MC){
             // WRITING TO FILE
             write_exp_values(T,MC-MCbeforesample,L,temp_exp_vals,ofile,filenames);
 
-            cout << "\nexe_e() done for L = " << L << " " << Latticestart << " " << T << endl;
+            cout << "Done for L = " << L << " " << Latticestart << " " << T << endl;
             cout << "------------" << endl;
 
         }   // LOOP OVER T END
         ofile.close();
         cout << "Closed " << filenames << endl;
     }   // LOOP OVER L END
+    cout << "\nexe_e() done" << endl;
+    cout << "--------------" << endl;
     return 0;
 }   // EXE E END
