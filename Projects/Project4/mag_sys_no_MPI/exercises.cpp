@@ -176,10 +176,9 @@ int exe_d(double const Temp, string Latticestart, int const MC){
 int exe_e(string Latticestart, int const MC){
 
     ofstream ofile;
-    string filenames = "../datafiles_no_MPI/ExerciseE/"+Latticestart+"_L_";
     int MCbeforesample = 1e4;
-    for (uword L = 20; L<31; L+=20){ //CHANGE TO L<101 LATER
-        filenames.append(to_string(L)+".bin");
+    for (uword L = 20; L<41; L+=20){ //CHANGE TO L<101 LATER
+        string filenames = "../datafiles_no_MPI/ExerciseE/"+Latticestart+"_L_"+to_string(L) + ".txt";
         ofile.open(filenames);  // Open file for this L
         for (double T = 2.0; T<2.2; T+=0.05){
 
