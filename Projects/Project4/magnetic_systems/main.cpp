@@ -17,7 +17,7 @@ int main(int numArguments, char **arguments)
     cout << "Hello world, I have  rank " << my_rank << " out of "
          << numprocs << endl;
 
-    exe_d(1.0,"Up",1e6, numprocs, my_rank);
+    exe_d(1.0,"Up",1e4+5, numprocs, my_rank);
 
     /*
     if(numArguments > 2){  // If more than one cmd given = MPI, it reflects what exe to be run. Could be "ALL" to run all exes
@@ -88,7 +88,7 @@ int main(int numArguments, char **arguments)
         }
     }   // ONE CMD END
 */
-    cout << "Main running for " << " " <<  double((clock()-time_start)/double(CLOCKS_PER_SEC)) << " seconds" << endl;
+    //cout << "Main running for " << " " <<  double((clock()-time_start)/double(CLOCKS_PER_SEC)) << " seconds" << endl;
     MPI_Finalize ();
     return result;
 } // MAIN END
