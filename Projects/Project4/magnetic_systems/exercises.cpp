@@ -128,7 +128,7 @@ int exe_c(double const Temp, string Latticestart, int const MC){
     return 0;
 }   // EXE C END
 
-int exe_d(double const Temp, string Latticestart, int const MC){
+int exe_d(double const Temp, string Latticestart, int const MC, int numprocs, int my_rank){
 
     // Initializing
     double T = Temp ,E,M;    // temperatur, energy and magnetic moment
@@ -137,18 +137,25 @@ int exe_d(double const Temp, string Latticestart, int const MC){
     if (T > 1.1){
         MCbeforesample = 1e4;
     }
-    uword L = 20;           // Nr spins along one axis
+
+
+    uword L = 20;
+    MPI_Bcast (&L, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast (&T, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+               // Nr spins along one axis
     double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
-    mt19937_64 gen(1234);
+    mt19937_64 gen(int(1234+my_rank));
     imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
     //vec Energies(MC-MCbeforesample);
     double *Energies = new double[MC-MCbeforesample];
+    double *E_avg = new double[MC-MCbeforesample];
     vec temp_exp_vals(2,fill::zeros); // Vector for holding temporary expectation values
     // Set up possible energy differences
     vec w(17);
     for (int dE = -8; dE <= 8; dE+=4) {
         w(dE+8) = exp(-dE/T);
     }
+    cout << "CPU:" << my_rank << endl;
     // Computing
     initialize_new_round(L,Lattice,E,M,Latticestart);
 
@@ -158,21 +165,27 @@ int exe_d(double const Temp, string Latticestart, int const MC){
         Energies[cycle-MCbeforesample] = E;
         temp_exp_vals(0) += E;
         temp_exp_vals(1) += E*E;
+        E_avg[cycle-MCbeforesample] = 0;
         }
+
+    //MPI_Reduce(&M, &M_avg, 1,MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     }
+    MPI_Reduce(&Energies, &E_avg, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 //    cout << Energies.head(5) << endl;
 //    cout << Energies.tail(5) << endl;
 //    //Energies /= double(MC-MCbeforesample);
 //    cout << Energies.head(5) << endl;
 //    cout << Energies.tail(5) << endl;
     // Writing to file
+    //MPI_Finalize()
     string filename = "ExerciseD/"+Latticestart+"_T_"+to_string(T)+"_Energy_levels_";
-    write_double_array_bin(Energies,MC-MCbeforesample,filename);
+    write_double_array_bin(E_avg,MC-MCbeforesample,filename);
 
     double variance = find_variance(temp_exp_vals(1),temp_exp_vals(0), MC-MCbeforesample);
     cout << "Variance Energy " << variance << " for " << MC-MCbeforesample << " sampling points" << endl;
 
     delete [] Energies;
+    delete [] E_avg;
     cout << "\nexe_d() done for T " << T << " " << Latticestart << endl;
     cout << "------------" << endl;
     return 0;
