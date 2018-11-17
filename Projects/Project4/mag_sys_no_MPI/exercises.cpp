@@ -185,7 +185,7 @@ int exe_e(string Latticestart, int const MC){
         for (double T = 2.0; T<2.4; T+=0.05){
 
             double E,M;    // temperatur, energy and magnetic moment
-            cout << "Starting exe_E() for L= " << L << " " << Latticestart << endl;
+            cout << "Starting exe_E() for L = " << L << " " << Latticestart << endl;
 
             double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
             mt19937_64 gen(1234);

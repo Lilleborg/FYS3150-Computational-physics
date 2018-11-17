@@ -6,7 +6,6 @@
 int main(int numArguments, char **arguments)
 {
     int result = 0;
-    cout << "main" << endl;
     clock_t time_start = clock();
 
     if(numArguments == 2){  // If one cmd given = no MPI, it reflects what exe to be run. Could be "ALL" to run all exes
