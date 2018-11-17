@@ -10,6 +10,7 @@
 #include <math.h>
 #include <vector>
 #include <random>
+#include "mpi.h"
 
 using namespace arma;
 using namespace std;

@@ -93,6 +93,7 @@ int exe_c(double const Temp, string Latticestart, int const MC){
     MagneticPerCycle[0] = Magnetic[0];
     // STARTING MC CYCLES
     int counter = 0;
+
     for (int cycle = 0; cycle < MC; cycle ++){
 
         Accept_Counter[cycle] =  metropolis(L,gen,Lattice,w,E,M);  // One cycle through the lattice
@@ -103,7 +104,9 @@ int exe_c(double const Temp, string Latticestart, int const MC){
         MagneticPerCycle[cycle+1] = Magnetic[cycle+1]/counter;
 
 
-    } // END MC CYCLES
+    }
+    MPI_Finalize ();
+    // END MC CYCLES
 
     // WRITING TO FILE
     string filenames = "ExerciseC/"+Latticestart+"_T_";

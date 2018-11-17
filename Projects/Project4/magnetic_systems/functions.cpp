@@ -28,6 +28,7 @@ int metropolis(uword Nspins,mt19937_64 &gen, imat &Lattice, vec &w, double &E, d
             }
     }   // END LOOP OVER LATTICE
     return acc_counter;
+
 }   // METROPOLIS END
 
 
