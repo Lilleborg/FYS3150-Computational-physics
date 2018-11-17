@@ -35,7 +35,9 @@ cycles = np.zeros(N)
 for i in range(N):
     cycles[i] = 2**(i+8)
 plt.figure("Test")
-plt.plot(range(len(Energylevels)),Energylevels,'o')
+plt.plot(range(len(Energylevels[::100])),Energylevels[::100],'o')
+
+
 plt.figure("Energy_difference")
 plt.loglog(cycles,energies,'-o',label='Datapoints')
 plt.title("Relative error mean energy")
