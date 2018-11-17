@@ -10,7 +10,6 @@
 #include <vector>
 #include <random>
 #include <armadillo>
-#include "mpi.h"
 #define ARMA_NO_DEBUG
 
 using namespace arma;

@@ -1,4 +1,5 @@
 //#include <iostream>
+#include "mpi.h"
 #include "functions.h"
 #include "exercises.h"
 #include "time.h"
@@ -8,6 +9,16 @@ int main(int numArguments, char **arguments)
     int result = 0;
     cout << "main" << endl;
     clock_t time_start = clock();
+    int numprocs,my_rank;
+    MPI_Init (&numArguments, &arguments);
+
+    MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
+    MPI_Comm_rank (MPI_COMM_WORLD, &my_rank);
+    cout << "Hello world, I have  rank " << my_rank << " out of "
+         << numprocs << endl;
+    //  End MPI
+    exe_b();
+    /*
     if(numArguments > 2){  // If more than one cmd given = MPI, it reflects what exe to be run. Could be "ALL" to run all exes
         cout << "stuff is actually happening!" << endl;
         int MC_c = 60000;
@@ -75,8 +86,9 @@ int main(int numArguments, char **arguments)
             result += exe_d(2.4,"Random",1e6);
         }
     }   // ONE CMD END
-
-    cout << "Main running for " << string(arguments[1]) << " " <<  double((clock()-time_start)/double(CLOCKS_PER_SEC)) << " seconds" << endl;
+*/
+    cout << "Main running for " << " " <<  double((clock()-time_start)/double(CLOCKS_PER_SEC)) << " seconds" << endl;
+    MPI_Finalize ();
     return result;
 } // MAIN END
 
