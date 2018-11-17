@@ -13,10 +13,10 @@ plt.matplotlib.rc('font', **font)
 
 def plotting(MCcycles):
     path = "../datafiles/ExerciseD/"
-    temps = ["1.000000","2.400000"]
+    temps = ["1.000000"]#,"2.400000"]
     mcbefore = [1e3,1e4]
     Ename = "_Energy_levels_"
-    initial = ["Up","Random"]
+    initial = ["Up"]#,"Random"]
 
     figE,axes = plt.subplots(2,2)#,sharex='col')#,sharey='row')
     figE.suptitle(r"Histogram of energy levels after equilibrium is reached")
