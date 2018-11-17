@@ -106,10 +106,7 @@ int exe_c(double const Temp, string Latticestart, int const MC){
         EnergyPerCycle[cycle+1] = Energies[cycle+1]/counter;
         MagneticPerCycle[cycle+1] = Magnetic[cycle+1]/counter;
 
-
-    }
-    MPI_Finalize ();
-    // END MC CYCLES
+    }   // END MC CYCLES
 
     // WRITING TO FILE
     string filenames = "ExerciseC/"+Latticestart+"_T_";

@@ -13,8 +13,8 @@ int metropolis(uword Nspins,mt19937_64 &gen, imat &Lattice, vec &w, double &E, d
     for (uword lattis = 0; lattis < Nspins*Nspins; lattis++){
             uword xi = uword(RNG(gen)*Nspins);
             uword yi = uword(RNG(gen)*Nspins);
-            // Calculating energy change
 
+            // Calculating energy change
             int dE =  2*Lattice(xi,yi)*
                     (Lattice(xi,PeriodicBoundary(yi,Nspins,-1))+
                      Lattice(PeriodicBoundary(xi,Nspins,-1),yi) +
@@ -25,10 +25,9 @@ int metropolis(uword Nspins,mt19937_64 &gen, imat &Lattice, vec &w, double &E, d
                 M += double(2*Lattice(xi,yi));
                 E += double(dE);
                 acc_counter++;
-            }
+            }   // IF ACCEPT OR NOT END
     }   // END LOOP OVER LATTICE
     return acc_counter;
-
 }   // METROPOLIS END
 
 
