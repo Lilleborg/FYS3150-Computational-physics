@@ -1,7 +1,7 @@
 #include "exercises.h"
 
 int exe_b(uword L, double Temperature){
-    cout << "Starting exe_b()" << endl;
+    cout << "Starting exe_b() for T " << Temperature << endl;
 
     vector <double> Exp_E_diffing;  // Holding absdiff of calculated exp_E vs exact_E for different lengths of MCcycles
     vector <double> Exp_absM_diffing;
@@ -29,7 +29,7 @@ int exe_b(uword L, double Temperature){
 
         vec w(17);
         for (int dE = -8; dE <= 8; dE+=4) {
-            w(dE+8) = exp(-dE/T);
+            w[dE+8] = exp(-dE/T);
         }
 
         initialize_new_round(L,Lattice,E,M,"Up");   // Sets up Lattice, calc M and E all spins up, WILL BE MORE USEFULL FOR MULTIPLE TEMPERATURES
@@ -42,17 +42,20 @@ int exe_b(uword L, double Temperature){
             Energies[cycle+1] = E;
             MagneticMom[cycle+1] = M;
             // Update expectation values:
-            temp_exp_vals(0) += E; temp_exp_vals(1) += E*E;
-            temp_exp_vals(2) += M; temp_exp_vals(3) += M*M; temp_exp_vals(4) += fabs(M);
+            temp_exp_vals[0] += E; temp_exp_vals[1] += E*E;
+            temp_exp_vals[2] += M; temp_exp_vals[3] += M*M; temp_exp_vals[4] += fabs(M);
 
         } // END MC CYCLES
-        double exp_E = temp_exp_vals(0)/MC/L/L;
-        double exp_absM = temp_exp_vals(4)/MC/L/L;
+        double exp_E = temp_exp_vals[0]/MC/L/L;
+        double exp_absM = temp_exp_vals[4]/MC/L/L;
         Exp_E_diffing.push_back(abs(exp_E-E_exact)/abs(E_exact));
         Exp_absM_diffing.push_back(abs(exp_absM-absM_exact)/absM_exact);
         if (Exp_E_diffing.back() < 1e-3){   // calc ~= exact
             cout << "Relative error expectation energy " << Exp_E_diffing.back() << " with " << MC << " number of cycles" << endl;
             normed_quantities = normalizing_expectations(T,MC,L,temp_exp_vals);
+        }
+        if(i==23){
+        write_double_array_bin(Energies,MC,"/ExerciseB/Energies");
         }
     }   // LOOPING OVER I END
     write_double_vector(Exp_E_diffing,"/ExerciseB/Exp_E_diffing");
@@ -66,16 +69,16 @@ int exe_b(uword L, double Temperature){
 }   // EXE B END
 
 int exe_c(double const Temp, string Latticestart, int const MC){
-    cout << "Starting exe_c()" << endl;
 
     double T = Temp,E,M;    // temperatur, energy and magnetic moment
+    cout << "Starting exe_c() for T " << T << " " << Latticestart << endl;
     uword L = 20;           // Nr spins along one axis
     double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
     mt19937_64 gen(1234);
     // Arrays
     //vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
     imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
-    double *Energies = new double[MC+1];  // FOR SAVING ENERGIES PER MC CYCLE, ONLY USED WHEN LOOKING AT PATH TO EQUILIBRIUM
+    double *Energies = new double[MC+1];  // FOR SAVING ENERGIES
     double *Magnetic = new double[MC+1];   // SAME AS "Energies", but for magnetic moment
     double *EnergyPerCycle = new double[MC+1];
     double *MagneticPerCycle = new double[MC+1];
@@ -83,7 +86,7 @@ int exe_c(double const Temp, string Latticestart, int const MC){
 
     vec w(17);
     for (int dE = -8; dE <= 8; dE+=4) {
-        w(dE+8) = exp(-dE/T);
+        w[dE+8] = exp(-dE/T);
     }
     // Starting values
     initialize_new_round(L,Lattice,E,M,Latticestart);
@@ -93,6 +96,7 @@ int exe_c(double const Temp, string Latticestart, int const MC){
     MagneticPerCycle[0] = Magnetic[0];
     // STARTING MC CYCLES
     int counter = 0;
+
     for (int cycle = 0; cycle < MC; cycle ++){
 
         Accept_Counter[cycle] =  metropolis(L,gen,Lattice,w,E,M);  // One cycle through the lattice
@@ -102,8 +106,7 @@ int exe_c(double const Temp, string Latticestart, int const MC){
         EnergyPerCycle[cycle+1] = Energies[cycle+1]/counter;
         MagneticPerCycle[cycle+1] = Magnetic[cycle+1]/counter;
 
-
-    } // END MC CYCLES
+    }   // END MC CYCLES
 
     // WRITING TO FILE
     string filenames = "ExerciseC/"+Latticestart+"_T_";
@@ -124,3 +127,53 @@ int exe_c(double const Temp, string Latticestart, int const MC){
     cout << "------------" << endl;
     return 0;
 }   // EXE C END
+
+int exe_d(double const Temp, string Latticestart, int const MC){
+
+    // Initializing
+    double T = Temp ,E,M;    // temperatur, energy and magnetic moment
+    cout << "Starting exe_d() for T " << T << " " << Latticestart << endl;
+    int MCbeforesample = 1e3;
+    if (T > 1.1){
+        MCbeforesample = 1e4;
+    }
+    uword L = 20;           // Nr spins along one axis
+    double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
+    mt19937_64 gen(1234);
+    imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
+    //vec Energies(MC-MCbeforesample);
+    double *Energies = new double[MC-MCbeforesample];
+    vec temp_exp_vals(2,fill::zeros); // Vector for holding temporary expectation values
+    // Set up possible energy differences
+    vec w(17);
+    for (int dE = -8; dE <= 8; dE+=4) {
+        w(dE+8) = exp(-dE/T);
+    }
+    // Computing
+    initialize_new_round(L,Lattice,E,M,Latticestart);
+
+    for (int cycle = 0; cycle < MC; ++cycle) {
+        metropolis(L,gen,Lattice,w,E,M);
+        if (MCbeforesample<=cycle){
+        Energies[cycle-MCbeforesample] = E;
+        temp_exp_vals(0) += E;
+        temp_exp_vals(1) += E*E;
+        }
+    }
+//    cout << Energies.head(5) << endl;
+//    cout << Energies.tail(5) << endl;
+//    //Energies /= double(MC-MCbeforesample);
+//    cout << Energies.head(5) << endl;
+//    cout << Energies.tail(5) << endl;
+    // Writing to file
+    string filename = "ExerciseD/"+Latticestart+"_T_"+to_string(T)+"_Energy_levels_";
+    write_double_array_bin(Energies,MC-MCbeforesample,filename);
+
+    double variance = find_variance(temp_exp_vals(1),temp_exp_vals(0), MC-MCbeforesample);
+    cout << "Variance Energy " << variance << " for " << MC-MCbeforesample << " sampling points" << endl;
+
+    delete [] Energies;
+    cout << "\nexe_d() done for T " << T << " " << Latticestart << endl;
+    cout << "------------" << endl;
+    return 0;
+}   // EXE D END

@@ -13,8 +13,8 @@ int metropolis(uword Nspins,mt19937_64 &gen, imat &Lattice, vec &w, double &E, d
     for (uword lattis = 0; lattis < Nspins*Nspins; lattis++){
             uword xi = uword(RNG(gen)*Nspins);
             uword yi = uword(RNG(gen)*Nspins);
-            // Calculating energy change
 
+            // Calculating energy change
             int dE =  2*Lattice(xi,yi)*
                     (Lattice(xi,PeriodicBoundary(yi,Nspins,-1))+
                      Lattice(PeriodicBoundary(xi,Nspins,-1),yi) +
@@ -25,7 +25,7 @@ int metropolis(uword Nspins,mt19937_64 &gen, imat &Lattice, vec &w, double &E, d
                 M += double(2*Lattice(xi,yi));
                 E += double(dE);
                 acc_counter++;
-            }
+            }   // IF ACCEPT OR NOT END
     }   // END LOOP OVER LATTICE
     return acc_counter;
 }   // METROPOLIS END
@@ -60,27 +60,6 @@ void initialize_new_round(uword Nspins, imat &Lattice, double &Energy, double &M
     }
 }   // INITIALIZE NEW ROUND END
 
-
-// WRITE TO FILE FUNCTIONS-------------------------
-void write_double_vector(vector<double> quantity,string filenamestart){
-    string filename = filenamestart + "_" + to_string(quantity.size()) +"_elements.dat";
-    filename.insert(0,"../datafiles/");
-    cout << "Writing " << filename << endl;
-    ofstream file(filename);
-    for (const auto &e : quantity) file << e << "\n";
-    file.close();
-}
-void write_double_array_bin(double *quantity,int MC, string filename){
-    filename.insert(0,"../datafiles/");
-    filename.append(to_string(MC));
-    filename.append(".bin");
-    cout << "Writing " << filename << endl;
-    ofstream file(filename, ofstream::binary);
-    file.write(reinterpret_cast<const char*> (quantity), MC*sizeof(double));
-    file.close();
-    cout << filename << " closed" << endl;
-}   // RESULTS PER MC END
-
 vec normalizing_expectations(double const T, double const MC, int const L, vec const Exp_vals){
     double MC_norming = 1.0/double(MC);
     double Spin_norming = 1.0/double(L*L);
@@ -104,6 +83,32 @@ vec normalizing_expectations(double const T, double const MC, int const L, vec c
     return normed_exp;
 }
 
+// WRITE TO FILE FUNCTIONS-------------------------
+void write_double_vector(vector<double> quantity,string filenamestart){
+    string filename = filenamestart + "_" + to_string(quantity.size()) +"_elements.dat";
+    filename.insert(0,"../datafiles/");
+    cout << "Writing " << filename << endl;
+    ofstream file(filename);
+    for (const auto &e : quantity) file << e << "\n";
+    file.close();
+}
+void write_double_array_bin(double *quantity,int MC, string filename){
+    filename.insert(0,"../datafiles/");
+    filename.append(to_string(MC));
+    filename.append(".bin");
+    cout << "Writing " << filename << endl;
+    ofstream file(filename, ofstream::binary);
+    file.write(reinterpret_cast<const char*> (quantity), MC*sizeof(double));
+    file.close();
+    cout << filename << " closed" << endl;
+}   // RESULTS PER MC END
+
+double find_variance(double qq,double q,int const Norming){
+    qq /= Norming;
+    double qnormed = q/Norming;
+    return qq-qnormed*qnormed;
+}   // FIND VARIANCE END
+
 // TODO: CHANGE HOW FILENAME GETS DEFINED, SHOULD BE ALL DONE OUTSIDE FUNCTION
 void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofstream& ofile,string filename){
     cout << "OBS, Remember:\n Write_to_exp_values function takes the UN-NORMED expectation values as argument!" << endl;
@@ -122,6 +127,7 @@ void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofs
     cout << "written for temp " << T << " , file not closed yet" << endl;
     cout << "---------------\n" << endl;
 }   // WRITE EXP VALUES END
+
 
 
 // ----------------------------------------
