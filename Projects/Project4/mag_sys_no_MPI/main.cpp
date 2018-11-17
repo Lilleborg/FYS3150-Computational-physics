@@ -6,7 +6,6 @@
 int main(int numArguments, char **arguments)
 {
     int result = 0;
-    cout << "main" << endl;
     clock_t time_start = clock();
 
     if(numArguments == 2){  // If one cmd given = no MPI, it reflects what exe to be run. Could be "ALL" to run all exes
@@ -41,6 +40,9 @@ int main(int numArguments, char **arguments)
             result += exe_d(1.0,"Random",1e6);
             result += exe_d(2.4,"Up",1e6);
             result += exe_d(2.4,"Random",1e6);
+        }
+        if (strcmp(arguments[1],"E") == 0){   // RUN EXERCISE B
+            result += exe_e("Up",1e6);
         }
     }   // ONE CMD END
     cout << "Main running for " << " " <<  double((clock()-time_start)/double(CLOCKS_PER_SEC)) << " seconds" << endl;

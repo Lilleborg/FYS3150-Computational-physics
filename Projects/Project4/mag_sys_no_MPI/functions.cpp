@@ -110,11 +110,9 @@ double find_variance(double qq,double q,int const Norming){
 }   // FIND VARIANCE END
 
 // TODO: CHANGE HOW FILENAME GETS DEFINED, SHOULD BE ALL DONE OUTSIDE FUNCTION
-void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofstream& ofile,string filename){
+void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofstream& ofile,string fullfilename){
     cout << "OBS, Remember:\n Write_to_exp_values function takes the UN-NORMED expectation values as argument!" << endl;
-    filename.insert(0,"../datafiles_no_MPI/");
     vec normed_values = normalizing_expectations(T,MC,L,Exp_vals);
-    cout << "\nWriting expectation values to "<< filename << " for temperature " << T << endl;
 
     ofile << setiosflags(ios::showpoint | ios::uppercase);
     ofile << setw(15) << setprecision(8) << T;
@@ -124,7 +122,7 @@ void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofs
     ofile << setw(15) << setprecision(8) << normed_values(3);   // Susceptibility
     ofile << setw(15) << setprecision(8) << normed_values(4) << endl;   // Abs Magnetic
     cout << "---------------" << endl;
-    cout << "written for temp " << T << " , file not closed yet" << endl;
+    cout << "written for temp " << T << " to " << fullfilename << " , file not closed yet" << endl;
     cout << "---------------\n" << endl;
 }   // WRITE EXP VALUES END
 

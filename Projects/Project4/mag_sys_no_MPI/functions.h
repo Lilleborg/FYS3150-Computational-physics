@@ -22,7 +22,7 @@ vec normalizing_expectations(double const T, double const MC, int const L, vec c
 double find_variance(double qq, double q, int const Norming);
 
 void write_double_array_bin(double *quantity,int MC, string filename);
-void write_exp_values(const double T, const int MC, int L, vec Exp_vals, ofstream &ofile, string filename);
+void write_exp_values(const double T, const int MC, int L, vec Exp_vals, ofstream &ofile, string fullfilename);
 void write_double_vector(vector<double> quantity,string filenamestart);
 
 #endif // FUNCTIONS_H
