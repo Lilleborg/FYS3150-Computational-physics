@@ -2,6 +2,8 @@
 # Build folder
 build
 datafiles
+datafiles_no_MPI
+build-mag_sys_no_MPI
 
 # Mac
 .DS_Store

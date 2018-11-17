@@ -86,14 +86,14 @@ vec normalizing_expectations(double const T, double const MC, int const L, vec c
 // WRITE TO FILE FUNCTIONS-------------------------
 void write_double_vector(vector<double> quantity,string filenamestart){
     string filename = filenamestart + "_" + to_string(quantity.size()) +"_elements.dat";
-    filename.insert(0,"../datafiles/");
+    filename.insert(0,"../datafiles_no_MPI/");
     cout << "Writing " << filename << endl;
     ofstream file(filename);
     for (const auto &e : quantity) file << e << "\n";
     file.close();
 }
 void write_double_array_bin(double *quantity,int MC, string filename){
-    filename.insert(0,"../datafiles/");
+    filename.insert(0,"../datafiles_no_MPI/");
     filename.append(to_string(MC));
     filename.append(".bin");
     cout << "Writing " << filename << endl;
@@ -112,7 +112,7 @@ double find_variance(double qq,double q,int const Norming){
 // TODO: CHANGE HOW FILENAME GETS DEFINED, SHOULD BE ALL DONE OUTSIDE FUNCTION
 void write_exp_values(double const T, int const MC,int L, vec Exp_vals, std::ofstream& ofile,string filename){
     cout << "OBS, Remember:\n Write_to_exp_values function takes the UN-NORMED expectation values as argument!" << endl;
-    filename.insert(0,"../datafiles/");
+    filename.insert(0,"../datafiles_no_MPI/");
     vec normed_values = normalizing_expectations(T,MC,L,Exp_vals);
     cout << "\nWriting expectation values to "<< filename << " for temperature " << T << endl;
 
