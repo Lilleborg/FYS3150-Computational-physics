@@ -7,7 +7,7 @@
 int main(int numArguments, char **arguments)
 {
     int result = 0;
-    cout << "main" << endl;
+    cout << "suck my aaaaaaaaaaass" << endl;
     clock_t time_start = clock();
     int numprocs,my_rank;
     MPI_Init (&numArguments, &arguments);
@@ -16,8 +16,9 @@ int main(int numArguments, char **arguments)
     MPI_Comm_rank (MPI_COMM_WORLD, &my_rank);
     cout << "Hello world, I have  rank " << my_rank << " out of "
          << numprocs << endl;
-    //  End MPI
-    exe_b();
+
+    exe_d(1.0,"Up",1e6, numprocs, my_rank);
+
     /*
     if(numArguments > 2){  // If more than one cmd given = MPI, it reflects what exe to be run. Could be "ALL" to run all exes
         cout << "stuff is actually happening!" << endl;
