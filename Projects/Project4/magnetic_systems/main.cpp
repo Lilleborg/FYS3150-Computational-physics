@@ -1,23 +1,22 @@
 //#include <iostream>
-#include "mpi.h"
+//#include "mpi.h"
 #include "functions.h"
 #include "exercises.h"
-#include "time.h"
+//#include "time.h"
 
 int main(int numArguments, char **arguments)
 {
     int result = 0;
     cout << "suck my aaaaaaaaaaass" << endl;
-    clock_t time_start = clock();
     int numprocs,my_rank;
     MPI_Init (&numArguments, &arguments);
-
     MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
     MPI_Comm_rank (MPI_COMM_WORLD, &my_rank);
+    
     cout << "Hello world, I have  rank " << my_rank << " out of "
          << numprocs << endl;
 
-    exe_d(1.0,"Up",1e4+5, numprocs, my_rank);
+    //exe_d(1.0,"Up",1e4+5, numprocs, my_rank);
 
     /*
     if(numArguments > 2){  // If more than one cmd given = MPI, it reflects what exe to be run. Could be "ALL" to run all exes

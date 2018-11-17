@@ -219,6 +219,6 @@ int exe_e(string Latticestart, int const MC){
         cout << "Closed " << filenames << endl;
     }   // LOOP OVER L END
     cout << "\nexe_e() done" << endl;
-    cout << "--------------" << endl;
+    cout << "------------" << endl;
     return 0;
 }   // EXE E END

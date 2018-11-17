@@ -172,7 +172,7 @@ int exe_d(double const Temp, string Latticestart, int const MC, int numprocs, in
 
     //MPI_Reduce(&M, &M_avg, 1,MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     }
-    MPI_Reduce(&Energies, &E_avg, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&Energies, &E_avg, MC-MCbeforesample, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     delete [] Energies;
 //    cout << Energies.head(5) << endl;
 //    cout << Energies.tail(5) << endl;
@@ -196,3 +196,53 @@ int exe_d(double const Temp, string Latticestart, int const MC, int numprocs, in
     delete [] E_avg;}
     return 0;
 }   // EXE D END
+
+int exe_e(string Latticestart, int const MC,int my_rank){
+    cout << "Starting exe_E() " << Latticestart << " MC " << MC << endl;
+    ofstream ofile;
+    int MCbeforesample = 1e4;
+    for (uword L = 20; L<41; L+=20){ //CHANGE TO L<101 LATER
+        string filenames = "../datafiles_no_MPI/ExerciseE/"+Latticestart+"_L_"+to_string(L) + ".txt";
+        ofile.open(filenames);  // Open file for this L
+        for (double T = 2.0; T<2.2; T+=0.05){
+
+            cout << "Starting exe_E() for L = " << L << " " << Latticestart << " T " << T << endl;
+            double E,M;    // temperatur, energy and magnetic moment
+            mt19937_64 gen(123+L);
+
+            // Arrays
+            vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
+            imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
+
+            vec w(17);
+            for (int dE = -8; dE <= 8; dE+=4) {
+                w[dE+8] = exp(-dE/T);
+            }
+            // Starting values
+            initialize_new_round(L,Lattice,E,M,Latticestart);
+
+            // STARTING MC CYCLES
+
+            for (int cycle = 0; cycle < MC; cycle ++){
+                metropolis(L,gen,Lattice,w,E,M);
+
+                // Update expectation values if equilibrium
+                if (MCbeforesample<=cycle){
+                    temp_exp_vals[0] += E; temp_exp_vals[1] += E*E;
+                    temp_exp_vals[2] += M; temp_exp_vals[3] += M*M; temp_exp_vals[4] += fabs(M);
+                }
+            }   // END MC CYCLES
+            // WRITING TO FILE
+            write_exp_values(T,MC-MCbeforesample,L,temp_exp_vals,ofile,filenames);
+
+            cout << "Done for L = " << L << " " << Latticestart << " " << T << endl;
+            cout << "------------" << endl;
+
+        }   // LOOP OVER T END
+        ofile.close();
+        cout << "Closed " << filenames << endl;
+    }   // LOOP OVER L END
+    cout << "\nexe_e() done" << endl;
+    cout << "------------" << endl;
+    return 0;
+}   // EXE E END

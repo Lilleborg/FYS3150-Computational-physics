@@ -9,9 +9,9 @@
 #include <math.h>
 #include <vector>
 #include <random>
-#include <armadillo>
 #include "mpi.h"
 #define ARMA_NO_DEBUG
+#include <armadillo>
 
 using namespace arma;
 using namespace std;
