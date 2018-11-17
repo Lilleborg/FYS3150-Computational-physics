@@ -41,6 +41,9 @@ int main(int numArguments, char **arguments)
             result += exe_d(2.4,"Up",1e6);
             result += exe_d(2.4,"Random",1e6);
         }
+        if (strcmp(arguments[1],"E") == 0){   // RUN EXERCISE B
+            result += exe_e("Up",1e6);
+        }
     }   // ONE CMD END
     cout << "Main running for " << " " <<  double((clock()-time_start)/double(CLOCKS_PER_SEC)) << " seconds" << endl;
     return result;

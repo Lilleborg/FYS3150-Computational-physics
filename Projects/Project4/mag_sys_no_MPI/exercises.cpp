@@ -54,7 +54,7 @@ int exe_b(uword L, double Temperature){
             normed_quantities = normalizing_expectations(T,MC,L,temp_exp_vals);
         }
         if(i==23){
-        write_double_array_bin(Energies,MC,"/ExerciseB/Energies");
+            write_double_array_bin(Energies,MC,"/ExerciseB/Energies");
         }
     }   // LOOPING OVER I END
     write_double_vector(Exp_E_diffing,"/ExerciseB/Exp_E_diffing");
@@ -137,10 +137,10 @@ int exe_d(double const Temp, string Latticestart, int const MC){
         MCbeforesample = 1e4;
     }
     uword L = 20;           // Nr spins along one axis
-    double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
+
     mt19937_64 gen(1234);
     imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
-    //vec Energies(MC-MCbeforesample);
+
     double *Energies = new double[MC-MCbeforesample];
     vec temp_exp_vals(2,fill::zeros); // Vector for holding temporary expectation values
     // Set up possible energy differences
@@ -154,16 +154,12 @@ int exe_d(double const Temp, string Latticestart, int const MC){
     for (int cycle = 0; cycle < MC; ++cycle) {
         metropolis(L,gen,Lattice,w,E,M);
         if (MCbeforesample<=cycle){
-        Energies[cycle-MCbeforesample] = E;
-        temp_exp_vals(0) += E;
-        temp_exp_vals(1) += E*E;
+            Energies[cycle-MCbeforesample] = E;
+            temp_exp_vals(0) += E;
+            temp_exp_vals(1) += E*E;
         }
     }
-//    cout << Energies.head(5) << endl;
-//    cout << Energies.tail(5) << endl;
-//    //Energies /= double(MC-MCbeforesample);
-//    cout << Energies.head(5) << endl;
-//    cout << Energies.tail(5) << endl;
+
     // Writing to file
     string filename = "ExerciseD/"+Latticestart+"_T_"+to_string(T)+"_Energy_levels_";
     write_double_array_bin(Energies,MC-MCbeforesample,filename);
@@ -179,29 +175,21 @@ int exe_d(double const Temp, string Latticestart, int const MC){
 
 int exe_e(string Latticestart, int const MC){
 
-    for (int L = 40; L<41; L+=20){ //CHANGE TO L<101 LATER
+    ofstream ofile;
+    string filenames = "../datafiles_no_MPI/ExerciseE/"+Latticestart+"_L_";
+    int MCbeforesample = 1e4;
+    for (uword L = 20; L<31; L+=20){ //CHANGE TO L<101 LATER
+        filenames.append(to_string(L)+".bin");
+        ofile.open(filenames);  // Open file for this L
+        for (double T = 2.0; T<2.2; T+=0.05){
 
-        for (double T = 2.0; T<2.4; T+=0.05){
-
+            cout << "Starting exe_E() for L = " << L << " " << Latticestart << " T " << T << endl;
             double E,M;    // temperatur, energy and magnetic moment
-            cout << "Starting exe_E() for L = " << L << " " << Latticestart << endl;
-
-            double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
             mt19937_64 gen(1234);
 
             // Arrays
-            //vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
+            vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
             imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
-            double *Energies = new double[MC+1];  // FOR SAVING ENERGIES
-            double *EnergiesSquared = new double[MC+1];
-            double *Magnetic = new double[MC+1];   // SAME AS "Energies", but for magnetic moment
-            double *MagneticSquared = new double[MC+1];
-            double *HeatCapacity = new double[MC+1];
-            double *Susceptibility = new double[MC+1];
-
-            //double *EnergyPerCycle = new double[MC+1];
-            //double *MagneticPerCycle = new double[MC+1];
-            //double *Accept_Counter = new double[MC+1];
 
             vec w(17);
             for (int dE = -8; dE <= 8; dE+=4) {
@@ -209,58 +197,27 @@ int exe_e(string Latticestart, int const MC){
             }
             // Starting values
             initialize_new_round(L,Lattice,E,M,Latticestart);
-            Energies[0] = E*norming;
-            EnergiesSquared[0] = E*E*norming;
-            Magnetic[0] = M*norming;
-            MagneticSquared[0] = M*M*norming;
-            HeatCapacity[0] = 1./T*(EnergiesSquared[0]-Energies[0]*Energies[0]);
-            Susceptibility[0] = 1./T*(MagneticSquared[0]-Magnetic[0]*Magnetic[0]);
 
-            //EnergyPerCycle[0] = Energies[0];
-            //MagneticPerCycle[0] = Magnetic[0];
             // STARTING MC CYCLES
-            int counter = 0;
+
             for (int cycle = 0; cycle < MC; cycle ++){
-                //Accept_Counter[cycle] =  metropolis(L,gen,Lattice,w,E,M);  // One cycle through the lattice
-                //counter++;
-                Energies[cycle+1] = (Energies[cycle]+E*norming);
-                EnergiesSquared[cycle+1] = (EnergiesSquared[cycle]*EnergiesSquared[cycle] +E*E*norming);
-                Magnetic[cycle+1] = Magnetic[cycle] + fabs(M)*norming;
-                MagneticSquared[cycle+1] = (MagneticSquared[cycle]*MagneticSquared[cycle]+ fabs(M*M)*norming);
-                HeatCapacity[cycle+1] = (HeatCapacity[cycle] + 1./T*(EnergiesSquared[cycle]-Energies[cycle]*Energies[cycle]));
-                Susceptibility[0] = (Susceptibility[cycle] + 1./T*(MagneticSquared[cycle]-Magnetic[cycle]*Magnetic[cycle]));
+                metropolis(L,gen,Lattice,w,E,M);
 
-                //EnergyPerCycle[cycle+1] = Energies[cycle+1]/counter;
-                //MagneticPerCycle[cycle+1] = Magnetic[cycle+1]/counter;
-
+                // Update expectation values if equilibrium
+                if (MCbeforesample<=cycle){
+                    temp_exp_vals[0] += E; temp_exp_vals[1] += E*E;
+                    temp_exp_vals[2] += M; temp_exp_vals[3] += M*M; temp_exp_vals[4] += fabs(M);
+                }
             }   // END MC CYCLES
-
-
             // WRITING TO FILE
-            string filenames = "ExerciseE/"+Latticestart+"_L_";
-            filenames.append(to_string(L));
-            write_double_array_bin(Energies,MC,filenames + "Energies_");
-            write_double_array_bin(Magnetic,MC,filenames + "AbsMagnetic_");
-            write_double_array_bin(HeatCapacity, MC, filenames + "HeatCapacity_");
-            write_double_array_bin(Susceptibility, MC, filenames + "Susceptibility_");
+            write_exp_values(T,MC-MCbeforesample,L,temp_exp_vals,ofile,filenames);
 
-            //write_double_array_bin(EnergyPerCycle,MC,filenames + "Energy_per_mc_");
-            //write_double_array_bin(MagneticPerCycle,MC,filenames + "Magnetic_per_mc_");
-            //write_double_array_bin(Accept_Counter,MC,filenames + "Accept_per_mc_");
-
-            delete [] Energies;
-            delete [] Magnetic;
-            delete [] HeatCapacity;
-            delete [] Susceptibility;
-
-            //delete [] EnergyPerCycle;
-            //delete [] MagneticPerCycle;
-            //delete [] Accept_Counter;
-
-            cout << "\nexe_c() done for L = " << L << " " << Latticestart << endl;
+            cout << "\nexe_e() done for L = " << L << " " << Latticestart << " " << T << endl;
             cout << "------------" << endl;
-        }
-    }
 
+        }   // LOOP OVER T END
+        ofile.close();
+        cout << "Closed " << filenames << endl;
+    }   // LOOP OVER L END
     return 0;
 }   // EXE E END
