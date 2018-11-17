@@ -1,7 +1,7 @@
 #include "exercises.h"
 
 int exe_b(uword L, double Temperature){
-    cout << "Starting exe_b()" << endl;
+    cout << "Starting exe_b() for T " << Temperature << endl;
 
     vector <double> Exp_E_diffing;  // Holding absdiff of calculated exp_E vs exact_E for different lengths of MCcycles
     vector <double> Exp_absM_diffing;
@@ -69,9 +69,9 @@ int exe_b(uword L, double Temperature){
 }   // EXE B END
 
 int exe_c(double const Temp, string Latticestart, int const MC){
-    cout << "Starting exe_c()" << endl;
 
     double T = Temp,E,M;    // temperatur, energy and magnetic moment
+    cout << "Starting exe_c() for T " << T << " " << Latticestart << endl;
     uword L = 20;           // Nr spins along one axis
     double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
     mt19937_64 gen(1234);
@@ -129,13 +129,13 @@ int exe_c(double const Temp, string Latticestart, int const MC){
 }   // EXE C END
 
 int exe_d(double const Temp, string Latticestart, int const MC){
-    cout << "Starting exe_d()" << endl;
 
     // Initializing
     double T = Temp ,E,M;    // temperatur, energy and magnetic moment
+    cout << "Starting exe_d() for T " << T << " " << Latticestart << endl;
     int MCbeforesample = 1e3;
     if (T > 1.1){
-        int MCbeforesample = 1e4;
+        MCbeforesample = 1e4;
     }
     uword L = 20;           // Nr spins along one axis
     double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
@@ -166,10 +166,9 @@ int exe_d(double const Temp, string Latticestart, int const MC){
 //    cout << Energies.head(5) << endl;
 //    cout << Energies.tail(5) << endl;
     // Writing to file
-    string filename = "ExerciseD/"+Latticestart+"_T_";
-    filename.append(to_string(T)+"_Energy_levels_");//+to_string(MC-MCbeforesample)+".bin");
-    cout << "Writing " << filename << endl;
+    string filename = "ExerciseD/"+Latticestart+"_T_"+to_string(T)+"_Energy_levels_";
     write_double_array_bin(Energies,MC-MCbeforesample,filename);
+
     double variance = find_variance(temp_exp_vals(1),temp_exp_vals(0), MC-MCbeforesample);
     cout << "Variance Energy " << variance << " for " << MC-MCbeforesample << " sampling points" << endl;
 
