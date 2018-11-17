@@ -137,14 +137,11 @@ int exe_d(double const Temp, string Latticestart, int const MC, int numprocs, in
     if (T > 1.1){
         MCbeforesample = 1e4;
     }
-
-
     uword L = 20;
-
                // Nr spins along one axis
     double norming = 1.0/(double(L*L)); // 1.0/(double(MC))
     mt19937_64 gen(int(1234+my_rank));
-    imat Lattice(L, L);   // imat giving typedef <sword> matrix - armadillos integer type
+       // imat giving typedef <sword> matrix - armadillos integer type
     //vec Energies(MC-MCbeforesample);
     double *Energies = new double[MC-MCbeforesample];
     double *E_avg = new double[MC-MCbeforesample];
@@ -156,7 +153,8 @@ int exe_d(double const Temp, string Latticestart, int const MC, int numprocs, in
     }
     MPI_Bcast (&L, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast (&T, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast (&Energies, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    imat Lattice(L, L);
+    //MPI_Bcast (&Energies, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     cout << "CPU:" << my_rank << endl;
     // Computing
     initialize_new_round(L,Lattice,E,M,Latticestart);
@@ -167,7 +165,7 @@ int exe_d(double const Temp, string Latticestart, int const MC, int numprocs, in
         Energies[cycle-MCbeforesample] = E;
         temp_exp_vals(0) += E;
         temp_exp_vals(1) += E*E;
-        //E_avg[cycle-MCbeforesample] = 0;
+        E_avg[cycle-MCbeforesample] = 0;
         }
 
     //MPI_Reduce(&M, &M_avg, 1,MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
@@ -182,17 +180,16 @@ int exe_d(double const Temp, string Latticestart, int const MC, int numprocs, in
     // Writing to file
     //MPI_Finalize()
 
-
     double variance = find_variance(temp_exp_vals(1),temp_exp_vals(0), MC-MCbeforesample);
     cout << "Variance Energy " << variance << " for " << MC-MCbeforesample << " sampling points" << endl;
-
 
     cout << "\nexe_d() done for T " << T << " " << Latticestart << endl;
     cout << "------------" << endl;
     if(my_rank == 0){
-    string filename = "ExerciseD/"+Latticestart+"_T_"+to_string(T)+"_Energy_levels_";
-    write_double_array_bin(E_avg,MC-MCbeforesample,filename);
+        string filename = "ExerciseD/"+Latticestart+"_T_"+to_string(T)+"_Energy_levels_";
+        write_double_array_bin(E_avg,MC-MCbeforesample,filename);
 
-    delete [] E_avg;}
+        delete [] E_avg;
+    }
     return 0;
 }   // EXE D END
