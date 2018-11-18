@@ -177,14 +177,14 @@ int exe_e(string Latticestart, int const MC){
     cout << "Starting exe_E() " << Latticestart << " MC " << MC << endl;
     ofstream ofile;
     int MCbeforesample = 1e4;
-    for (uword L = 20; L<41; L+=20){ //CHANGE TO L<101 LATER
+    for (uword L = 40; L<101; L+=20){ //CHANGE TO L<101 LATER
         string filenames = "../datafiles_no_MPI/ExerciseE/"+Latticestart+"_L_"+to_string(L) + ".txt";
         ofile.open(filenames);  // Open file for this L
-        for (double T = 2.0; T<2.2; T+=0.05){
+        for (double T = 2.1; T<2.35; T+=0.05){
 
             cout << "Starting exe_E() for L = " << L << " " << Latticestart << " T " << T << endl;
             double E,M;    // temperatur, energy and magnetic moment
-            mt19937_64 gen(123+L);
+            mt19937_64 gen(1+T+L);
 
             // Arrays
             vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
