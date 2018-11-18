@@ -46,7 +46,7 @@ int main(int nArg, char **Arg)
         MC = atoi(Arg[2]);
         MCbeforesample = atoi(Arg[3]);
         filename = Arg[4];
-        T_initial = 2.1; T_final = 2.4; T_step = 0.05;
+        T_initial = 2.2; T_final = 2.35; T_step = 0.0075;
 
         outfile = filename.append("_L_"+to_string(L)+"_MC_"+to_string(MC)+".txt");
         cout << "Opening " << outfile << " with rank " << my_rank << endl;
@@ -80,14 +80,14 @@ int main(int nArg, char **Arg)
         mt19937_64 gen(idum+int(T));
 
         for (int cycles = 0; cycles < MC; cycles++){    // MC CYCLES
-            
+
             metropolis(L,gen,Lattice,w,E,M);
 
-                // Update expectation values if equilibrium
-            //if (MCbeforesample<=cycles){
+            //Update expectation values if equilibrium
+            if (MCbeforesample<=cycles){
                 temp_exp_vals[0] += E; temp_exp_vals[1] += E*E;
                 temp_exp_vals[2] += M; temp_exp_vals[3] += M*M; temp_exp_vals[4] += fabs(M);
-            //}
+            }
 
         }   // MC CYCLES END
 
@@ -96,7 +96,7 @@ int main(int nArg, char **Arg)
         }
 
         if (my_rank == 0){
-            write_exp_values(T,MC*numprocs,L,final_exp_vals,ofile,outfile);
+            write_exp_values(T,(MC-MCbeforesample)*numprocs,L,final_exp_vals,ofile,outfile);
             cout << "Writen for T " << T << endl;
         }
 
@@ -197,9 +197,9 @@ int metropolis(uword Nspins,mt19937_64 &gen, imat &Lattice, vec &w, double &E, d
             // Calculating energy change
         int dE =  2*Lattice(xi,yi)*
         (Lattice(xi,PeriodicBoundary(yi,Nspins,-1))+
-           Lattice(PeriodicBoundary(xi,Nspins,-1),yi) +
-           Lattice(xi,PeriodicBoundary(yi,Nspins,1)) +
-           Lattice(PeriodicBoundary(xi,Nspins,1),yi));
+         Lattice(PeriodicBoundary(xi,Nspins,-1),yi) +
+         Lattice(xi,PeriodicBoundary(yi,Nspins,1)) +
+         Lattice(PeriodicBoundary(xi,Nspins,1),yi));
             if (RNG(gen) <= w(dE+8)){ // Accept or not
                 Lattice(xi,yi) *= -1;   // flip to new accepted config
                 M += double(2*Lattice(xi,yi));
