@@ -12,11 +12,11 @@ plt.matplotlib.rc('text', usetex=True)
 plt.matplotlib.rc('font', **font)
 
 def plotting(MCcycles):
-    path = "../datafiles/ExerciseD/"
-    temps = ["1.000000"]#,"2.400000"]
+    path = "../datafiles_no_MPI/ExerciseD/"
+    temps = ["1.000000","2.400000"]
     mcbefore = [1e3,1e4]
     Ename = "_Energy_levels_"
-    initial = ["Up"]#,"Random"]
+    initial = ["Up","Random"]
 
     figE,axes = plt.subplots(2,2)#,sharex='col')#,sharey='row')
     figE.suptitle(r"Histogram of energy levels after equilibrium is reached")
@@ -41,21 +41,3 @@ def plotting(MCcycles):
     #figE.subplots_adjust(top=0.88)
 plotting(1e6)
 plt.show()
-
-# energies = np.fromfile("../Datafiles/ExerciseD/Up_T_2.400000_Energy_levels_999000.bin")
-# #nergies = np.max(energies)
-# print(energies.max())
-# def boltzmann_T_1(E,Z):
-#     return np.exp(-E)/Z
-
-
-# def boltzmann_T_2(E,Z):
-#     return np.exp(-E/2.4)/Z
-
-# hist_energy,bins_energy = np.histogram(energies, bins = 'auto',density =True)
-
-# plt.figure(1)
-# plt.bar(bins_energy[:-1],hist_energy)
-# #plt.plot(bins_energy[:-1],y)
-
-
