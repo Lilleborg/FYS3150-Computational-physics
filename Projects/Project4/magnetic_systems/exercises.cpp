@@ -194,17 +194,19 @@ int exe_d(double const Temp, string Latticestart, int const MC, int numprocs, in
     return 0;
 }   // EXE D END
 
-int exe_e(string Latticestart, int const MC,int my_rank){
+int exe_e(string Latticestart, int const MC,int my_rank, int numprocs){
     cout << "Starting exe_E() " << Latticestart << " MC " << MC << endl;
     ofstream ofile;
     int MCbeforesample = 1e4;
+    double E,M;    // temperatur, energy and magnetic
     for (uword L = 20; L<41; L+=20){ //CHANGE TO L<101 LATER
-        string filenames = "../datafiles_no_MPI/ExerciseE/"+Latticestart+"_L_"+to_string(L) + ".txt";
-        ofile.open(filenames);  // Open file for this L
+        if (my_rank == 0){
+            string filenames = "../datafiles_no_MPI/ExerciseE/"+Latticestart+"_L_"+to_string(L) + ".txt";
+            ofile.open(filenames);  // Open file for this L
+        }
         for (double T = 2.0; T<2.2; T+=0.05){
 
             cout << "Starting exe_E() for L = " << L << " " << Latticestart << " T " << T << endl;
-            double E,M;    // temperatur, energy and magnetic moment
             mt19937_64 gen(123+L);
 
             // Arrays

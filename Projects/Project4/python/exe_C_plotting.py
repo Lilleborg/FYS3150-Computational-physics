@@ -58,11 +58,14 @@ def plotting(MCcycles):
             axM.legend()
 
             axA.plot(cycles[1:],Accept[1:],alpha= 0.5,label="T={:.2f}, {:s}".format(float(T),init))
-            axA.legend()
+            axA.legend(loc =1,fontsize=14)
 
     figE.tight_layout()
+    figE.savefig('../plots/plot_C_mean_energy.pdf')
     figM.tight_layout()
+    figM.savefig('../plots/plot_C_mean_abs_magnetic.pdf')
     figA.tight_layout()
+    figA.savefig('../plots/plot_C_number_accepted_energies.pdf')
 
 plotting(60000)
 plt.show()

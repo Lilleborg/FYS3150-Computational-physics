@@ -45,6 +45,7 @@ plt.xlabel("Number of MC cycles")
 plt.ylabel(r'$\frac{|\langle E_{calc} \rangle - \langle E_{exact} \rangle|}{|\langle E_{exact} \rangle|}$',fontsize = 16)
 plt.tight_layout()
 plt.legend()
+plt.savefig("../plots/plot_B_rel_error_mean_energy.pdf")
 
 plt.figure("Abs_Magnetic_difference")
 plt.loglog(cycles,absmagnetic,'-o',label='Datapoints')
@@ -53,6 +54,7 @@ plt.xlabel("Number of MC cycles")
 plt.ylabel(r'$\frac{|\langle |M_{calc}| \rangle - \langle |M_{exact}| \rangle|}{\langle |M_{exact}| \rangle}$',fontsize = 16)
 plt.tight_layout()
 plt.legend()
+plt.savefig("../plots/plot_B_rel_error_abs_magnet.pdf")
 
 plt.show()
 
