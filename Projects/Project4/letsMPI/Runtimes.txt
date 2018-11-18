@@ -1,0 +1,6 @@
+Jakob_file_hyper_absSUSC_L_20_MC_100000.txt
+Total time 75.8466s on 4 cores 
+
+Jakob_file_hyper_absSUSC_L_40_MC_100000.txt
+Total time 306.167s on 4 cores 
+

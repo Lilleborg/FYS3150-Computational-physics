@@ -83,7 +83,7 @@ int main(int nArg, char **Arg)
 
             metropolis(L,gen,Lattice,w,E,M);
 
-            //Update expectation values if equilibrium
+            //Update expectation values if over MCbeforesample
             if (MCbeforesample<=cycles){
                 temp_exp_vals[0] += E; temp_exp_vals[1] += E*E;
                 temp_exp_vals[2] += M; temp_exp_vals[3] += M*M; temp_exp_vals[4] += fabs(M);
@@ -101,15 +101,28 @@ int main(int nArg, char **Arg)
         }
 
     }   // LOOP OVER TEMPERATURES END
+    
+    Timeend = MPI_Wtime();
+    if (my_rank == 0){
+        cout << "Total time " << double(Timeend-Timestart) << "s on " << numprocs << " cores " << endl;
+    }
+
     if (my_rank == 0){  // Closing file with root
         ofile.close();
         cout << "Rank " << my_rank << " closed " << outfile << endl;
     }
 
-    Timeend = MPI_Wtime();
     if (my_rank == 0){
-        cout << "Total time " << double(Timeend-Timestart) << "s on " << numprocs << " cores " << endl;
+        ofstream runtimeout;
+        string timingfile = "Runtimes.txt";
+        runtimeout.open(timingfile,std::ios::app);
+        runtimeout << outfile << endl;
+        runtimeout << "Total time " << double(Timeend-Timestart) << "s on " << numprocs << " cores " << endl;
+        runtimeout << endl;
+        runtimeout.close();
+        
     }
+
     MPI_Finalize ();
     return 0;
 } // MAIN END
@@ -164,7 +177,7 @@ vec normalizing_expectations(double const T, double const MC, int const L, vec c
     double exp_absM = Exp_vals(4)*MC_norming;
 
     double Heat_cap = (exp_EE-exp_E*exp_E)*TT_norming*Spin_norming;
-    double Mag_susc = (exp_MM-exp_M*exp_M)*TT_norming*Spin_norming;
+    double Mag_susc = (exp_MM-exp_absM*exp_absM)*TT_norming*Spin_norming;
 
     normed_exp(0) = exp_E*Spin_norming;
     normed_exp(1) = Heat_cap;
