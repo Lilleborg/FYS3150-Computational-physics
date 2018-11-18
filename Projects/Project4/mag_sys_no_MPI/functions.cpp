@@ -51,7 +51,6 @@ void initialize_new_round(uword Nspins, imat &Lattice, double &Energy, double &M
             }
         }
     }
-
     Energy = 0;
     for (uword i = 0; i< Nspins; i++){
         for (uword j = 0; j< Nspins; j++){
@@ -92,6 +91,7 @@ void write_double_vector(vector<double> quantity,string filenamestart){
     for (const auto &e : quantity) file << e << "\n";
     file.close();
 }
+
 void write_double_array_bin(double *quantity,int MC, string filename){
     filename.insert(0,"../datafiles_no_MPI/");
     filename.append(to_string(MC));
