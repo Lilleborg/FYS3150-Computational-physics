@@ -45,10 +45,10 @@ try:
     filename4 = str(sys.argv[5])
 except IndexError:
     print ('Only three datafile given, no fifth cmd argument.')
-    filename3 = None
+    filename4 = None
 except ValueError:
     print ('Fourth filenamestart not understood, fifth cmd argument. Defaulting to \n None')
-    filename3 = None
+    filename4 = None
 
 figE = plt.figure("Expectation_E")
 axE = plt.gca()
@@ -77,7 +77,7 @@ axX.set_ylabel(r'$\chi$',fontsize = 15)
 
 filenames = [filename1,filename2,filename3,filename4]
 print (filenames)
-Ls = [40,60,80]#,100]
+Ls = [40,60,80,100]
 
 for L in Ls:
     totq = np.zeros((6,21))
