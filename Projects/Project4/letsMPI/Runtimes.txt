@@ -37,3 +37,12 @@ Total time 315.596s on 4 cores
 Jakob_file_absM_005_L_40_effectiveMC_90000.txt
 Total time 1073.93s on 4 cores 
 
+Jakob_file_absM_005_L_100_effectiveMC_90000.txt
+Total time 3201.44s on 4 cores 
+
+Jakob_file_absM_005_L_80_effectiveMC_90000.txt
+Total time 15286.7s on 4 cores 
+
+Jakob_file_absM_005_L_60_effectiveMC_90000.txt
+Total time 1014.17s on 4 cores 
+
