@@ -46,9 +46,9 @@ int main(int nArg, char **Arg)
         MC = atoi(Arg[2]);
         MCbeforesample = atoi(Arg[3]);
         filename = Arg[4];
-        T_initial = 2.2; T_final = 2.35; T_step = 0.0075;
+        T_initial = 2.2; T_final = 2.35; T_step = 0.005;
 
-        outfile = filename.append("_L_"+to_string(L)+"_MC_"+to_string(MC)+".txt");
+        outfile = filename.append("_L_"+to_string(L)+"_effectiveMC_"+to_string(MC-MCbeforesample)+".txt");
         cout << "Opening " << outfile << " with rank " << my_rank << endl;
         ofile.open(outfile);
     }
@@ -97,7 +97,7 @@ int main(int nArg, char **Arg)
 
         if (my_rank == 0){
             write_exp_values(T,(MC-MCbeforesample)*numprocs,L,final_exp_vals,ofile,outfile);
-            cout << "Writen for T " << T << endl;
+            cout << "Written for T " << T << " " <<  (T_final-T)/T_step << " left" << endl;
         }
 
     }   // LOOP OVER TEMPERATURES END

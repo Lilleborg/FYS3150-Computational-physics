@@ -80,13 +80,13 @@ print (filenames)
 Ls = [40,60,80,100]
 
 for L in Ls:
-    totq = np.zeros((6,21))
-    q = np.zeros((6,21)) # q = T , E , Cv , M , X , absM
+    totq = np.zeros((6,31))
+    q = np.zeros((6,31)) # q = T , E , Cv , M , X , absM
     nrfiles = 0
     for f in filenames:
         if f != None:
             nrfiles += 1
-            filename = "../letsMPI/" + f + "_L_" + str(L) + "_MC_" + str(MC) + ".txt"
+            filename = "../letsMPI/" + f + "_L_" + str(L) + "_effectiveMC_" + str(MC) + ".txt"
             print("Loading:\n" + filename)
             q[0,:],q[1,:],q[2,:],q[3,:],q[4,:],q[5,:] = np.loadtxt(filename,unpack=True)
             for i in range(len(q[:,0])):
@@ -98,13 +98,15 @@ for L in Ls:
         axC.plot(totq[0,:],totq[2,:],label="L = %d"%L)
         axX.plot(totq[0,:],totq[4,:],label="L = %d"%L)
         axM.plot(totq[0,:],totq[5,:],label="L = %d"%L)
-axE.legend()
-axC.legend()
-axM.legend()
-axX.legend()
-figE.tight_layout()
-figC.tight_layout()
-figM.tight_layout()
-figX.tight_layout()
+
+figs = [figE,figC,figM,figX]
+axes = [axE,axC,axM,axX]
+fignames = ["../plots/plot_E_exp_E_MC","../plots/plot_E_Heat_cap_MC","../plots/plot_E_exp_abs_M_MC","../plots/plot_E_susc_MC"]
+
+for i in range(len(figs)):
+    fignames[i] += (str(MC)+".pdf")
+    axes[i].legend()
+    figs[i].tight_layout()
+    figs[i].savefig(fignames[i])
 plt.show()
 

@@ -4,3 +4,36 @@ Total time 75.8466s on 4 cores
 Jakob_file_hyper_absSUSC_L_40_MC_100000.txt
 Total time 306.167s on 4 cores 
 
+Jakob_file_hyper_absSUSC_L_60_MC_100000.txt
+Total time 762.188s on 4 cores 
+
+Jakob_file_hyper_absSUSC_L_80_MC_100000.txt
+Total time 1365.09s on 4 cores 
+
+Jakob_file_hyper_absSUSC_L_100_MC_100000.txt
+Total time 2018.08s on 4 cores 
+
+Jakob_file_absM_005_L_20_effectiveMC_9000.txt
+Total time 12.0775s on 4 cores 
+
+Jakob_file_absM_005_L_20_effectiveMC_9000.txt
+Total time 12.1897s on 4 cores 
+
+Jakob_file_absM_005_L_20_effectiveMC_9000.txt
+Total time 11.6074s on 4 cores 
+
+Jakob_file_absM_005_L_20_effectiveMC_9000.txt
+Total time 11.2748s on 4 cores 
+
+Jakob_file_absM_005_L_20_effectiveMC_9000.txt
+Total time 11.7181s on 4 cores 
+
+Jakob_file_absM_005_L_40_effectiveMC_9000.txt
+Total time 47.181s on 4 cores 
+
+Jakob_file_absM_005_L_100_effectiveMC_9000.txt
+Total time 315.596s on 4 cores 
+
+Jakob_file_absM_005_L_40_effectiveMC_90000.txt
+Total time 1073.93s on 4 cores 
+
