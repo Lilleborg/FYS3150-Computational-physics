@@ -62,7 +62,7 @@ int main(int nArg, char **Arg)
     MPI_Bcast(&T_step,1,MPI_DOUBLE,0,MPI_COMM_WORLD);
 
 
-    idum = 1+my_rank;   // Individual seeds
+    idum = 3+my_rank;   // Individual seeds
     imat Lattice(L,L);
     initialize_new_round(L,Lattice,E,M,"Up");
 
