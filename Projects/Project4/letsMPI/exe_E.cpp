@@ -46,9 +46,9 @@ int main(int nArg, char **Arg)
         MC = atoi(Arg[2]);
         MCbeforesample = atoi(Arg[3]);
         filename = Arg[4];
-        T_initial = 2.2; T_final = 2.35; T_step = 0.0075;
+        T_initial = 2.2; T_final = 2.35; T_step = 0.005;
 
-        outfile = filename.append("_L_"+to_string(L)+"_MC_"+to_string(MC)+".txt");
+        outfile = filename.append("_L_"+to_string(L)+"_effectiveMC_"+to_string(MC-MCbeforesample)+".txt");
         cout << "Opening " << outfile << " with rank " << my_rank << endl;
         ofile.open(outfile);
     }
@@ -83,7 +83,7 @@ int main(int nArg, char **Arg)
 
             metropolis(L,gen,Lattice,w,E,M);
 
-            //Update expectation values if equilibrium
+            //Update expectation values if over MCbeforesample
             if (MCbeforesample<=cycles){
                 temp_exp_vals[0] += E; temp_exp_vals[1] += E*E;
                 temp_exp_vals[2] += M; temp_exp_vals[3] += M*M; temp_exp_vals[4] += fabs(M);
@@ -97,19 +97,32 @@ int main(int nArg, char **Arg)
 
         if (my_rank == 0){
             write_exp_values(T,(MC-MCbeforesample)*numprocs,L,final_exp_vals,ofile,outfile);
-            cout << "Writen for T " << T << endl;
+            cout << "Written for T " << T << " " <<  (T_final-T)/T_step << " left" << endl;
         }
 
     }   // LOOP OVER TEMPERATURES END
+    
+    Timeend = MPI_Wtime();
+    if (my_rank == 0){
+        cout << "Total time " << double(Timeend-Timestart) << "s on " << numprocs << " cores " << endl;
+    }
+
     if (my_rank == 0){  // Closing file with root
         ofile.close();
         cout << "Rank " << my_rank << " closed " << outfile << endl;
     }
 
-    Timeend = MPI_Wtime();
     if (my_rank == 0){
-        cout << "Total time " << double(Timeend-Timestart) << "s on " << numprocs << " cores " << endl;
+        ofstream runtimeout;
+        string timingfile = "Runtimes.txt";
+        runtimeout.open(timingfile,std::ios::app);
+        runtimeout << outfile << endl;
+        runtimeout << "Total time " << double(Timeend-Timestart) << "s on " << numprocs << " cores " << endl;
+        runtimeout << endl;
+        runtimeout.close();
+        
     }
+
     MPI_Finalize ();
     return 0;
 } // MAIN END
@@ -164,7 +177,7 @@ vec normalizing_expectations(double const T, double const MC, int const L, vec c
     double exp_absM = Exp_vals(4)*MC_norming;
 
     double Heat_cap = (exp_EE-exp_E*exp_E)*TT_norming*Spin_norming;
-    double Mag_susc = (exp_MM-exp_M*exp_M)*TT_norming*Spin_norming;
+    double Mag_susc = (exp_MM-exp_absM*exp_absM)*TT_norming*Spin_norming;
 
     normed_exp(0) = exp_E*Spin_norming;
     normed_exp(1) = Heat_cap;
