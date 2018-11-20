@@ -58,3 +58,9 @@ Total time 3048.8s on 4 cores
 julie_newseed_absM_005_L_100_effectiveMC_90000.txt
 Total time 4677.11s on 4 cores 
 
+wanja_file_L_150_effectiveMC_90000.txt
+Total time 8124.74s on 4 cores 
+
+wanja_file_L_200_effectiveMC_90000.txt
+Total time 26752.3s on 4 cores 
+
