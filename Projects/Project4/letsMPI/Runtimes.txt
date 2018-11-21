@@ -79,3 +79,6 @@ Total time 18300.8s on 4 cores
 wanja_file_00008_L_200_effectiveMC_95000.txt
 Total time 49607.1s on 4 cores 
 
+wanja_file_00008_L_40_effectiveMC_95000.txt
+Total time 1113.59s on 4 cores 
+
