@@ -10,3 +10,6 @@
 3. Project 3
 	1. Not yet uploaded
 	2. [Main directory](https://github.com/Lilleborg/FYS3150-Computational-physics/tree/master/Projects/Project3)
+4. Project 4
+	1. Not yet uploaded, We wrote individual papers for this project
+	2. [Main directory](https://github.com/Lilleborg/FYS3150-Computational-physics/tree/master/Projects/Project4)
