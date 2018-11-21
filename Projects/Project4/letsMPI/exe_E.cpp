@@ -70,7 +70,7 @@ int main(int nArg, char **Arg)
     // LOOPING TEMPERATURES
     for (double T = T_initial; T <= T_final; T+= T_step){
         // Setup for new round
-        initialize_new_round(L,Lattice,E,M,"Up");  // Keeping lattice orientations from last temp
+        initialize_new_round(L,Lattice,E,M,"Up");  // could be able to setup way to keep lattice orientation
         vec temp_exp_vals(5,fill::zeros); // Vector for holding temporary expectation values
         vec final_exp_vals(5,fill::zeros); // Vector for holding reduced expectation values
         vec w(17);
