@@ -46,7 +46,7 @@ int main(int nArg, char **Arg)
         MC = atoi(Arg[2]);
         MCbeforesample = atoi(Arg[3]);
         filename = Arg[4];
-        T_initial = 2.2; T_final = 2.35; T_step = 0.005;
+        T_initial = 2.24; T_final = 2.29; T_step = 0.0008;
 
         outfile = filename.append("_L_"+to_string(L)+"_effectiveMC_"+to_string(MC-MCbeforesample)+".txt");
         cout << "Opening " << outfile << " with rank " << my_rank << endl;
@@ -62,7 +62,7 @@ int main(int nArg, char **Arg)
     MPI_Bcast(&T_step,1,MPI_DOUBLE,0,MPI_COMM_WORLD);
 
 
-    idum = 3+my_rank;   // Individual seeds
+    idum = 10+my_rank;   // Individual seeds
     imat Lattice(L,L);
     initialize_new_round(L,Lattice,E,M,"Up");
 
