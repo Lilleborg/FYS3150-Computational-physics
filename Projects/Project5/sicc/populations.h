@@ -12,6 +12,7 @@ public:
     double a;
     double b;
     double c;
+    int N;
 
     //POPULATION NAME
     string name;
@@ -24,7 +25,9 @@ public:
     vector<vec3> u;
 
     //How to deal with intial conditions?
-    Populations();
+    Populations(double a_, double b_, double c_, vec3 u0_, int N_, string name_);
+
+    vec3 SIR_a(vec3 u, double t);
 };
 
 #endif // POPULATIONS_H

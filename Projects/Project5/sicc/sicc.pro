@@ -7,11 +7,9 @@ SOURCES += \
         main.cpp \
     populations.cpp \
     odesolver.cpp \
-    vec3.cpp \
-    functions.cpp
+    vec3.cpp
 
 HEADERS += \
     populations.h \
     odesolver.h \
-    vec3.h \
-    functions.h
+    vec3.h

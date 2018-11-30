@@ -12,6 +12,7 @@ public:
     vec3 m_f;
 
     ODEsolver(double dt, vec3 f);
+    void Euler();
     void RungeKutta4(class Populations &pop);
 };
 

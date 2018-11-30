@@ -1,4 +1,5 @@
 #include <iostream>
+#include "populations.h"
 
 using namespace std;
 

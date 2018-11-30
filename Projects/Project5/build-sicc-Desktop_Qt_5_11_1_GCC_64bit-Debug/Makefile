@@ -53,13 +53,11 @@ OBJECTS_DIR   = ./
 SOURCES       = ../sicc/main.cpp \
 		../sicc/populations.cpp \
 		../sicc/odesolver.cpp \
-		../sicc/vec3.cpp \
-		../sicc/functions.cpp 
+		../sicc/vec3.cpp 
 OBJECTS       = main.o \
 		populations.o \
 		odesolver.o \
-		vec3.o \
-		functions.o
+		vec3.o
 DIST          = /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/common/unix.conf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/common/linux.conf \
@@ -222,12 +220,10 @@ DIST          = /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/lex.prf \
 		../sicc/sicc.pro populations.h \
 		odesolver.h \
-		vec3.h \
-		functions.h ../sicc/main.cpp \
+		vec3.h ../sicc/main.cpp \
 		../sicc/populations.cpp \
 		../sicc/odesolver.cpp \
-		../sicc/vec3.cpp \
-		../sicc/functions.cpp
+		../sicc/vec3.cpp
 QMAKE_TARGET  = sicc
 DESTDIR       = 
 TARGET        = sicc
@@ -619,10 +615,6 @@ odesolver.o: ../sicc/odesolver.cpp ../sicc/odesolver.h \
 
 vec3.o: ../sicc/vec3.cpp ../sicc/vec3.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o vec3.o ../sicc/vec3.cpp
-
-functions.o: ../sicc/functions.cpp ../sicc/functions.h \
-		../sicc/vec3.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o functions.o ../sicc/functions.cpp
 
 ####### Install
 

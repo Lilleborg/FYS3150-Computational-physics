@@ -1,7 +1,7 @@
 #include "odesolver.h"
 
 ODEsolver::ODEsolver(double dt, vec3 f) :
-    m_dt(dt)
+    m_dt(dt), m_f(f)
 {   
 
 }
@@ -10,6 +10,7 @@ ODEsolver::ODEsolver(double dt, vec3 f) :
    //create seperate .cpp-file that contains S', I', R'.
 
 void ODEsolver::Euler(){
+
 
 }
 
