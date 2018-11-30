@@ -8,7 +8,10 @@ class ODEsolver
 public:
 
     //u should be a function? how to do this hmm
-    ODEsolver(double dt, vec3 u);
+    double m_dt;
+    vec3 m_f;
+
+    ODEsolver(double dt, vec3 f);
     void RungeKutta4(class Populations &pop);
 };
 

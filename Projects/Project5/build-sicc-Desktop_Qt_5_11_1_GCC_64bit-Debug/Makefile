@@ -52,10 +52,14 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../sicc/main.cpp \
 		../sicc/populations.cpp \
-		../sicc/rk4.cpp 
+		../sicc/odesolver.cpp \
+		../sicc/vec3.cpp \
+		../sicc/functions.cpp 
 OBJECTS       = main.o \
 		populations.o \
-		rk4.o
+		odesolver.o \
+		vec3.o \
+		functions.o
 DIST          = /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/common/unix.conf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/common/linux.conf \
@@ -202,6 +206,7 @@ DIST          = /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/qt_config.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/spec_post.prf \
+		../sicc/.qmake.stash \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/toolchain.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -216,9 +221,13 @@ DIST          = /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/yacc.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/lex.prf \
 		../sicc/sicc.pro populations.h \
-		rk4.h ../sicc/main.cpp \
+		odesolver.h \
+		vec3.h \
+		functions.h ../sicc/main.cpp \
 		../sicc/populations.cpp \
-		../sicc/rk4.cpp
+		../sicc/odesolver.cpp \
+		../sicc/vec3.cpp \
+		../sicc/functions.cpp
 QMAKE_TARGET  = sicc
 DESTDIR       = 
 TARGET        = sicc
@@ -376,6 +385,7 @@ Makefile: ../sicc/sicc.pro /home/julie/Qt/5.11.1/gcc_64/mkspecs/linux-g++/qmake.
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/qt_config.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/toolchain.prf \
 		/home/julie/Qt/5.11.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -537,6 +547,7 @@ Makefile: ../sicc/sicc.pro /home/julie/Qt/5.11.1/gcc_64/mkspecs/linux-g++/qmake.
 /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/qt_config.prf:
 /home/julie/Qt/5.11.1/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/toolchain.prf:
 /home/julie/Qt/5.11.1/gcc_64/mkspecs/features/default_pre.prf:
@@ -597,11 +608,21 @@ compiler_clean:
 main.o: ../sicc/main.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../sicc/main.cpp
 
-populations.o: ../sicc/populations.cpp ../sicc/populations.h
+populations.o: ../sicc/populations.cpp ../sicc/populations.h \
+		../sicc/vec3.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o populations.o ../sicc/populations.cpp
 
-rk4.o: ../sicc/rk4.cpp ../sicc/rk4.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o rk4.o ../sicc/rk4.cpp
+odesolver.o: ../sicc/odesolver.cpp ../sicc/odesolver.h \
+		../sicc/populations.h \
+		../sicc/vec3.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o odesolver.o ../sicc/odesolver.cpp
+
+vec3.o: ../sicc/vec3.cpp ../sicc/vec3.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o vec3.o ../sicc/vec3.cpp
+
+functions.o: ../sicc/functions.cpp ../sicc/functions.h \
+		../sicc/vec3.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o functions.o ../sicc/functions.cpp
 
 ####### Install
 

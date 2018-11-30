@@ -17,7 +17,7 @@ public:
     string name;
 
     //CURRENT VALUES ODES
-    vector<vec3> u_i;
+    vec3 u_i;
 
     //VECTOR FOR STORING SOLUTIONS TO DIFFERENTIAL EQUATIONS
     //u[0] = S, u[1] = I, u[2] = R
