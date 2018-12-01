@@ -1,7 +1,7 @@
 #ifndef POPULATIONS_H
 #define POPULATIONS_H
-#include<vector>
-#include<string>
+#include <vector>
+#include <string>
 #include "vec3.h"
 using namespace std;
 
