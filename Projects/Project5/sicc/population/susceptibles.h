@@ -5,10 +5,12 @@
 
 class Susceptibles : public population_group
 {
+private:
+    double a0,c,d,e,f
 public:
 
     // Init
-    Susceptibles(double a0,double c, double d, double e, double f,double );
+    Susceptibles(double a0_,double c_, double d_, double e_, double f_);
 
     // Parameters
     double a0;

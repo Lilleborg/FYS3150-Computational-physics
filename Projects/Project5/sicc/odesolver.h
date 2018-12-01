@@ -1,6 +1,6 @@
 #ifndef ODESOLVER_H
 #define ODESOLVER_H
-#include "populations.h"
+#include "population/populations.h"
 #include "vec3.h"
 
 class ODEsolver

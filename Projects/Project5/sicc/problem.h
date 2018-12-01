@@ -13,7 +13,7 @@ class problem
 private:
 
 public:
-    problem(int N_, int S0_, int I0_);
+    problem(int N_, int S0_);
     ~problem();
 
     void set_parameters(double a0_,double b_,double c_,double d_=0,double e_=0,double f_=0); // init params
@@ -26,7 +26,7 @@ public:
     int N,S0,I0;    // initial conditions
 
     // Population groups
-    Susceptibles S;
+    Susceptibles *S;
     Infected I;
     Recovered R;
 };

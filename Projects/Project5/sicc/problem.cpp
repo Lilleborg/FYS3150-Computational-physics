@@ -1,8 +1,8 @@
 #include "problem.h"
 
-problem::problem(int N_, int S0_, int I0_)
+problem::problem(int N_, int S0_)
 {
-    N = N_; S0 = S0_; I0 = I0_;
+    N = N_; S0 = S0_; I0 = N-S0;
 }
 
 problem::~problem()
