@@ -12,9 +12,11 @@ int main()
 {
     // Oppgave A
     problem A(400,300);
-    a_seasons a_s(4,1,M_PI);
+    a_seasons *a_s = new a_seasons(4,1,M_PI);
+    A.set_afunc(a_s);
+    A.set_population();
     a_constant a_c(3);
-    cout << a_c.a(2) << endl;
+    cout << a_c.a(2) << " " << a_s->a(1.0/2) << " " << A.m_S->m_a_param->a(1.0/2) << endl;
 
 
 

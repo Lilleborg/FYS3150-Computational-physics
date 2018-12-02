@@ -14,8 +14,7 @@ SOURCES += \
     population/a_parameter.cpp \
     population/a_constant.cpp \
     population/a_seasons.cpp \
-    problem.cpp \
-    population/population_group.cpp
+    problem.cpp
 
 HEADERS += \
     population/populations.h \
@@ -27,5 +26,4 @@ HEADERS += \
     population/a_seasons.h \
     problem.h \
     population/a_constant.h \
-    population/a_parameter.h \
-    population/population_group.h
+    population/a_parameter.h
