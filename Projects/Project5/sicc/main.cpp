@@ -10,13 +10,22 @@ using namespace std;
 
 int main()
 {
+    // Constants
+    double b = 1; double c = 0.5;
+
+    // a-parameters
+    a_constant a_c(3);
+    a_seasons *a_s = new a_seasons(4,1,M_PI);
+
     // Oppgave A
     problem A(400,300,100);
-    a_seasons *a_s = new a_seasons(4,1,M_PI);
+    A.set_parameters(b,c);
     A.set_afunc(a_s);
     A.set_population();
-    a_constant a_c(3);
+    A.m_b = 2;
+    A.set_population();
     cout << a_c.a(2) << " " << a_s->a(1.0/2) << " " << A.m_S->m_a_param->a(1.0/2) << endl;
+    cout << A.m_I->m_b << endl;
     for (auto &Qs : A.Quantities)
     {
         cout << Qs << endl;

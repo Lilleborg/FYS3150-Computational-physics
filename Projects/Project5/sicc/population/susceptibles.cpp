@@ -2,7 +2,11 @@
 
 Susceptibles::Susceptibles()
 {
+}
 
+Susceptibles::~Susceptibles()
+{
+    delete m_a_param;
 }
 
 Susceptibles::Susceptibles(int N, int S0, a_parameter *a, double c, double d, double e, double f)
@@ -13,7 +17,3 @@ Susceptibles::Susceptibles(int N, int S0, a_parameter *a, double c, double d, do
     S_n = double(m_S0);
 }
 
-Susceptibles::~Susceptibles()
-{
-    delete m_a_param;
-}

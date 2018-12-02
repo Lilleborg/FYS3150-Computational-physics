@@ -10,7 +10,7 @@ using std::vector;
 class Infected
 {
 private:
-    double m_b,m_d,m_dI;
+    double m_d,m_dI;
     int m_N,m_I0;
     a_parameter *m_a_param;
 public:
@@ -18,7 +18,7 @@ public:
     Infected(int N, int I0, a_parameter *a,double b, double d, double dI);
     ~Infected();
 
-    double I_n;
+    double I_n,m_b;
     double I_prime();
 
 };
