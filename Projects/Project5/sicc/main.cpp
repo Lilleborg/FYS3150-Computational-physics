@@ -11,7 +11,7 @@ using namespace std;
 int main()
 {
     // Oppgave A
-    problem A(400,300);
+    problem A(400,300,100);
     a_seasons *a_s = new a_seasons(4,1,M_PI);
     A.set_afunc(a_s);
     A.set_population();

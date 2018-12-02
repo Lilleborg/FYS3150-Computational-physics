@@ -11,7 +11,7 @@ private:
 public:
     a_parameter *m_a_param;
     Susceptibles();
-    Susceptibles(int N, int S0, a_parameter *a, double c, double d=0, double e=0, double f=0);
+    Susceptibles(int N, int S0, a_parameter *a, double c, double d, double e, double f);
     ~Susceptibles();
 
     double S_n;

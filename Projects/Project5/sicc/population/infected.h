@@ -2,22 +2,20 @@
 #define INFECTED_H
 
 #include "population/a_parameter.h"
-//#include "population/susceptibles.h"
-#include "population/recovered.h"
 
 class Infected
 {
 private:
-    double m_c,m_d,m_e,m_f;
-    int m_N,m_S0;
-public:
+    double m_b,m_d,m_dI;
+    int m_N,m_I0;
     a_parameter *m_a_param;
+public:
     Infected();
-    Infected(int N, int S0, a_parameter *a, double c, double d=0, double e=0, double f=0);
+    Infected(int N, int I0, a_parameter *a,double b, double d, double dI);
     ~Infected();
 
-    double S_n;
-    double S_prime();
+    double I_n;
+    double I_prime();
 
 };
 #endif // INFECTED_H
