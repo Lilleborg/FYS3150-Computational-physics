@@ -23,4 +23,7 @@ void problem::set_population()
     m_S = new Susceptibles(m_N,m_S0,m_afunc,m_c,m_d,m_e,m_f);
     m_I = new Infected(m_N,m_I0,m_afunc,m_b,m_d,m_dI);
     m_R = new Recovered(m_N,m_R0,m_b,m_c,m_d,m_f);
+    Quantities.push_back(m_S->S_n);
+    Quantities.push_back(m_I->I_n);
+    Quantities.push_back(m_R->R_n);
 }

@@ -21,10 +21,11 @@ public:
     void set_afunc(a_parameter *afunc){m_afunc = afunc;}    // sets the type of a parameter used
     void set_population();
 
-    // Parameters, initial conditions
+    // Parameters, initial conditions, values
     a_parameter *m_afunc = nullptr; // pointer for parameter a(t) class
     double m_a0,m_b,m_c,m_d,m_dI,m_e,m_f;
     int m_N,m_S0,m_I0,m_R0;    // initial conditions
+    vector <double> Quantities;
 
     // Population groups, initialized by void set_population()
     Susceptibles *m_S = nullptr;

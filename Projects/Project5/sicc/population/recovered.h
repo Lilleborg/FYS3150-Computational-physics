@@ -1,6 +1,10 @@
 #ifndef RECOVERED_H
 #define RECOVERED_H
 
+#include <vector>
+
+using std::vector;
+
 class Recovered
 {
 private:

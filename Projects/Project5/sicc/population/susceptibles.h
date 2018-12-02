@@ -2,6 +2,9 @@
 #define SUSCEPTIBLES_H
 
 #include "population/a_parameter.h"
+#include <vector>
+
+using std::vector;
 
 class Susceptibles
 {
@@ -15,7 +18,7 @@ public:
     ~Susceptibles();
 
     double S_n;
-    double S_prime();
+    double S_prime(vector<double> Qs,double t);
 
 };
 

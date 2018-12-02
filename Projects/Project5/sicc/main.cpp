@@ -17,6 +17,10 @@ int main()
     A.set_population();
     a_constant a_c(3);
     cout << a_c.a(2) << " " << a_s->a(1.0/2) << " " << A.m_S->m_a_param->a(1.0/2) << endl;
+    for (auto &Qs : A.Quantities)
+    {
+        cout << Qs << endl;
+    }
 
 
 

@@ -2,6 +2,10 @@
 #define INFECTED_H
 
 #include "population/a_parameter.h"
+#include <vector>
+
+using std::vector;
+
 
 class Infected
 {
