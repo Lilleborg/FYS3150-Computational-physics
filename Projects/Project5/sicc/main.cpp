@@ -25,7 +25,7 @@ int main()
     A.m_b = 2;
     A.set_population();
     cout << a_c.a(2) << " " << a_s->a(1.0/2) << " " << A.m_S->m_a_param->a(1.0/2) << endl;
-    cout << A.m_I->m_b << endl;
+    //cout << A.m_I->m_b << endl; testing
     for (auto &Qs : A.Quantities)
     {
         cout << Qs << endl;
