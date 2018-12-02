@@ -13,22 +13,22 @@ class problem
 private:
 
 public:
-    problem(int N_, int S0_);
+    problem(int N, int S0);
     ~problem();
 
-    void set_parameters(double a0_,double b_,double c_,double d_=0,double e_=0,double f_=0); // init params
+    void set_parameters(double a0, double b, double c, double d=0, double e=0, double f=0); // init params
     void set_afunc(a_parameter *afunc){m_afunc = afunc;}    // sets the type of a parameter used
     void set_population();
 
     // Parameters
     a_parameter *m_afunc = nullptr; // pointer for parameter a class
-    double a0,b,c,d,e,f;
-    int N,S0,I0;    // initial conditions
+    double m_a0,m_b,m_c,m_d,m_e,m_f;
+    int m_N,m_S0,m_I0;    // initial conditions
 
     // Population groups
-    Susceptibles *S;
-    Infected I;
-    Recovered R;
+    Susceptibles *m_S = nullptr;
+    Infected *m_I = nullptr;
+    Recovered *m_R = nullptr;
 };
 
 #endif // PROBLEM_H

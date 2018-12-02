@@ -1,21 +1,21 @@
 #ifndef SUSCEPTIBLES_H
 #define SUSCEPTIBLES_H
 
-#include "population/population_group.h"
+#include "population/a_parameter.h"
 
-class Susceptibles : public population_group
+class Susceptibles
 {
 private:
-    double a0,c,d,e,f
+    double m_c,m_d,m_e,m_f;
+    int m_N,m_S0;
 public:
+    a_parameter *m_a_param;
+    Susceptibles();
+    Susceptibles(int N, int S0, a_parameter *a, double c, double d=0, double e=0, double f=0);
+    ~Susceptibles();
 
-    // Init
-    Susceptibles(double a0_,double c_, double d_, double e_, double f_);
-
-    // Parameters
-    double a0;
-    double a();
-    double a(double t);
+    double S_n;
+    double S_prime();
 
 };
 
