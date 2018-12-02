@@ -7,7 +7,6 @@ a_constant::a_constant(double a0)
 
 a_constant::~a_constant()
 {
-
 }
 
 double a_constant::a(double t)
