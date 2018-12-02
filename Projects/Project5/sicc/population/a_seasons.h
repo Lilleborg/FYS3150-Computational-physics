@@ -7,9 +7,9 @@
 class a_seasons : public a_parameter
 {
 private:
-    double m_a,A,omega;
+    double m_a,m_A,m_omega;
 public:
-    a_seasons(double a0_, double A_, double omega_);
+    a_seasons(double a0, double A, double omega);
     ~a_seasons();
 
     double a(double t);

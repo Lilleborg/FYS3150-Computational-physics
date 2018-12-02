@@ -1,8 +1,8 @@
 #include "a_seasons.h"
 
-a_seasons::a_seasons(double a0_,double A_,double omega_)
+a_seasons::a_seasons(double a0, double A, double omega)
 {
-    m_a = a0_; A = A_; omega = omega_;
+    m_a = a0; m_A = A; m_omega = omega;
 }
 
 a_seasons::~a_seasons()
@@ -11,5 +11,5 @@ a_seasons::~a_seasons()
 
 double a_seasons::a(double t)
 {
-    return A*cos(omega*t)+m_a;
+    return m_A*cos(m_omega*t)+m_a;
 }

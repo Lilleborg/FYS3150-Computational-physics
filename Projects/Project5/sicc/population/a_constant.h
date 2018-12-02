@@ -8,7 +8,7 @@ class a_constant : public a_parameter
 private:
     double m_a;
 public:
-    a_constant(double a0_);
+    a_constant(double a0);
     ~a_constant();
 
     double a(double t);
