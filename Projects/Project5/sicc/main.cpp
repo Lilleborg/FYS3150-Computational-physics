@@ -31,16 +31,19 @@ int main()
 //        cout << Qs << endl;
 //    }
 
-
     // Testing implementation
     cout << "Testing stuff\n" << endl;
     problem test(400,300,100);
     test.set_afunc(a_c);
     test.set_parameters(b,c);
     test.set_population();
+    test.set_timing(0.01,2);
     test.print_current_SIR();
-    test.evolve();
-    test.print_current_SIR();
+
+    for (int var = 0; var < 5; ++var) {
+        test.evolve();
+        test.print_current_SIR();
+    }
 
 
 

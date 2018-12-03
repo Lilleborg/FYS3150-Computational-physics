@@ -28,6 +28,7 @@ void problem::set_timing(double dt, double T, double T0)
     {
         time.push_back(i);
     }
+    solver = new ODEsolver(this,m_dt);
 }
 
 void problem::set_population()
@@ -49,7 +50,11 @@ void problem::update_current()
 
 void problem::evolve()
 {
-    SIR[0]->add_prime(m_Qs,1);
+    //for (population_group Q : SIR)
+    for (int i = 0; i<3; i++)
+    {
+        solver->RK4(SIR[i],time[0]);
+    }
     update_current();
 }
 

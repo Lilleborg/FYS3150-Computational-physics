@@ -2,7 +2,8 @@
 #define ODESOLVER_H
 
 #include "population/population_group.h"
-#include "problem.h"
+
+class problem;
 
 // TODO: add lists of values to add in get_ks() for looping
 class ODEsolver

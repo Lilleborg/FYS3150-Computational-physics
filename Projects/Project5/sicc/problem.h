@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "population/a_parameter.h"
+#include "odesolver.h"
 #include "population/population_group.h"
 #include "population/susceptibles.h"
 #include "population/infected.h"
@@ -43,11 +44,14 @@ public:
     vector <double> I_vector;
     vector <double> R_vector;
 
-    // Population group classes in vector SIR, initialized by void set_population()
+    // Population group objects in vector SIR, initialized by void set_population()
     vector <population_group*> SIR;
 
-    // parameter a(t) class, set by void set_afunc() taking a_parameter object from outside
+    // parameter a(t) object, set by void set_afunc() taking a_parameter object from outside
     a_parameter *m_afunc = nullptr;
+
+    // ODEsolver object, initialized by void set_timing()
+    ODEsolver *solver = nullptr;
 
     // Calculations
     void evolve();
