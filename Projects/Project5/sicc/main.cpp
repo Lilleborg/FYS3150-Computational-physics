@@ -1,5 +1,5 @@
 #include <iostream>
-#include <math.h>
+
 //#include "populations.h"
 
 #include "problem.h"
@@ -14,7 +14,7 @@ int main()
     double b = 1; double c = 0.5;
 
     // a-parameters
-    a_constant a_c(3);
+    a_constant *a_c = new a_constant(3);
     a_seasons *a_s = new a_seasons(4,1,M_PI);
 
     // Oppgave A
@@ -24,12 +24,24 @@ int main()
     A.set_population();
     A.m_b = 2;
     A.set_population();
-    cout << a_c.a(2) << " " << a_s->a(1.0/2) << " " << A.m_S->m_a_param->a(1.0/2) << endl;
+    cout << a_c->a(2) << " " << a_s->a(1.0/2) << " " << A.m_S->m_a_param->a(1.0/2) << endl;
     //cout << A.m_I->m_b << endl; testing
-    for (auto &Qs : A.Quantities)
+    for (auto &Qs : A.m_Qs)
     {
         cout << Qs << endl;
     }
+
+
+    // Testing implementation
+    cout << "Testing stuff\n" << endl;
+    problem test(400,300,100);
+    test.set_afunc(a_c);
+    test.set_parameters(b,c);
+    test.set_population();
+    test.print_current_SIR();
+    test.evolve();
+    test.print_current_SIR();
+
 
 
 
