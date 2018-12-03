@@ -1,22 +1,31 @@
 #ifndef ODESOLVER_H
 #define ODESOLVER_H
 
+#include "population/population_group.h"
 #include "problem.h"
 
+// TODO: add lists of values to add in get_ks() for looping
 class ODEsolver
 {
+private:
+//    friend std::vector<double> &operator+(vector<double> &os, const vec3& myVector);
+//    std::vector<double> &operator+(vector<double> *this,vector <double> &vec,double &plussing);
 public:
 
-    double m_dt,k1,k2,k3,k4;
-    vector <double> ks;
+    double m_dt;
+    vector <double> ks = vector <double> (4,0);
+    problem *m_problem;
 
-    ODEsolver(double dt);
+    ODEsolver(problem *p_, double dt);
     ~ODEsolver();
 
-    // Integrators updating problem p 1 time step
-    void Euler(problem *p);
-    void get_ks();
-    void RK4(problem *p);
+    // Convenient
+    void get_ks(population_group *p, double t);
+    vector<double> vec_pluss(const vector<double> vec,double pluss);
+
+    // Integrators updating problem m_problem 1 time step
+    //void Euler(population_group *p);
+    void RK4(population_group *p, double t);
 };
 
 #endif // ODESOLVER_H
