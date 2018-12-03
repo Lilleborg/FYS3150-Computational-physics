@@ -4,9 +4,10 @@
 #include <iostream>
 
 #include "population/a_parameter.h"
-#include "population/susceptibles.h"
-#include "population/infected.h"
-#include "population/recovered.h"
+#include "population/population_group.h"
+//#include "population/susceptibles.h"
+//#include "population/infected.h"
+//#include "population/recovered.h"
 
 //class a_parameter;
 //vector <double> m_parameters; TODO?: list of all parameters for printing current params for this problem
@@ -27,7 +28,7 @@ public:
     double m_b,m_c,m_d,m_dI,m_e,m_f;
     int m_N,m_S0,m_I0,m_R0;    // initial conditions
 
-    // Vectors holding SIT values
+    // Vectors holding SIR values
     //vector <double> m_Qs = {m_S->S_n,m_I->I_n,m_R->R_n}; // Current SIR values
     vector <double> m_Qs = {0,0,0}; // Current SIR values
     // Vectors holding all SIR values for writing
@@ -36,9 +37,10 @@ public:
     vector <double> R_vector;
 
     // Population group classes, initialized by void set_population()
-    Susceptibles *m_S = nullptr;
-    Infected *m_I = nullptr;
-    Recovered *m_R = nullptr;
+    vector <population_group*> SIR;
+//    Susceptibles *m_S = nullptr;
+//    Infected *m_I = nullptr;
+//    Recovered *m_R = nullptr;
     // parameter a(t) class, set by void set_afunc() taking a_parameter object from outside
     a_parameter *m_afunc = nullptr;
 

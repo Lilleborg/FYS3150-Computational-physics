@@ -18,18 +18,18 @@ int main()
     a_seasons *a_s = new a_seasons(4,1,M_PI);
 
     // Oppgave A
-    problem A(400,300,100);
-    A.set_parameters(b,c);
-    A.set_afunc(a_s);
-    A.set_population();
-    A.m_b = 2;
-    A.set_population();
-    cout << a_c->a(2) << " " << a_s->a(1.0/2) << " " << A.m_S->m_a_param->a(1.0/2) << endl;
-    //cout << A.m_I->m_b << endl; testing
-    for (auto &Qs : A.m_Qs)
-    {
-        cout << Qs << endl;
-    }
+//    problem A(400,300,100);
+//    A.set_parameters(b,c);
+//    A.set_afunc(a_s);
+//    A.set_population();
+//    A.m_b = 2;
+//    A.set_population();
+//    cout << a_c->a(2) << " " << a_s->a(1.0/2) << " " << endl; // << A.SIR[0]->m_a_param->a(1.0/2)
+//    //cout << A.m_I->m_b << endl; testing
+//    for (auto &Qs : A.m_Qs)
+//    {
+//        cout << Qs << endl;
+//    }
 
 
     // Testing implementation

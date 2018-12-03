@@ -8,9 +8,10 @@ problem::problem(int N, int S0, int I0, int R0)
 problem::~problem()
 {
     delete m_afunc;
-    //delete m_S;
-    //delete m_I;
-    //delete m_R;
+    for (int i=0; i<3;i++)
+    {
+        delete SIR[i];
+    }
 }
 
 void problem::set_parameters(double b, double c, double d, double dI, double e, double f)
@@ -20,24 +21,32 @@ void problem::set_parameters(double b, double c, double d, double dI, double e, 
 
 void problem::set_population()
 {
-    m_S = new Susceptibles(m_N,m_S0,m_afunc,m_c,m_d,m_e,m_f);
-    m_I = new Infected(m_N,m_I0,m_afunc,m_b,m_d,m_dI);
-    m_R = new Recovered(m_N,m_R0,m_b,m_c,m_d,m_f);
-    m_Qs[0] = m_S->S_n;
-    m_Qs[1] = m_I->I_n;
-    m_Qs[2] = m_R->R_n;
+    SIR.push_back(new Susceptibles(m_N,m_S0,m_afunc,m_c,m_d,m_e,m_f));
+    SIR.push_back(new Infected(m_N,m_I0,m_afunc,m_b,m_d,m_dI));
+    SIR.push_back(new Recovered(m_N,m_R0,m_b,m_c,m_d,m_f));
+    this->update_current();
+//    m_S = new Susceptibles(m_N,m_S0,m_afunc,m_c,m_d,m_e,m_f);
+//    m_I = new Infected(m_N,m_I0,m_afunc,m_b,m_d,m_dI);
+//    m_R = new Recovered(m_N,m_R0,m_b,m_c,m_d,m_f);
+//    m_Qs[0] = m_S->S_n;
+//    m_Qs[1] = m_I->I_n;
+//    m_Qs[2] = m_R->R_n;
 }
 
 void problem::update_current()
 {
-    m_Qs[0] = m_S->S_n;
-    m_Qs[1] = m_I->I_n;
-    m_Qs[2] = m_R->R_n;
+    for (int i = 0; i <3; i++)
+    {
+        m_Qs[i] = SIR[i]->get_current();
+    }
+//    m_Qs[0] = m_S->S_n;
+//    m_Qs[1] = m_I->I_n;
+//    m_Qs[2] = m_R->R_n;
 }
 
 void problem::evolve()
 {
-    m_S->add_S_prime(m_Qs,1);
+    SIR[0]->add_prime(m_Qs,1);
     update_current();
 }
 
