@@ -19,7 +19,6 @@ double population_group::prime(vector <double> Qs, double t)
 {
     return 0;
 }
-void population_group::add_prime(vector <double> Qs, double t)
+void population_group::add_to_current(double previous)
 {
-
 }

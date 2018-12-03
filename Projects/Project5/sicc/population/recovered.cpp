@@ -23,9 +23,9 @@ double Recovered::prime(vector <double> Qs, double t)
     return m_b*Qs[1]-m_c*Qs[2]-m_d*Qs[2] + m_f;
 }
 
-void Recovered::add_prime(vector <double> Qs, double t)
+void Recovered::add_to_current(double prev)
 {
-    this->current += this->prime(Qs,t);
+    current += prev;
 }
 
 double Recovered::get_current()

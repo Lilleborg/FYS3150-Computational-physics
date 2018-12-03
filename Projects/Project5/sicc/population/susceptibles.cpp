@@ -21,9 +21,9 @@ double Susceptibles::prime(vector <double> Qs, double t)
     return m_c*Qs[2]-m_a_param->a(t)*Qs[0]*Qs[1]/m_N-m_d*Qs[0]+m_e*m_N-m_f;
 }
 
-void Susceptibles::add_prime(vector <double> Qs, double t)
+void Susceptibles::add_to_current(double prev)
 {
-    this->current += this->prime(Qs,t);
+    current += prev;
 }
 
 double Susceptibles::get_current()

@@ -19,7 +19,7 @@ public:
 
     double get_current();
     double prime(vector<double> Qs, double t);
-    void add_prime(vector<double> Qs,double t);
+    void add_to_current(double previous);
 
 };
 

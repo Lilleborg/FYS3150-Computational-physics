@@ -14,7 +14,7 @@ public:
 
     virtual double get_current() = 0;
     virtual double prime(vector <double> Qs, double t) = 0;
-    virtual void add_prime(vector <double> Qs, double t) = 0;
+    virtual void add_to_current(double previous) = 0;
 
 };
 

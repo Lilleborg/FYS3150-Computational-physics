@@ -21,9 +21,9 @@ double Infected::prime(vector <double> Qs, double t)
     return m_a_param->a(t)*Qs[0]*Qs[1]/m_N - m_b*Qs[1] - m_d*Qs[1] - m_dI*Qs[1];
 }
 
-void Infected::add_prime(vector <double> Qs, double t)
+void Infected::add_to_current(double prev)
 {
-    this->current += this->prime(Qs,t);
+    current += prev;
 }
 
 double Infected::get_current()
