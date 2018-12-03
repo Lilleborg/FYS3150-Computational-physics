@@ -1,7 +1,5 @@
 #include <iostream>
 
-//#include "populations.h"
-
 #include "problem.h"
 #include "population/a_seasons.h"
 #include "population/a_constant.h"
@@ -37,33 +35,13 @@ int main()
     test.set_afunc(a_c);
     test.set_parameters(b,c);
     test.set_population();
-    test.set_timing(0.01,2);
+    test.set_timing(0.01,100);
 
     test.print_current_SIR();
-    for (int var = 0; var < 5; ++var) {
+    for (int var = 0; var < 100; ++var) {
         test.evolve();
         test.print_current_SIR();
     }
-
-
-
-
-
-
-    // Initialize populations
-//    vector<double> as = {4,4,4,4};
-//    vector<double> bs = {1,2,3,4};
-//    vector<double> cs = {0.5,0.5,0.5,0.5};
-//    vector<Populations> m_populations;
-//    for (int i = 0; i < 4; ++i) {
-//        m_populations
-//    }
-//    Popa = Populations()
-
-
-
-
-
 
     cout << "Hello World!" << endl;
     return 0;
