@@ -23,10 +23,28 @@ void problem::set_population()
     m_S = new Susceptibles(m_N,m_S0,m_afunc,m_c,m_d,m_e,m_f);
     m_I = new Infected(m_N,m_I0,m_afunc,m_b,m_d,m_dI);
     m_R = new Recovered(m_N,m_R0,m_b,m_c,m_d,m_f);
-    Quantities[0] = m_S->S_n;
-    Quantities[1] = m_I->I_n;
-    Quantities[2] = m_R->R_n;
+    m_Qs[0] = m_S->S_n;
+    m_Qs[1] = m_I->I_n;
+    m_Qs[2] = m_R->R_n;
 //    Quantities.push_back(m_S->S_n);
 //    Quantities.push_back(m_I->I_n);
 //    Quantities.push_back(m_R->R_n);
+}
+
+void problem::update_current()
+{
+    m_Qs[0] = m_S->S_n;
+    m_Qs[1] = m_I->I_n;
+    m_Qs[2] = m_R->R_n;
+}
+
+void problem::evolve()
+{
+    m_S->add_S_prime(m_Qs,1);
+    update_current();
+}
+
+void problem::print_current_SIR()
+{
+   std::cout << "S: " << m_Qs[0] << " , I: " << m_Qs[1] << " , R: " << m_Qs[2] << std::endl;
 }
