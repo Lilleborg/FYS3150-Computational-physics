@@ -38,8 +38,8 @@ int main()
     test.set_parameters(b,c);
     test.set_population();
     test.set_timing(0.01,2);
-    test.print_current_SIR();
 
+    test.print_current_SIR();
     for (int var = 0; var < 5; ++var) {
         test.evolve();
         test.print_current_SIR();

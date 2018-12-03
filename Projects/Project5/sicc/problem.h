@@ -22,10 +22,18 @@ public:
     problem(int N, int S0,int I0, int R0 = 0);
     ~problem();
 
-    void set_parameters(double b, double c, double d=0, double dI=0, double e=0, double f=0);
-    void set_timing(double dt, double T, double T0=0);
-    void set_afunc(a_parameter *afunc){m_afunc = afunc;}
+    void set_parameters(double b, double c, double d=0, double dI=0, double e=0, double f=0);//init param
+    void set_timing(double dt, double T, double T0=0);  // init timing and ODEsolver
+    void set_afunc(a_parameter *afunc){m_afunc = afunc;}    // inint a parameter
     void set_population();  // Initialize population classes
+
+    // Calculations
+    void evolve();  // evolve SIR systems 1 step
+    void update_current();  // update local current values of current SIR
+
+    // Convinient functions
+    void print_current_SIR();
+    vector <population_group*> get_SIR();
 
     // Parameters, initial conditions
     double m_b,m_c,m_d,m_dI,m_e,m_f;
@@ -52,14 +60,6 @@ public:
 
     // ODEsolver object, initialized by void set_timing()
     ODEsolver *solver = nullptr;
-
-    // Calculations
-    void evolve();
-    void update_current();
-
-    // Convinient functions
-    void print_current_SIR();
-    vector <population_group*> get_SIR();
 };
 
 #endif // PROBLEM_H
