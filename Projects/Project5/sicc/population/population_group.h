@@ -3,7 +3,6 @@
 
 #include "population/a_parameter.h"
 #include <vector>
-#include <iostream>
 
 using std::vector;
 

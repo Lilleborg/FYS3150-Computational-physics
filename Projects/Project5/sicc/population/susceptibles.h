@@ -18,7 +18,7 @@ public:
     ~Susceptibles();
 
     double get_current();
-    double prime(vector<double> Qs,double t);
+    double prime(vector<double> Qs, double t);
     void add_prime(vector<double> Qs,double t);
 
 };
