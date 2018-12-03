@@ -17,3 +17,14 @@ Recovered::Recovered(int N,int R0,double b, double c, double d, double f)
 
     R_n = double (m_R0);
 }
+
+
+double Recovered::R_prime(vector <double> Qs, double t)
+{
+    return m_b*Qs[1]-m_c*Qs[2]-m_d*Qs[2] + m_f;
+}
+
+void Recovered::add_R_prime(vector <double> Qs, double t)
+{
+    this->R_n += this->R_prime(Qs,t);
+}

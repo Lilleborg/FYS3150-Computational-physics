@@ -16,7 +16,8 @@ public:
     ~Recovered();
 
     double R_n;
-    double R_prime();
+    double R_prime(vector <double> Qs, double t);
+    void add_R_prime(vector <double> Qs, double t);
 };
 
 #endif // RECOVERED_H

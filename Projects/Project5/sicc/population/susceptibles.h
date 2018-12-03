@@ -19,6 +19,7 @@ public:
 
     double S_n;
     double S_prime(vector<double> Qs,double t);
+    void add_S_prime(vector<double> Qs,double t);
 
 };
 
