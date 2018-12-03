@@ -1,19 +1,22 @@
 #ifndef ODESOLVER_H
 #define ODESOLVER_H
-#include "population/populations.h"
-#include "vec3.h"
+
+#include "problem.h"
 
 class ODEsolver
 {
 public:
 
-    //u should be a function? how to do this hmm
-    double m_dt;
-    vec3 m_f;
+    double m_dt,k1,k2,k3,k4;
+    vector <double> ks;
 
-    ODEsolver(double dt, vec3 f);
-    void Euler();
-    void RungeKutta4(class Populations &pop);
+    ODEsolver(double dt);
+    ~ODEsolver();
+
+    // Integrators updating problem p 1 time step
+    void Euler(problem *p);
+    void get_ks();
+    void RK4(problem *p);
 };
 
 #endif // ODESOLVER_H

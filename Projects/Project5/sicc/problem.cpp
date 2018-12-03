@@ -26,9 +26,6 @@ void problem::set_population()
     m_Qs[0] = m_S->S_n;
     m_Qs[1] = m_I->I_n;
     m_Qs[2] = m_R->R_n;
-//    Quantities.push_back(m_S->S_n);
-//    Quantities.push_back(m_I->I_n);
-//    Quantities.push_back(m_R->R_n);
 }
 
 void problem::update_current()
