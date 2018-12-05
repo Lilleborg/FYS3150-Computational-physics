@@ -13,3 +13,8 @@ double a_seasons::a(double t)
 {
     return m_A*cos(m_omega*t)+m_a;
 }
+
+std::string a_seasons::get_name()
+{
+    return name;
+}

@@ -10,3 +10,8 @@ double a_parameter::a(double t)
 {
     return 0;
 }
+
+std::string a_parameter::get_name()
+{
+    return "";
+}

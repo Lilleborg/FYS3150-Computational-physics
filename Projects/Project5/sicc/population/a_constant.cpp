@@ -13,3 +13,8 @@ double a_constant::a(double t)
 {
     return m_a;
 }
+
+std::string a_constant::get_name()
+{
+    return name;
+}
