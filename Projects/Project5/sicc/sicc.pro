@@ -5,7 +5,6 @@ CONFIG -= qt
 
 SOURCES += \
         main.cpp \
-    population/populations.cpp \
     odesolver.cpp \
     vec3.cpp \
     population/susceptibles.cpp \
@@ -15,10 +14,10 @@ SOURCES += \
     population/a_constant.cpp \
     population/a_seasons.cpp \
     problem.cpp \
-    population/population_group.cpp
+    population/population_group.cpp \
+    writeme.cpp
 
 HEADERS += \
-    population/populations.h \
     odesolver.h \
     vec3.h \
     population/susceptibles.h \
@@ -28,4 +27,5 @@ HEADERS += \
     problem.h \
     population/a_constant.h \
     population/a_parameter.h \
-    population/population_group.h
+    population/population_group.h \
+    writeme.h

@@ -9,13 +9,12 @@ using std::vector;
 class population_group
 {
 public:
-    population_group(); 
+    population_group();
     virtual ~population_group();
 
     virtual double get_current() = 0;
     virtual double prime(vector <double> Qs, double t) = 0;
     virtual void add_to_current(double previous) = 0;
-
 };
 
 #endif // POPULATION_GROUP_H

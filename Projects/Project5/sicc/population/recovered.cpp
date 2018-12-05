@@ -2,7 +2,6 @@
 
 Recovered::Recovered()
 {
-
 }
 
 Recovered::~Recovered()

@@ -2,12 +2,10 @@
 
 population_group::population_group()
 {
-
 }
 
 population_group::~population_group()
 {
-
 }
 
 double population_group::get_current()
