@@ -6,7 +6,6 @@ CONFIG -= qt
 SOURCES += \
         main.cpp \
     odesolver.cpp \
-    vec3.cpp \
     population/susceptibles.cpp \
     population/infected.cpp \
     population/recovered.cpp \
@@ -19,7 +18,6 @@ SOURCES += \
 
 HEADERS += \
     odesolver.h \
-    vec3.h \
     population/susceptibles.h \
     population/infected.h \
     population/recovered.h \
