@@ -9,8 +9,9 @@ class problem;
 class ODEsolver
 {
 private:
-//    friend std::vector<double> &operator+(vector<double> &os, const vec3& myVector);
-//    std::vector<double> &operator+(vector<double> *this,vector <double> &vec,double &plussing);
+    // experiment: try to overload operator on std::vector object?
+    //    friend std::vector<double> &operator+(vector<double> &os, const vec3& myVector);
+    //    std::vector<double> &operator+(vector<double> *this,vector <double> &vec,double &plussing);
 public:
 
     double m_dt;
