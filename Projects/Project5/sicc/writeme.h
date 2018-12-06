@@ -12,11 +12,12 @@
  *
  * WORK IN PROGRESS
  * this class is inteded for further development for printing of many types
- * the main work currently has been in the path and filename functionality
+
+
 
 TODO:
 Add option to add parameters in first line of file for textfiles
-
+check for existing path
 Add workexample
 
 
@@ -66,6 +67,7 @@ public:
     // Writing
     void write_double_vector(vector<double> quantity,string filenamestart = "",bool add_ints = false, bool add_doubles = false);
     void write_vector_vector(vector<vector<double>> quantity,string filenamestart = "", bool add_ints = false, bool add_doubles = false);
+    void write_vector_vector_bin(vector<vector<double>> quantity, string filenamestart = "", bool add_ints = false, bool add_doubles = false);
 };
 
 #endif // WRITEME_H

@@ -169,11 +169,32 @@ void writeme::write_vector_vector(vector<vector<double>> quantity, string filena
     ofstream file(temp);
     file << setiosflags(ios::showpoint | ios::uppercase);
 
-    for (u_long i = 0; i < quantity.size(); ++i) {
-        for (u_long j = 0; j < quantity[0].size(); ++j){
-            file << setw(15) << setprecision(8) << quantity[i][j];
+    for (u_long j = 0; j < quantity[0].size(); ++j){
+        for (u_long i = 0; i < quantity.size(); ++i) {
+            file << setw(10) << setprecision(5) << quantity[i][j];
         }
         file << "\n";
     }
+    file.close();
+}
+
+void writeme::write_vector_vector_bin(vector<vector<double>> quantity, string filenamestart, bool add_ints, bool add_doubles){
+    string temp;
+    temp = get_current_path(filenamestart, add_ints, add_doubles) + ".bin";
+    cout << "Writing \n";
+    cout << temp << endl;
+    ofstream file(temp, ofstream::binary);
+    for (u_long i = 0; i < quantity.size(); ++i) {
+        file.write(reinterpret_cast<char*>(&quantity[i][0]),quantity[i].size()*sizeof(double));
+
+    }
+
+
+//    for (vector<double>& vec : quantity)
+//    {
+//        file.write(reinterpret_cast<const char*>(vec), vec.size() * sizeof(double))
+//    }
+
+//    file.write(reinterpret_cast<const char*> (quantity), MC*sizeof(double));
     file.close();
 }
