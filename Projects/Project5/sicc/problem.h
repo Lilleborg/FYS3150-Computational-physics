@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <math.h>
+#include <stdlib.h>
 #include "time.h"
 
 #include "population/a_parameter.h"
@@ -71,6 +72,7 @@ public:
     // Writing to file
     void config_write(writeme *write, string filenamestart = "SIR");
     void write_SIR(writeme *write, bool config = true);
+    void write_SIR_bin(writeme *write, bool config = true);
     void write_SIR_one_by_one(writeme *write, bool config = true);
 
 };

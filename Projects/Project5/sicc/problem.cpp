@@ -42,6 +42,9 @@ void problem::set_timing(double dt, double T, double T0)
 void problem::set_population()
 {
     SIR.clear();
+    S_vector.clear();
+    I_vector.clear();
+    R_vector.clear();
     SIR.push_back(new Susceptibles(m_N,m_S0,m_afunc,m_c,m_d,m_e,m_f));
     SIR.push_back(new Infected(m_N,m_I0,m_afunc,m_b,m_d,m_dI));
     SIR.push_back(new Recovered(m_N,m_R0,m_b,m_c,m_d,m_f));
@@ -83,7 +86,7 @@ void problem::evolve(int i)
 bool problem::test_total_population()
 {
     test_sum = 0;
-    double tol = 5;
+    double tol = 1;
     for (double& q : m_Qs)
     {
         test_sum += q;
@@ -101,7 +104,7 @@ void problem::evolve_full(bool debug)
         this->evolve(i);
         if (debug)
         {
-            if (i%int(m_nr_steps/1000) == 0)
+            if (i%int(m_nr_steps/100) == 0)
             {
                 if (this->test_total_population())
                 {
@@ -110,7 +113,7 @@ void problem::evolve_full(bool debug)
                     cout << "-------------------------------------------------------------------\n";
                     cout << "Total population initially" << m_N << ", current population " << test_sum << "\n";
                     cout << "at time " << time[i] << " ran " << i << " steps." << endl;
-                    break;
+                    exit (EXIT_FAILURE);
                 }
             }
         }
@@ -128,6 +131,8 @@ void problem::config_write(writeme *write,string filenamestart)
         write->add_double(e.first,e.second);
     }
     write->add_int("N", m_N);
+    write->add_double("dt",m_dt);
+    write->add_double("T", m_T);
     write->set_default_filename(filenamestart + "_" + m_afunc->get_name(),true,true);
 }
 
@@ -142,6 +147,19 @@ void problem::write_SIR(writeme *write, bool config)
     temp.push_back(I_vector);
     temp.push_back(R_vector);
     write->write_vector_vector(temp);
+}
+
+void problem::write_SIR_bin(writeme *write, bool config)
+{
+    if (config)
+    {
+        config_write(write);
+    }
+    vector<vector<double>> temp;
+    temp.push_back(S_vector);
+    temp.push_back(I_vector);
+    temp.push_back(R_vector);
+    write->write_vector_vector_bin(temp);
 }
 
 void problem::write_SIR_one_by_one(writeme *write, bool config)
@@ -160,7 +178,7 @@ void problem::print_current_SIR(bool debug)
     if (debug)
     {
         this->test_total_population();
-        cout << "At time " << time[current_step] << " index " << current_step << " the sum of current SIR values " << test_sum;
+        cout<<"At time "<<time[current_step]<<" index "<<current_step<<" the sum of current SIR values "<<test_sum;
         cout << " vs initial " << m_N << endl;
     }
     cout << "S: " << m_Qs[0] << " , I: " << m_Qs[1] << " , R: " << m_Qs[2] << endl;
