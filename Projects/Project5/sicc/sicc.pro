@@ -14,7 +14,8 @@ SOURCES += \
     population/a_seasons.cpp \
     problem.cpp \
     population/population_group.cpp \
-    writeme.cpp
+    writeme.cpp \
+    montecarlo.cpp
 
 HEADERS += \
     odesolver.h \
@@ -26,4 +27,5 @@ HEADERS += \
     population/a_constant.h \
     population/a_parameter.h \
     population/population_group.h \
-    writeme.h
+    writeme.h \
+    montecarlo.h

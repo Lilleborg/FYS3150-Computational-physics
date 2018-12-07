@@ -28,7 +28,7 @@ public:
 
     void set_parameters(double b, double c, double d=0, double dI=0, double e=0, double f=0);//init param
     void set_timing(double dt, double T, double T0=0);  // init timing and ODEsolver
-    void set_afunc(a_parameter *afunc){m_afunc = afunc;}    // inint a parameter
+    void set_afunc(a_parameter *afunc){m_afunc = afunc;}    // init a parameter
     void set_population();  // Initialize population classes
 
     // Calculations
