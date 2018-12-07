@@ -116,6 +116,7 @@ void problem::evolve_full(bool debug)
                     exit (EXIT_FAILURE);
                 }
             }
+        this->print_current_SIR(debug);
         }
     }
     cout << "Simulation done in " << (double(clock()-timestart)/double(CLOCKS_PER_SEC)) << " seconds.\n" << endl;

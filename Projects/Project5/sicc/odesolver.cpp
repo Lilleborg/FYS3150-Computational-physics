@@ -28,7 +28,7 @@ vector<double> ODEsolver::vec_pluss(const vector<double> vec, double pluss)
 void ODEsolver::RK4(population_group *p, double t)
 {
     get_ks(p,t);
-    p->add_to_current(1.0/6*(ks[0]+2*ks[1]+2*ks[2]+ks[1]));
+    p->add_to_current(1.0/6*(ks[0]+2*ks[1]+2*ks[2]+ks[3]));
 }
 
 void ODEsolver::get_ks(population_group *p, double t)
