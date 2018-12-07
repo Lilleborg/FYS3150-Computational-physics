@@ -45,10 +45,10 @@ void problem::set_population()
     S_vector.clear();
     I_vector.clear();
     R_vector.clear();
-    SIR.push_back(new Susceptibles(m_N,m_S0,m_afunc,m_c,m_d,m_e,m_f));
+    SIR.push_back(new Susceptibles(m_N,m_S0,m_afunc,m_c,m_d,m_e,m_f));  // check here
     SIR.push_back(new Infected(m_N,m_I0,m_afunc,m_b,m_d,m_dI));
     SIR.push_back(new Recovered(m_N,m_R0,m_b,m_c,m_d,m_f));
-    this->update_current();
+    update_current();
     current_step = 0;
 }
 
@@ -99,9 +99,9 @@ void problem::evolve_full(bool debug)
     cout << "Running full simulation of problem " << name << " with " << m_nr_steps << " steps\n";
     cout << "..." << endl;
     clock_t timestart = clock();
-    for (int i = 0; i < m_nr_steps;i++)
+    for (int i = 1; i < m_nr_steps;i++)
     {
-        this->evolve(i);
+        evolve(i);
         if (debug)
         {
             if (i%int(m_nr_steps/100) == 0)
@@ -109,14 +109,14 @@ void problem::evolve_full(bool debug)
                 if (this->test_total_population())
                 {
                     cout << "-------------------------------------------------------------------\n";
-                    cout << "Terminating run as total number of people has changed significantly\n";
+                    cout << "       Terminating run as total number of people has changed\n";
                     cout << "-------------------------------------------------------------------\n";
                     cout << "Total population initially" << m_N << ", current population " << test_sum << "\n";
                     cout << "at time " << time[i] << " ran " << i << " steps." << endl;
                     exit (EXIT_FAILURE);
                 }
             }
-        this->print_current_SIR(debug);
+        print_current_SIR(debug);
         }
     }
     cout << "Simulation done in " << (double(clock()-timestart)/double(CLOCKS_PER_SEC)) << " seconds.\n" << endl;
