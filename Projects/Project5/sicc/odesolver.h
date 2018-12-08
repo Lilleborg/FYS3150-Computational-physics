@@ -15,7 +15,7 @@ private:
 public:
 
     double m_dt;
-    vector <double> ks = vector <double> (4,0);
+    vector <double> ks;// = vector <double> (4,0);
     problem *m_problem;
 
     ODEsolver(problem *p_, double dt);

@@ -1,4 +1,5 @@
 #include "susceptibles.h"
+#include <iostream>
 
 Susceptibles::Susceptibles()
 {
@@ -23,7 +24,10 @@ double Susceptibles::prime(vector <double> Qs, double t)
 
 void Susceptibles::add_to_current(double prev)
 {
+    std::cout << "In add to current S\n";
+    std::cout << current << " " << prev << std::endl;
     current += prev;
+    std::cout << current << std::endl;
 }
 
 double Susceptibles::get_current()

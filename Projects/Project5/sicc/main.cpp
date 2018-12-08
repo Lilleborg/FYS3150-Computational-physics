@@ -31,13 +31,14 @@ int main()
     double c = 0.5;
     problem A(400,300,100,"exeA/c_0.5");
     A.set_afunc(a_c);
-    A.set_timing(0.001,20);
+    A.set_timing(0.001,0.5);
     for (double b = 1; b <= 1; b++)
     {
         A.set_parameters(b,c);
         A.set_population();
         A.evolve_full(debug);
-        A.write_SIR_bin(write);
+        //A.write_SIR_bin(write);
+        A.write_SIR(write);
     }
 
 

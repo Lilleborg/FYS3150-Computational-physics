@@ -171,7 +171,7 @@ void writeme::write_vector_vector(vector<vector<double>> quantity, string filena
 
     for (u_long j = 0; j < quantity[0].size(); ++j){
         for (u_long i = 0; i < quantity.size(); ++i) {
-            file << setw(10) << setprecision(5) << quantity[i][j];
+            file << setw(15) << setprecision(10) << quantity[i][j];
         }
         file << "\n";
     }

@@ -10,7 +10,7 @@ class Infected : public population_group
 {
 private:
     double m_b,m_d,m_dI;
-    int m_N,m_I0;
+    double m_N,m_I0;
     a_parameter *m_a_param;
     double current;
 public:
