@@ -22,5 +22,8 @@ public:
     double prime(vector <double> Qs, double t);
     void add_to_current(double previous);
 
+    // MC transitions
+    double trans_I_R(double I, double dt){return m_b*I*dt;}
+    double trans_I_D(double I, double dt){return (m_d+m_dI)*I*dt;}
 };
 #endif // INFECTED_H

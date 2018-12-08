@@ -19,6 +19,10 @@ public:
     double get_current();
     double prime(vector <double> Qs, double t);
     void add_to_current(double previous);
+
+    // MC transitions
+    double trans_R_S(double R, double dt){return m_c*R*dt;}
+    double trans_R_D(double R, double dt){return m_d*R*dt;}
 };
 
 #endif // RECOVERED_H
