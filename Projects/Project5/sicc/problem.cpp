@@ -72,7 +72,7 @@ void problem::evolve(double t)
 {
     for (int i = 0; i<3; i++)
     {
-        cout << "solver SIR[i], t \n" << i << " " << t << endl;
+        //cout << "solver SIR[i], t \n" << i << " " << t << endl;
         solver->RK4(SIR[i],t);
     }
     update_current();
@@ -103,10 +103,12 @@ void problem::evolve_full(bool debug)
     for (int i = 1; i < m_nr_steps;i++)
     {
         evolve(i);
+
         if (debug)
         {
-            if (i%int(m_nr_steps/100) == 0)
+            if (i%int(m_nr_steps/10) == 0)
             {
+                print_current_SIR(debug);
                 if (this->test_total_population())
                 {
                     cout << "-------------------------------------------------------------------\n";
@@ -117,7 +119,6 @@ void problem::evolve_full(bool debug)
                     //exit (EXIT_FAILURE);
                 }
             }
-        print_current_SIR(debug);
         }
     }
     cout << "Simulation done in " << (double(clock()-timestart)/double(CLOCKS_PER_SEC)) << " seconds.\n" << endl;

@@ -37,6 +37,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
         # Reading files by globbing
         path = "../datafiles/" + exeFolder + "/"
         list_of_files = glob.glob(path + '*.bin')   # globbing all binary files in path
+
         list_of_correct_file = [] 
 
         string_dt = "dt_" + timestep + "_"
@@ -44,9 +45,8 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
         list_of_parameters = {}
 
         for filename in list_of_files:   # add files with correct dt and endtime
-            if string_dt in filename and string_T in filename:
+            if string_dt in filename and string_T in filename and atype in filename:
                 list_of_correct_file.append(filename)
-                
         # User check that correct files are given
         def usercheck():
             for i,file in enumerate(list_of_correct_file):
@@ -105,8 +105,8 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
             if params[key] != None:
                 paramstring += key + ' = ' + params[key] + ', '
         # Plotting
-        i = sub[f][0]
-        j = sub[f][1]
+        i = sub[f%4][0]
+        j = sub[f%4][1]
 
         time = np.linspace(0,float(finaltime),onesize)
 
