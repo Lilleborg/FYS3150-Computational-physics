@@ -24,6 +24,7 @@ public:
 
     // MC transitions
     double trans_I_R(double I, double dt){return m_b*I*dt;}
-    double trans_I_D(double I, double dt){return (m_d+m_dI)*I*dt;}
+    double trans_I_D(double I, double dt){return m_d*I*dt;}
+    double trans_I_DI(double I, double dt){return m_dI*I*dt;}
 };
 #endif // INFECTED_H

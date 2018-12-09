@@ -38,22 +38,3 @@ double Susceptibles::get_current()
     return current;
 }
 
-double Susceptibles::trans_S_I(double S, double I, double N, double t, double dt)
-{
-    return m_a_param->a(t)*S*I*dt/N;
-}
-
-double Susceptibles::trans_S_R(double dt)
-{
-    return m_f*dt;
-}
-
-double Susceptibles::trans_S_D(double S, double dt)
-{
-    return m_d*S*dt;
-}
-
-double Susceptibles::trans_E_S(double N, double dt)
-{
-    return m_e*N*dt;
-}

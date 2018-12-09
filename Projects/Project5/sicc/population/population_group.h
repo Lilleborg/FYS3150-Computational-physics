@@ -26,6 +26,7 @@ public:
     // transitions for I
     virtual double trans_I_R(double I, double dt){}
     virtual double trans_I_D(double I, double dt){}
+    virtual double trans_I_DI(double I, double dt){}
 
     // transitions for R
     virtual double trans_R_S(double R, double dt){}

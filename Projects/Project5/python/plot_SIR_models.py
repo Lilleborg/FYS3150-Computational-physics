@@ -75,7 +75,6 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
                 if filenr == 'stop':
                     break
 
-    list_of_correct_file.sort()
     sub = [[0,0],[0,1],[1,0],[1,1]]
     people = ['S','I','R']
     for f,filename in enumerate(list_of_correct_file):

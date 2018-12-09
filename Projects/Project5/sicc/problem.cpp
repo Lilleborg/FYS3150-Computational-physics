@@ -68,6 +68,13 @@ void problem::update_all()
     R_vector.push_back(m_Qs[2]);
 }
 
+void problem::update_all(double S, double I, double R)
+{
+    S_vector.push_back(S);
+    I_vector.push_back(I);
+    R_vector.push_back(R);
+}
+
 void problem::evolve(double t)
 {
     for (int i = 0; i<3; i++)

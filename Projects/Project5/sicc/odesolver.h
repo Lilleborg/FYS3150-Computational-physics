@@ -2,6 +2,7 @@
 #define ODESOLVER_H
 
 #include "population/population_group.h"
+#include "time.h"
 
 class problem;
 

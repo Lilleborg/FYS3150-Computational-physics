@@ -22,10 +22,10 @@ public:
     void add_to_current(double previous);
 
     // MC transitions
-    double trans_S_I(double S, double I,double N, double t, double dt);
-    double trans_S_R(double dt);
-    double trans_S_D(double S, double dt);
-    double trans_E_S(double N, double dt);
+    double trans_S_I(double S, double I,double N, double t, double dt){return m_a_param->a(t)*S*I*dt/N;}
+    double trans_S_R(double dt){return m_f*dt;}
+    double trans_S_D(double S, double dt){return m_d*S*dt;}
+    double trans_E_S(double N, double dt){return m_e*N*dt;}
 
 };
 

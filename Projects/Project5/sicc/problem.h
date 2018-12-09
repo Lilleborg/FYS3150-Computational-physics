@@ -37,6 +37,7 @@ public:
     void update_current();  // update local current values of current SIR
     void evolve_full(bool debug = false); // run full simulation untill time[i] = T, with test of total population if test = true
     void update_all();  // add current values to SIR vectors
+    void update_all(double S, double I, double R);  // add values S I R to SIR vectors
     bool test_total_population(); double test_sum;
 
     // Convinient functions
