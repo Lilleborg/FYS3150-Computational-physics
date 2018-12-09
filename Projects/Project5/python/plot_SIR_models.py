@@ -85,7 +85,11 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
 
         # Dictionary for handling parameters
         params = copy.deepcopy(parameters)  # creates copy of parameter dictionary 
-        params['a'] = atype
+        if atype == "const":
+            params['a'] = 'a0'
+        else:
+            params['a'] = 'a(t)'
+            
         
         # Temporary string for manipulating filename
         temp = filename.split('_')  # parameters from temp[5:]
@@ -103,7 +107,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
         paramstring = ""
         for key in params:
             if params[key] != None:
-                paramstring += key + ' = ' + params[key] + ', '
+                paramstring += key + '=' + params[key] + ', '
         # Plotting
         i = sub[f%4][0]
         j = sub[f%4][1]
@@ -112,11 +116,14 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
 
         for k in range(3):
             axes[i,j].plot(time,data[k*onesize:(k+1)*onesize],label=people[k])
-            axes[i,j].set_title(paramstring)
+            size = 20 - (len(params) - 5)
+            axes[i,j].set_title(paramstring, fontsize = size)
+                
     
     ax = fig.gca()
     handles, labels = ax.get_legend_handles_labels()
     fig.legend(handles, labels)
+    
     #fig.tight_layout()
     #fig.subplots_adjust(top=0.88)
 
