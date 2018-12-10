@@ -16,7 +16,10 @@ void MonteCarlo::find_dt(double N, double t)
 
 void MonteCarlo::find_dt_extended(double N, double t)
 {
+    // Here we don't check if a parameter is zero, as if example f=0 then
+    // 1/m_p->m_f = inf wich is not < m_dt. This saves a lot of if tests
     find_dt(N,t);
+
     if (1/m_p->m_d/N < m_dt) {m_dt = 1/m_p->m_d/N;}
 
     if (1/(m_p->m_dI)/N < m_dt) {m_dt = 1/(m_p->m_dI)/N ;}
@@ -24,11 +27,9 @@ void MonteCarlo::find_dt_extended(double N, double t)
     if (1/m_p->m_e/N < m_dt) {m_dt = 1/m_p->m_e/N;}
 
     if (1/m_p->m_f < m_dt) {m_dt = 1/m_p->m_f;}
+
 }
 
-//if (m_p->m_f != 0)
-//{
-//}
 void MonteCarlo::Run_MC_const_population()
 {
     mt19937 gen;
@@ -81,10 +82,10 @@ void MonteCarlo::Run_MC_const_population()
 
 void MonteCarlo::Run_MC_extended()
 {
+    // Using this for exe C and onwards, not checking of d = 0 or e = 0 as this is unrealistic
     mt19937 gen;
     uniform_real_distribution<double> RNG(0.0, 1.0);
     vector<population_group*> SIR = m_p->get_SIR();
-    //vector<double> Qs = m_p
 
     avgS = vector<double>(m_p->m_nr_steps,0);
     avgI = vector<double>(m_p->m_nr_steps,0);
@@ -126,14 +127,23 @@ void MonteCarlo::Run_MC_extended()
             // Accept or reject transitions, set up SIR values for next time step
             // Out of S:
             if (RNG(gen) < SIR[0]->trans_S_I(S,I,N,time[i],m_dt)) {S -= 1; I += 1;}
-            if (RNG(gen) < SIR[0]->trans_S_R(m_dt)) {S -= 1; R += 1;}
+
+            if (m_p->m_f != 0)  // if f = 0 not use this transition
+            {
+                if (RNG(gen) < SIR[0]->trans_S_R(m_dt)) {S -= 1; R += 1;}
+            }
+
             if (RNG(gen) < SIR[0]->trans_S_D(S,m_dt)) {S -= 1;}
             if (RNG(gen) < SIR[0]->trans_E_S(N,m_dt)) {S += 1;}
 
             // Out of I:
             if (RNG(gen) < SIR[1]->trans_I_R(I,m_dt)) {I -= 1; R += 1;}
             if (RNG(gen) < SIR[1]->trans_I_D(I,m_dt)) {I -= 1;}
-            if (RNG(gen) < SIR[1]->trans_I_DI(I,m_dt)) {I -= 1;}
+
+            if (m_p->m_dI != 0) // if dI = 0 not use this transition
+            {
+                if (RNG(gen) < SIR[1]->trans_I_DI(I,m_dt)) {I -= 1;}
+            }
 
             // Out of R:
             if (RNG(gen) < SIR[2]->trans_R_S(R,m_dt)) {R -= 1; S += 1;}
