@@ -106,7 +106,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
                     params[ele] = temp[indexofT_+1+l]
 
         paramstring = ""
-        for key in params:
+        for key in paramlist:
             if params[key] != None:
                 paramstring += key + '=' + params[key] + ', '
         # Plotting
