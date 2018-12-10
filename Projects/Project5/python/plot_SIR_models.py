@@ -24,8 +24,8 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
                          give list of 4 files to be read
     """
     # Set up axes and figure
-    fig, axes = plt.subplots(2,2)#,sharex='col')#,sharey='row')
-    
+    fig, axes = plt.subplots(2,2,figsize = (14,8))#,sharex='col')#,sharey='row')
+
     if manual_filenames:
         pass    # TODO add method for giving 4 filenames
     else:    
@@ -40,6 +40,9 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
         if simtype_ == 'MC':
             string_simtype = "SIR_MC_a"
             simulation_type = 'MC'
+            mean_std = {}
+
+
 
 
         string_dt = "dt_" + timestep + "_"
@@ -95,7 +98,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
             
         
         # Temporary string for manipulating filename
-        temp = filename.split('_')  # parameters from temp[5:]
+        temp = filename.split('_')  # splitting filename for extracting param values
         temp[-1] = temp[-1].replace('.bin','')
         for i,ele in enumerate(temp):
             if ele == 'T':
@@ -106,6 +109,8 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
             if l%2 == 0:
                 if ele != 'N' and ele != 'dt' and ele != 'T':
                     params[ele] = temp[indexofT_+1+l]
+                    if ele == 'sigS' or ele == 'sigI' or ele == 'sigR':
+                        mean_std[ele] = float(temp[indexofT_+1+l])
 
         paramstring = ""
         for key in paramlist:
@@ -121,6 +126,9 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
             axes[i,j].plot(time,data[k*onesize:(k+1)*onesize],label=people[k])
             size = 20 - (len(params) - 5)
             axes[i,j].set_title(paramstring, fontsize = size)
+        
+        if simtype == 'MC': # add average std in axes legend
+            axes[i,j].legend(['$\sigma_{:s} = {:.2f}$'.format(people[0],mean_std['sigS']),'$\sigma_{:s} = {:.2f}$'.format(people[1],mean_std['sigI']),'$\sigma_{:s} = {:.2f}$'.format(people[2],mean_std['sigR'])],loc = 'upper right',fontsize = 14)
                 
     fig.suptitle('{:s} simulation of SIRS model, T = {:s}, dt = {:s}'.format(simulation_type,finaltime,timestep))
     axes[1,0].set_xlabel(r"Time, [days]")
@@ -131,6 +139,14 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
     ax = fig.gca()
     handles, labels = ax.get_legend_handles_labels()
     fig.legend(handles, labels)
+
+    paramstring = paramstring.replace(' ', '_')
+    paramstring = paramstring.replace(',', '')
+    plotfilename = '../plots/plot_' + "{:s}_T={:s}_dt={:s}".format(simulation_type,finaltime,timestep)
+    plotfilename += paramstring
+    plotfilename += '.pdf'
+
+    plt.savefig(plotfilename)
     
     #fig.tight_layout()
     #fig.subplots_adjust(top=0.88)
