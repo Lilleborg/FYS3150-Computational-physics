@@ -188,13 +188,5 @@ void writeme::write_vector_vector_bin(vector<vector<double>> quantity, string fi
         file.write(reinterpret_cast<char*>(&quantity[i][0]),quantity[i].size()*sizeof(double));
 
     }
-
-
-//    for (vector<double>& vec : quantity)
-//    {
-//        file.write(reinterpret_cast<const char*>(vec), vec.size() * sizeof(double))
-//    }
-
-//    file.write(reinterpret_cast<const char*> (quantity), MC*sizeof(double));
     file.close();
 }
