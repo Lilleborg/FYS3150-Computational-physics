@@ -30,7 +30,7 @@ int main()
     // Exercise A
     bool debug = false;
     double c = 0.5;
-    problem A(400,300,100,"exeA/all");
+    problem A(400,300,100,"exeA/c_0.5_f_0.1");
     A.set_afunc(a_c);
     A.set_timing(0.001,20);
     for (double b = 1; b <= 4; b++)
@@ -46,33 +46,18 @@ int main()
 
 
     // MC testing
-    problem *AMC = new problem(400,300,100,"exeA/c_0.5");
+    problem *AMC = new problem(400,300,100,"exeA/c_0.5_f_0.1");
     AMC->set_afunc(a_c);
     AMC->set_timing(0.001,20);
 
     for (double b = 1; b <= 4; b++)
     {
-        AMC->set_parameters(b,c,0.1,0.1,.4);
+        AMC->set_parameters(b,c,0.1,0.1,.4,0.1);
         AMC->set_population();
         MonteCarlo MC_obj(AMC,100);
         MC_obj.Run_MC_extended(write);
         MC_obj.write_averages(write);
     }
-
-
-
-//    problem AMC(400,300,100,"exeA/c_0.5");
-//    AMC.set_afunc(a_c);
-//    AMC.set_timing(0.001,20);
-//    for (double b = 1; b <=4; b++)
-//    {
-//        AMC.set_parameters(b,c);
-//        AMC.set_population();
-//        MonteCarlo MC_obj(&AMC,100);// = new MonteCarlo(A);
-//        MC_obj.Run_MC_extended(write);
-//        MC_obj.write_averages(write);
-//    }
-
 
 
     cout << "Main done!" << endl;

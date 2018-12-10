@@ -52,7 +52,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
             for i,file in enumerate(list_of_correct_file):
                 print ('File nr {:d}: '.format(i),file)
             if len(list_of_correct_file) == 0:
-                print('Found no mathich files')
+                print('Found no matching files')
                 print('---Quiting---')
                 sys.exit(1)
 
@@ -75,6 +75,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
                 if filenr == 'stop':
                     break
 
+    list_of_correct_file.sort()
     sub = [[0,0],[0,1],[1,0],[1,1]]
     people = ['S','I','R']
     for f,filename in enumerate(list_of_correct_file):

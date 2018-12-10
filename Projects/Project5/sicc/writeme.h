@@ -57,6 +57,7 @@ public:
     void remove_double(string key);
     void add_int(string key, int value);
     void remove_int(string key);
+    void clear_maps() {doubles.clear(); ints.clear();}
 
     // Convenient
     string get_current_path(string filenamestart = "", bool add_ints = false, bool add_doubles = false);

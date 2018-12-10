@@ -136,6 +136,7 @@ void problem::config_write(writeme *write,string filenamestart)
     write->clear_default_filename();
     write->clear_subpath();
     write->set_subpath(name + "/");
+    write->clear_maps();
     for (const auto& e : m_params)
     {
         write->add_double(e.first,e.second);
