@@ -35,7 +35,7 @@ int main()
     A.set_timing(0.001,20);
     for (double b = 1; b <= 4; b++)
     {
-        A.set_parameters(b,c,0.1,0.1,.4);
+        A.set_parameters(b,c,0.1,0.1,.4,0.1);
         A.set_population();
         A.print_current_SIR();
         A.evolve_full(debug);
@@ -46,18 +46,32 @@ int main()
 
 
     // MC testing
-    //problem *AMC = new problem(400,300,100,"exeA/c_0.5");
-    problem AMC(400,300,100,"exeA/c_0.5");
+    problem *AMC = new problem(400,300,100,"exeA/c_0.5");
     AMC->set_afunc(a_c);
     AMC->set_timing(0.001,20);
-    for (double b = 1; b <=4; b++)
+
+    for (double b = 1; b <= 4; b++)
     {
-        AMC->set_parameters(b,c);
+        AMC->set_parameters(b,c,0.1,0.1,.4);
         AMC->set_population();
-        MonteCarlo MC_obj(&AMC,100);// = new MonteCarlo(A);
+        MonteCarlo MC_obj(AMC,100);
         MC_obj.Run_MC_extended(write);
         MC_obj.write_averages(write);
     }
+
+
+
+//    problem AMC(400,300,100,"exeA/c_0.5");
+//    AMC.set_afunc(a_c);
+//    AMC.set_timing(0.001,20);
+//    for (double b = 1; b <=4; b++)
+//    {
+//        AMC.set_parameters(b,c);
+//        AMC.set_population();
+//        MonteCarlo MC_obj(&AMC,100);// = new MonteCarlo(A);
+//        MC_obj.Run_MC_extended(write);
+//        MC_obj.write_averages(write);
+//    }
 
 
 
