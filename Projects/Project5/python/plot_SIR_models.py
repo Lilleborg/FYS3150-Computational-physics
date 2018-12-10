@@ -15,7 +15,7 @@ plt.matplotlib.rc('font', **font)
 
 # TODO: Add expectation values along right y axis
 
-def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
+def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=False):
     """
     @ timestep - dt value in filename
     @ finaltime - T value in filename
@@ -25,12 +25,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
     """
     # Set up axes and figure
     fig, axes = plt.subplots(2,2)#,sharex='col')#,sharey='row')
-    fig.suptitle('Simulation of SIRS model, T = {:s}, dt = {:s}'.format(finaltime,timestep))
-    axes[1,0].set_xlabel(r"Time, [days]")
-    axes[1,1].set_xlabel(r"Time, [days]")
-    axes[0,0].set_ylabel(r'NR People in category')
-    axes[1,0].set_ylabel(r'NR People in category')
-
+    
     if manual_filenames:
         pass    # TODO add method for giving 4 filenames
     else:    
@@ -40,12 +35,19 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
 
         list_of_correct_file = [] 
 
+        string_simtype = "SIR_a"
+        simulation_type = 'RK4'
+        if simtype_ == 'MC':
+            string_simtype = "SIR_MC_a"
+            simulation_type = 'MC'
+
+
         string_dt = "dt_" + timestep + "_"
         string_T = "T_" + finaltime + "_"
         list_of_parameters = {}
 
         for filename in list_of_files:   # add files with correct dt and endtime
-            if string_dt in filename and string_T in filename and atype in filename:
+            if string_dt in filename and string_T in filename and atype in filename and string_simtype in filename:
                 list_of_correct_file.append(filename)
         # User check that correct files are given
         def usercheck():
@@ -120,7 +122,12 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,manual_filenames=False):
             size = 20 - (len(params) - 5)
             axes[i,j].set_title(paramstring, fontsize = size)
                 
-    
+    fig.suptitle('{:s} simulation of SIRS model, T = {:s}, dt = {:s}'.format(simulation_type,finaltime,timestep))
+    axes[1,0].set_xlabel(r"Time, [days]")
+    axes[1,1].set_xlabel(r"Time, [days]")
+    axes[0,0].set_ylabel(r'NR People in category')
+    axes[1,0].set_ylabel(r'NR People in category')
+
     ax = fig.gca()
     handles, labels = ax.get_legend_handles_labels()
     fig.legend(handles, labels)
@@ -138,17 +145,21 @@ try:
     T = sys.argv[2]
     a = sys.argv[3]
     exe = sys.argv[4]
+    simtype = sys.argv[5]
 except IndexError:
     print ('Not correct number of cmd line arguments')
-    print ('Need 4 arguments handled as strings')
+    print ('Need 5 arguments handled as strings')
     print ('1 - dt value')
     print ('2 - Endtime value')
     print ('3 - a type, const or season')
     print ('4 - exe, exeA exeB.. etc')
+    print ('5 - MC or RK4')
     print ('---Quiting---')
     sys.exit(1)
 
-plottingSIR(dt,T,a,exe)
+
+
+plottingSIR(dt,T,a,exe,simtype)
 plt.show()
 
 
