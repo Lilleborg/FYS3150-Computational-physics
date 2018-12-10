@@ -108,9 +108,10 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
         for l,ele in enumerate(temp[indexofT_:]):   # fill dictionary with parameter values
             if l%2 == 0:
                 if ele != 'N' and ele != 'dt' and ele != 'T':
-                    params[ele] = temp[indexofT_+1+l]
                     if ele == 'sigS' or ele == 'sigI' or ele == 'sigR':
                         mean_std[ele] = float(temp[indexofT_+1+l])
+                        continue
+                    params[ele] = temp[indexofT_+1+l]
 
         paramstring = ""
         for key in paramlist:
@@ -121,6 +122,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
         j = sub[f%4][1]
 
         time = np.linspace(0,float(finaltime),onesize)
+        time = np.linspace(0,int(math.ceil(onesize/365)),onesize)
 
         for k in range(3):
             axes[i,j].plot(time,data[k*onesize:(k+1)*onesize],label=people[k])
@@ -128,11 +130,11 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
             axes[i,j].set_title(paramstring, fontsize = size)
         
         if simtype == 'MC': # add average std in axes legend
-            axes[i,j].legend(['$\sigma_{:s} = {:.2f}$'.format(people[0],mean_std['sigS']),'$\sigma_{:s} = {:.2f}$'.format(people[1],mean_std['sigI']),'$\sigma_{:s} = {:.2f}$'.format(people[2],mean_std['sigR'])],loc = 'upper right',fontsize = 14)
+            axes[i,j].legend([r'$\sigma_{:s} = {:.2f}$'.format(people[0],mean_std['sigS']),'$\sigma_{:s} = {:.2f}$'.format(people[1],mean_std['sigI']),'$\sigma_{:s} = {:.2f}$'.format(people[2],mean_std['sigR'])],loc = 'upper left',fontsize = 14,ncol = 3, columnspacing = 0.5)
                 
     fig.suptitle('{:s} simulation of SIRS model, T = {:s}, dt = {:s}'.format(simulation_type,finaltime,timestep))
-    axes[1,0].set_xlabel(r"Time, [days]")
-    axes[1,1].set_xlabel(r"Time, [days]")
+    axes[1,0].set_xlabel(r"Time, [Years]")
+    axes[1,1].set_xlabel(r"Time, [Years]")
     axes[0,0].set_ylabel(r'NR People in category')
     axes[1,0].set_ylabel(r'NR People in category')
 
@@ -146,10 +148,12 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
     plotfilename += paramstring
     plotfilename += '.pdf'
 
-    plt.savefig(plotfilename)
+    plt.show()
+    saving = input('Savefig? y/n ')
+    if saving == 'y':
+        plt.savefig(plotfilename)
     
     #fig.tight_layout()
-    #fig.subplots_adjust(top=0.88)
 
 paramlist = ['a','b','c','d','dI','e','f']
 parameters = {}
@@ -176,7 +180,7 @@ except IndexError:
 
 
 plottingSIR(dt,T,a,exe,simtype)
-plt.show()
+
 
 
 
