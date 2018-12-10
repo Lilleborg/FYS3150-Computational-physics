@@ -21,7 +21,7 @@ using namespace std;
 int main()
 {
     // a-parameters
-    a_constant *a_c = new a_constant(2);
+    a_constant *a_c = new a_constant(4);
     a_seasons *a_s = new a_seasons(4,2,2.0*M_PI/5.0);
 
     // writeme object
@@ -30,12 +30,12 @@ int main()
     // Exercise A
     bool debug = false;
     double c = 0.5;
-    problem A(400,300,100,"exeA/c_0.5_f_0.1");
+    problem A(400,300,100,"exeA/c_0.5/d_0.1");
     A.set_afunc(a_c);
     A.set_timing(0.001,20);
     for (double b = 1; b <= 4; b++)
     {
-        A.set_parameters(b,c,0.1,0.1,.4,0.1);
+        A.set_parameters(b,c,0.1,0.,0,0);
         A.set_population();
         A.print_current_SIR();
         A.evolve_full(debug);
@@ -46,13 +46,13 @@ int main()
 
 
     // MC testing
-    problem *AMC = new problem(400,300,100,"exeA/c_0.5_f_0.1");
+    problem *AMC = new problem(400,300,100,"exeA/c_0.5/d_0.1");
     AMC->set_afunc(a_c);
     AMC->set_timing(0.001,20);
 
     for (double b = 1; b <= 4; b++)
     {
-        AMC->set_parameters(b,c,0.1,0.1,.4,0.1);
+        AMC->set_parameters(b,c,0.1,0,0,0);
         AMC->set_population();
         MonteCarlo MC_obj(AMC,100);
         MC_obj.Run_MC_extended(write);
