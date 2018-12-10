@@ -33,8 +33,8 @@ int main(int numArguments, char **arguments)
     // writeme object
     writeme *write = new writeme("./../datafiles/");
 
-
     bool debug = false;
+    clock_t totstart = clock();
 
     if (numArguments == 2)  // cmd argument either A, B, C, D or E
     {
@@ -109,11 +109,11 @@ int main(int numArguments, char **arguments)
         {
             problem E(400,300,100,"exeE/c_0.5");
             E.set_afunc(a_s);
-            E.set_timing(0.001,40);
+            E.set_timing(0.001,20);
             for (double b = 1; b <= 4; b++)
             {
                 // RK4
-                E.set_parameters(b,c,d,dI,e,0.4);
+                E.set_parameters(b,c,0,0,0,f);
                 E.set_population();
                 E.evolve_full(debug);
                 E.write_SIR_bin(write);
@@ -126,6 +126,7 @@ int main(int numArguments, char **arguments)
             }
         }   // IF exe E END
     }
-    cout << "Main done!" << endl;
+    cout << "--------------\n";
+    cout << "Main done in " << (double(clock()-totstart)/double(CLOCKS_PER_SEC)) << " seconds.\n" << endl;
     return 0;
 }
