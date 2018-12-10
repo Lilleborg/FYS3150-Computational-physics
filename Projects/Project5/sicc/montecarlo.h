@@ -11,10 +11,10 @@
 class MonteCarlo
 {
 private:
-    double m_dt;
+    double m_dt,avg_sigS, avg_sigI, avg_sigR;
     problem *m_p = nullptr;
     int S,I,R,N,samples;
-    vector<double> avgS, avgI, avgR,time;
+    vector<double> avgS, avgI, avgR, varS, varI, varR, time;
 public:
     MonteCarlo(problem *p, int samples);
     ~MonteCarlo(){}
@@ -23,7 +23,7 @@ public:
     void find_dt_extended(double N, double t);
 
     void Run_MC_const_population();
-    void Run_MC_extended(writeme *write);
+    void Run_MC_extended();
 
     // Write to file funcs
     void write_averages(writeme *write);
