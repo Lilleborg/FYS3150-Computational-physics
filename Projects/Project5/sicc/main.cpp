@@ -1,5 +1,6 @@
 #include <iostream>
 #include "time.h"
+#include <string.h>
 
 #include "problem.h"
 #include "montecarlo.h"
