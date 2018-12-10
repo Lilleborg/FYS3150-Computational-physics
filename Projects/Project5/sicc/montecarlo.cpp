@@ -94,6 +94,7 @@ void MonteCarlo::Run_MC_extended(writeme *write)
             if (RNG(gen) < SIR[0]->trans_S_I(S,I,N,time[i],m_dt)) {S -= 1; I += 1;}
             if (RNG(gen) < SIR[0]->trans_S_R(m_dt)) {S -= 1; R += 1;}
             if (RNG(gen) < SIR[0]->trans_S_D(S,m_dt)) {S -= 1;}
+            if (RNG(gen) < SIR[0]->trans_E_S(N,m_dt)) {S += 1;}
 
             // Out of I:
             if (RNG(gen) < SIR[1]->trans_I_R(I,m_dt)) {I -= 1; R += 1;}
