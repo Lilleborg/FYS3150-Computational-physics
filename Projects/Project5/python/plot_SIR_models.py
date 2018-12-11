@@ -40,14 +40,17 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
         if simtype_ == 'MC':
             string_simtype = "SIR_MC_a"
             simulation_type = 'MC'
-            mean_std = {}
 
 
 
 
         string_dt = "dt_" + timestep + "_"
         string_T = "T_" + finaltime + "_"
+        if simtype_ == 'both': #hack
+            string_simtype = string_T
+            simulation_type = ''
         list_of_parameters = {}
+        mean_std = {}
 
         for filename in list_of_files:   # add files with correct dt and endtime
             if string_dt in filename and string_T in filename and atype in filename and string_simtype in filename:
@@ -61,9 +64,11 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
                 print('---Quiting---')
                 sys.exit(1)
 
+        list_of_correct_file.sort()
 
         usercheck()
         terminate = input('Continue with current files? y/n/edit ')
+
         if terminate == 'n':
             sys.exit(1)
         if terminate == 'edit':
@@ -80,9 +85,19 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
                 if filenr == 'stop':
                     break
 
-    list_of_correct_file.sort()
+        if len(list_of_correct_file) > 4:
+            for i in range(4): #rearange files a bit
+                list_of_correct_file.append(list_of_correct_file[0])
+                list_of_correct_file.remove(list_of_correct_file[0])
+            people2 = ['S MC','I MC','R MC']
+
+    #list_of_correct_file.sort()
+    usercheck()
+
+
     sub = [[0,0],[0,1],[1,0],[1,1]]
     people = ['S','I','R']
+
     for f,filename in enumerate(list_of_correct_file):
         print ('Loading ', filename)
         data = np.fromfile(filename)   # array of S I R values 
@@ -122,14 +137,20 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
         j = sub[f%4][1]
 
         time = np.linspace(0,float(finaltime),onesize)
-        time = np.linspace(0,int(math.ceil(onesize/365)),onesize)
+        #time = np.linspace(0,int(math.ceil(onesize/365)),onesize)
 
         for k in range(3):
-            axes[i,j].plot(time,data[k*onesize:(k+1)*onesize],label=people[k])
+            thislabel = people[k]
+            line = '-'
+            if f >= 4:
+                thislabel = people2[k]
+                line = '--'
+
+            axes[i,j].plot(time,data[k*onesize:(k+1)*onesize],label=thislabel,linestyle = line)
             size = 20 - (len(params) - 5)
             axes[i,j].set_title(paramstring, fontsize = size)
         
-        if simtype == 'MC': # add average std in axes legend
+        if simtype == 'MC' or f>=4: # add average std in axes legend
             axes[i,j].legend([r'$\sigma_{:s} = {:.2f}$'.format(people[0],mean_std['sigS']),'$\sigma_{:s} = {:.2f}$'.format(people[1],mean_std['sigI']),'$\sigma_{:s} = {:.2f}$'.format(people[2],mean_std['sigR'])],loc = 'upper left',fontsize = 14,ncol = 3, columnspacing = 0.5)
                 
     fig.suptitle('{:s} simulation of SIRS model, T = {:s}, dt = {:s}'.format(simulation_type,finaltime,timestep))
