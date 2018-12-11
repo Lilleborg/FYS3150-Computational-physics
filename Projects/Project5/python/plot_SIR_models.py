@@ -136,8 +136,10 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
         i = sub[f%4][0]
         j = sub[f%4][1]
 
-        time = np.linspace(0,float(finaltime),onesize)
-        #time = np.linspace(0,int(math.ceil(onesize/365)),onesize)
+        #time = np.linspace(0,float(finaltime),onesize)
+        #if 'MC' in filename:
+
+        time = np.linspace(0,int(math.ceil(onesize/365)),onesize)
 
         for k in range(3):
             thislabel = people[k]
@@ -169,10 +171,10 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
     plotfilename += paramstring
     plotfilename += '.pdf'
 
-    plt.show()
     saving = input('Savefig? y/n ')
     if saving == 'y':
         plt.savefig(plotfilename)
+    plt.show()
     
     #fig.tight_layout()
 
