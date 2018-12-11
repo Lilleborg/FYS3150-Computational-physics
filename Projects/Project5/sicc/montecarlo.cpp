@@ -55,27 +55,32 @@ void MonteCarlo::Run_MC_const_population()
         S = m_p->m_S0; I = m_p->m_I0; R = m_p->m_R0; N = m_p->m_N;
         time = m_p->time;
         u_long nr_steps = m_p->m_nr_steps;
-
+        vector<double> MC_time;
 
         for (u_long i = 0; i < nr_steps; ++i) {
-            find_dt(N,m_p->time[i]);
+            //find_dt(N,time[i]);
+            m_dt = 0.001;
+            MC_time.push_back(i*m_dt);
 
             avgS[i] += S/double(samples);
             avgI[i] += I/double(samples);
             avgR[i] += R/double(samples);
 
-            varS[i] += (avgS[i]-S)*(avgS[i]-S)/(samples-1);
-            varI[i] += (avgI[i]-I)*(avgI[i]-I)/(samples-1);
-            varR[i] += (avgR[i]-R)*(avgR[i]-R)/(samples-1);
+            if (time[i] > 5)
+            {
+                varS[i] += (avgS[i]-S)*(avgS[i]-S)/(samples-1);
+                varI[i] += (avgI[i]-I)*(avgI[i]-I)/(samples-1);
+                varR[i] += (avgR[i]-R)*(avgR[i]-R)/(samples-1);
 
-            avg_sigS += sqrt(varS[i])/(samples*nr_steps);
-            avg_sigI += sqrt(varI[i])/(samples*nr_steps);
-            avg_sigR += sqrt(varR[i])/(samples*nr_steps);
-
+                avg_sigS += sqrt(varS[i])/(samples*nr_steps);
+                avg_sigI += sqrt(varI[i])/(samples*nr_steps);
+                avg_sigR += sqrt(varR[i])/(samples*nr_steps);
+            }
             if (RNG(gen) < m_p->SIR[0]->trans_S_I(S,I,N,time[i],m_dt)){S -= 1; I += 1;}
             if (RNG(gen) < m_p->SIR[1]->trans_I_R(I,m_dt)){I -= 1; R += 1;}
             if (RNG(gen) < m_p->SIR[2]->trans_R_S(R,m_dt)){R -= 1; S += 1;}
         }
+        cout << MC_time.back() << endl;
     }
     cout << "MC done in " << (double(clock()-timestart)/double(CLOCKS_PER_SEC)) << " seconds.\n" << endl;
 }
@@ -107,22 +112,28 @@ void MonteCarlo::Run_MC_extended()
         S = m_p->m_S0; I = m_p->m_I0; R = m_p->m_R0; N = m_p->m_N;
         time = m_p->time;
         u_long nr_steps = m_p->m_nr_steps;
+        vector<double> MC_time;
 
         for (u_long i = 0; i < nr_steps; ++i) {
             find_dt_extended(N,time[i]);
+            //m_dt = m_p->m_dt;
+            MC_time.push_back(m_dt);
 
             // Calculate averages variance and avg standard deviation
             avgS[i] += S/double(samples);
             avgI[i] += I/double(samples);
             avgR[i] += R/double(samples);
 
-            varS[i] += (avgS[i]-S)*(avgS[i]-S)/(samples-1);
-            varI[i] += (avgI[i]-I)*(avgI[i]-I)/(samples-1);
-            varR[i] += (avgR[i]-R)*(avgR[i]-R)/(samples-1);
+            if (time[i]>5)
+            {
+                varS[i] += (avgS[i]-S)*(avgS[i]-S)/(samples-1);
+                varI[i] += (avgI[i]-I)*(avgI[i]-I)/(samples-1);
+                varR[i] += (avgR[i]-R)*(avgR[i]-R)/(samples-1);
 
-            avg_sigS += sqrt(varS[i])/(samples*nr_steps);
-            avg_sigI += sqrt(varI[i])/(samples*nr_steps);
-            avg_sigR += sqrt(varR[i])/(samples*nr_steps);
+                avg_sigS += sqrt(varS[i])/(samples*nr_steps);
+                avg_sigI += sqrt(varI[i])/(samples*nr_steps);
+                avg_sigR += sqrt(varR[i])/(samples*nr_steps);
+            }
 
             // Accept or reject transitions, set up SIR values for next time step
             // Out of S:
@@ -149,6 +160,7 @@ void MonteCarlo::Run_MC_extended()
             if (RNG(gen) < SIR[2]->trans_R_S(R,m_dt)) {R -= 1; S += 1;}
             if (RNG(gen) < SIR[2]->trans_R_D(R,m_dt)) {R -=1;}
         }
+        //cout << MC_time.back() << endl;
     }
     cout << "MC done in " << (double(clock()-timestart)/double(CLOCKS_PER_SEC)) << " seconds.\n" << endl;
 }
