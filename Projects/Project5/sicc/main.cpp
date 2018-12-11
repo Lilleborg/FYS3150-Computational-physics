@@ -41,6 +41,7 @@ int main(int numArguments, char **arguments)
     // a-parameters
     a_constant *a_c = new a_constant(4);
     a_seasons *a_s = new a_seasons(4,2,2.0*M_PI/5.0);
+
     // other parameters
     double c = 0.5;
     double d = 0.1;
@@ -58,10 +59,10 @@ int main(int numArguments, char **arguments)
     {
         if (strcmp(arguments[1],"A") == 0 || strcmp(arguments[1],"ALL") == 0)   // RUN EXERCISE A and B
         {
-            problem A(400,300,100,"exeAandB/c_0.5_test");
+            problem A(400,300,100,"exeAandB/c_0.5");
             A.set_afunc(a_c);
-            A.set_timing(0.1,10);
-            for (double b = 1; b <= 1; b++)
+            A.set_timing(0.001,10);
+            for (double b = 1; b <= 4; b++)
             {
                 // RK4
                 A.set_parameters(b,c);
@@ -70,18 +71,16 @@ int main(int numArguments, char **arguments)
                 A.write_SIR_bin(write);
 
                 // MC
-//                A.set_population();
-//                MonteCarlo MC_obj(&A,100);
-//                MC_obj.Run_MC_const_population();
-//                MC_obj.write_averages(write);
+                A.set_population();
+                MonteCarlo MC_obj(&A,100);
+                MC_obj.Run_MC_const_population();
+                MC_obj.write_averages(write);
             }
-            cout <<"A time end" << " " <<  A.time.back() << endl;
-
         }   // IF exe A AND B END
 
         if (strcmp(arguments[1],"C") == 0 || strcmp(arguments[1],"ALL") == 0)   // RUN EXERCISE C
         {
-            problem C(400,300,100,"exeC/c_0.5_vary_dty");
+            problem C(400,300,100,"exeC/c_0.5");
             C.set_afunc(a_c);
             C.set_timing(0.001,40);
             for (double b = 1; b <= 4; b++)
@@ -128,7 +127,7 @@ int main(int numArguments, char **arguments)
         {
             problem E(400,300,100,"exeE/c_0.5");
             E.set_afunc(a_s);
-            E.set_timing(0.0001,20);
+            E.set_timing(0.001,10);
             for (double b = 1; b <= 4; b++)
             {
                 // RK4
