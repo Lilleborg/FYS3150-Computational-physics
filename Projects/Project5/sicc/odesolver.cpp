@@ -46,6 +46,33 @@ void ODEsolver::RK4(population_group *p, double t)
     //p->add_to_current(1);
 }
 
+void ODEsolver::RK4(vector<population_group*> SIR,double t)
+{
+    k_S.push_back(m_dt*SIR[0]->prime(m_problem->m_Qs, t));
+    k_I.push_back(m_dt*SIR[1]->prime(m_problem->m_Qs, t));
+    k_R.push_back(m_dt*SIR[2]->prime(m_problem->m_Qs, t));
+
+    k_S.push_back(m_dt*SIR[0]->prime(vec_pluss(m_problem->m_Qs,k_S.back()/2.0), t + m_dt/2));
+    k_I.push_back(m_dt*SIR[1]->prime(vec_pluss(m_problem->m_Qs,k_I.back()/2.0), t + m_dt/2));
+    k_R.push_back(m_dt*SIR[2]->prime(vec_pluss(m_problem->m_Qs,k_R.back()/2.0), t + m_dt/2));
+
+    k_S.push_back(m_dt*SIR[0]->prime(vec_pluss(m_problem->m_Qs,k_S.back()/2.0), t + m_dt/2));
+    k_I.push_back(m_dt*SIR[1]->prime(vec_pluss(m_problem->m_Qs,k_I.back()/2.0), t + m_dt/2));
+    k_R.push_back(m_dt*SIR[2]->prime(vec_pluss(m_problem->m_Qs,k_R.back()/2.0), t + m_dt/2));
+
+    k_S.push_back(m_dt*SIR[0]->prime(vec_pluss(m_problem->m_Qs,k_S.back()), t + m_dt));
+    k_I.push_back(m_dt*SIR[1]->prime(vec_pluss(m_problem->m_Qs,k_I.back()), t + m_dt));
+    k_R.push_back(m_dt*SIR[2]->prime(vec_pluss(m_problem->m_Qs,k_R.back()), t + m_dt));
+
+    SIR[0]->add_to_current(1.0/6*(k_S[0]+2.0*k_S[1]+2.0*k_S[2]+k_S[3]));
+    SIR[1]->add_to_current(1.0/6*(k_I[0]+2.0*k_I[1]+2.0*k_I[2]+k_I[3]));
+    SIR[2]->add_to_current(1.0/6*(k_R[0]+2.0*k_R[1]+2.0*k_R[2]+k_R[3]));
+
+    k_S.clear();
+    k_I.clear();
+    k_R.clear();
+}
+
 void ODEsolver::get_ks(population_group *p, double t)
 {
     //cout << "Before ks clear\n" << ks.size() << endl;

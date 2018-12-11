@@ -77,11 +77,12 @@ void problem::update_all(double S, double I, double R)
 
 void problem::evolve(double t)
 {
-    for (int i = 0; i<3; i++)
-    {
-        //cout << "solver SIR[i], t \n" << i << " " << t << endl;
-        solver->RK4(SIR[i],t);
-    }
+//    for (int i = 0; i<3; i++)
+//    {
+//        //cout << "solver SIR[i], t \n" << i << " " << t << endl;
+//        solver->RK4(SIR[i],t);
+//    }
+    solver->RK4(SIR,t);
     update_current();
     current_step += 1;
 }
@@ -123,7 +124,7 @@ void problem::evolve_full(bool debug)
                     cout << "-------------------------------------------------------------------\n";
                     cout << "Total population initially" << m_N << ", current population " << test_sum << "\n";
                     cout << "at time " << time[i] << " ran " << i << " steps." << endl;
-                    //exit (EXIT_FAILURE);
+                    exit (EXIT_FAILURE);
                 }
             }
         }

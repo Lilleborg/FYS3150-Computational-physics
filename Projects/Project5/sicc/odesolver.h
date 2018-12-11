@@ -17,6 +17,10 @@ public:
 
     double m_dt;
     vector <double> ks;// = vector <double> (4,0);
+    vector<double> k_S;
+    vector<double> k_I;
+    vector<double> k_R;
+
     problem *m_problem;
 
     ODEsolver(problem *p_, double dt);
@@ -29,6 +33,8 @@ public:
     // Integrators updating problem m_problem 1 time step
     //void Euler(population_group *p);
     void RK4(population_group *p, double t);
+
+    void RK4(vector<population_group*> SIR,double t);
 };
 
 #endif // ODESOLVER_H
