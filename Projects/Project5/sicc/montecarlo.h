@@ -14,7 +14,7 @@ private:
     double m_dt,avg_sigS, avg_sigI, avg_sigR;
     problem *m_p = nullptr;
     int S,I,R,N,samples;
-    vector<double> avgS, avgI, avgR, varS, varI, varR, time;
+    vector<double> avgS, avgI, avgR, varS, varI, varR, time, MC_time;
 public:
     MonteCarlo(problem *p, int samples);
     ~MonteCarlo(){}

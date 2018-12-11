@@ -55,12 +55,17 @@ void MonteCarlo::Run_MC_const_population()
         S = m_p->m_S0; I = m_p->m_I0; R = m_p->m_R0; N = m_p->m_N;
         time = m_p->time;
         u_long nr_steps = m_p->m_nr_steps;
-        vector<double> MC_time;
+        //        MC_time.clear();
+        //        find_dt(N,0);
+        //        MC_time.push_back(i*m_dt);
+        //        if (MC_time.back()>m_p->time.back())
+        //        {
+        //            break;
+        //        }
 
         for (u_long i = 0; i < nr_steps; ++i) {
-            //find_dt(N,time[i]);
-            m_dt = 0.001;
-            MC_time.push_back(i*m_dt);
+            m_dt = m_p->m_dt;
+            //find_dt(N,MC_time[i]);
 
             avgS[i] += S/double(samples);
             avgI[i] += I/double(samples);
@@ -80,7 +85,6 @@ void MonteCarlo::Run_MC_const_population()
             if (RNG(gen) < m_p->SIR[1]->trans_I_R(I,m_dt)){I -= 1; R += 1;}
             if (RNG(gen) < m_p->SIR[2]->trans_R_S(R,m_dt)){R -= 1; S += 1;}
         }
-        cout << MC_time.back() << endl;
     }
     cout << "MC done in " << (double(clock()-timestart)/double(CLOCKS_PER_SEC)) << " seconds.\n" << endl;
 }
@@ -112,12 +116,12 @@ void MonteCarlo::Run_MC_extended()
         S = m_p->m_S0; I = m_p->m_I0; R = m_p->m_R0; N = m_p->m_N;
         time = m_p->time;
         u_long nr_steps = m_p->m_nr_steps;
-        vector<double> MC_time;
+        //        MC_time;
+        //        MC_time.push_back(m_dt);
 
         for (u_long i = 0; i < nr_steps; ++i) {
-            find_dt_extended(N,time[i]);
-            //m_dt = m_p->m_dt;
-            MC_time.push_back(m_dt);
+            //find_dt_extended(N,time[i]);
+            m_dt = m_p->m_dt;
 
             // Calculate averages variance and avg standard deviation
             avgS[i] += S/double(samples);
@@ -136,31 +140,32 @@ void MonteCarlo::Run_MC_extended()
             }
 
             // Accept or reject transitions, set up SIR values for next time step
-            // Out of S:
             if (RNG(gen) < SIR[0]->trans_S_I(S,I,N,time[i],m_dt)) {S -= 1; I += 1;}
+            if (RNG(gen) < SIR[1]->trans_I_R(I,m_dt)) {I -= 1; R += 1;}
+            if (RNG(gen) < SIR[2]->trans_R_S(R,m_dt)) {R -= 1; S += 1;}
 
-            if (m_p->m_f != 0)  // if f = 0 not use this transition
+            if (m_p->m_f != 0)  // vacination
             {
                 if (RNG(gen) < SIR[0]->trans_S_R(m_dt)) {S -= 1; R += 1;}
             }
 
-            if (RNG(gen) < SIR[0]->trans_S_D(S,m_dt)) {S -= 1;}
-            if (RNG(gen) < SIR[0]->trans_E_S(N,m_dt)) {S += 1;}
+            if (m_p->m_d != 0)  // Die natural
+            {
+                if (RNG(gen) < SIR[0]->trans_S_D(S,m_dt)) {S -= 1;}
+                if (RNG(gen) < SIR[1]->trans_I_D(I,m_dt)) {I -= 1;}
+                if (RNG(gen) < SIR[2]->trans_R_D(R,m_dt)) {R -=1;}
+            }
 
-            // Out of I:
-            if (RNG(gen) < SIR[1]->trans_I_R(I,m_dt)) {I -= 1; R += 1;}
-            if (RNG(gen) < SIR[1]->trans_I_D(I,m_dt)) {I -= 1;}
+            if (m_p->m_e != 0)  // Born into S
+            {
+                if (RNG(gen) < SIR[0]->trans_E_S(N,m_dt)) {S += 1;}
+            }
 
-            if (m_p->m_dI != 0) // if dI = 0 not use this transition
+            if (m_p->m_dI != 0) // Die of disease
             {
                 if (RNG(gen) < SIR[1]->trans_I_DI(I,m_dt)) {I -= 1;}
             }
-
-            // Out of R:
-            if (RNG(gen) < SIR[2]->trans_R_S(R,m_dt)) {R -= 1; S += 1;}
-            if (RNG(gen) < SIR[2]->trans_R_D(R,m_dt)) {R -=1;}
         }
-        //cout << MC_time.back() << endl;
     }
     cout << "MC done in " << (double(clock()-timestart)/double(CLOCKS_PER_SEC)) << " seconds.\n" << endl;
 }
