@@ -48,7 +48,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
         string_T = "T_" + finaltime + "_"
         if simtype_ == 'both': #hack
             string_simtype = string_T
-            simulation_type = ''
+            simulation_type = 'Both RK4 and MC'
         list_of_parameters = {}
         mean_std = {}
 
@@ -156,7 +156,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
         if simtype == 'MC' or f>=4: # add average std in axes legend
             axes[i,j].legend([r'$\sigma_{:s} = {:.2f}$'.format(people[0],mean_std['sigS']),'$\sigma_{:s} = {:.2f}$'.format(people[1],mean_std['sigI']),'$\sigma_{:s} = {:.2f}$'.format(people[2],mean_std['sigR'])],loc = 'upper left',fontsize = 14,ncol = 3, columnspacing = 0.5)
                 
-    fig.suptitle('{:s} simulation of SIRS model, T = {:s}, dt = {:s}'.format(simulation_type,finaltime,timestep))
+    fig.suptitle('{:s} simulation of SIRS model'.format(simulation_type))
     axes[1,0].set_xlabel(r"Time, [Years]")
     axes[1,1].set_xlabel(r"Time, [Years]")
     axes[0,0].set_ylabel(r'NR People in category')
@@ -168,7 +168,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
 
     paramstring = paramstring.replace(' ', '_')
     paramstring = paramstring.replace(',', '')
-    plotfilename = '../plots/plot_' + "{:s}_T={:s}_dt={:s}".format(simulation_type,finaltime,timestep)
+    plotfilename = '../plots/plot_' + "{:s}_T={:s}_dt={:s}".format(simulation_type.replace(' ','_'),finaltime,timestep)
     plotfilename += paramstring
     plotfilename += '.pdf'
 

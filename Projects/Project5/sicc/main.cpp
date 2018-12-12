@@ -52,14 +52,14 @@ int main(int numArguments, char **arguments)
     // writeme object
     writeme *write = new writeme("./../datafiles/");
 
-    bool debug = false;
+    bool debug = true;
     clock_t totstart = clock();
 
     if (numArguments == 2)  // cmd argument either A, B, C, D or E
     {
         if (strcmp(arguments[1],"A") == 0 || strcmp(arguments[1],"ALL") == 0)   // RUN EXERCISE A and B
         {
-            problem A(400,300,100,"exeAandB/c_0.5");
+            problem A(400,300,100,"exeAandB/c_0.5_test");
             A.set_afunc(a_c);
             A.set_timing(0.001,10);
             for (double b = 1; b <= 4; b++)
