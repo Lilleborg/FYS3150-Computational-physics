@@ -29,11 +29,12 @@ public:
     // Convenient
     void get_ks(population_group *p, double t);
     vector<double> vec_pluss(const vector<double> vec,double pluss);
+    vector<double> vec_pluss(const vector<double> vec, double x, double y, double z);   // use instead!
 
     // Integrators updating problem m_problem 1 time step
-    //void Euler(population_group *p);
-    void RK4(population_group *p, double t);
+    //void Euler(population_group *p);  // see how bad euler handles the problem?
 
+    void RK4(population_group *p, double t);
     void RK4(vector<population_group*> SIR,double t);
 };
 
