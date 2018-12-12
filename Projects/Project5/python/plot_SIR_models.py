@@ -136,10 +136,10 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
         i = sub[f%4][0]
         j = sub[f%4][1]
 
-        #time = np.linspace(0,float(finaltime),onesize)
+        time = np.linspace(0,float(finaltime),onesize)
         #if 'MC' in filename:
 
-        time = np.linspace(0,int(math.ceil(onesize/365)),onesize)
+        #time = np.linspace(0,int(math.ceil(onesize/365)),onesize)
 
         for k in range(3):
             thislabel = people[k]
@@ -157,8 +157,8 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
             axes[i,j].legend([r'$\sigma_{:s} = {:.2f}$'.format(people[0],mean_std['sigS']),'$\sigma_{:s} = {:.2f}$'.format(people[1],mean_std['sigI']),'$\sigma_{:s} = {:.2f}$'.format(people[2],mean_std['sigR'])],loc = 'upper left',fontsize = 14,ncol = 3, columnspacing = 0.5)
                 
     fig.suptitle('{:s} simulation of SIRS model'.format(simulation_type))
-    axes[1,0].set_xlabel(r"Time, [Years]")
-    axes[1,1].set_xlabel(r"Time, [Years]")
+    axes[1,0].set_xlabel(r"Time")
+    axes[1,1].set_xlabel(r"Time")
     axes[0,0].set_ylabel(r'NR People in category')
     axes[1,0].set_ylabel(r'NR People in category')
 
