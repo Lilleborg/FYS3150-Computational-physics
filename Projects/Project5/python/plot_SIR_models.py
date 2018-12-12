@@ -151,6 +151,7 @@ def plottingSIR(timestep,finaltime,atype,exeFolder,simtype_,manual_filenames=Fal
             axes[i,j].plot(time,data[k*onesize:(k+1)*onesize],label=thislabel,linestyle = line)
             size = 20 - (len(params) - 5)
             axes[i,j].set_title(paramstring, fontsize = size)
+            axes[i,j].set_ylim(0,np.max(data)*1.2)
         
         if simtype == 'MC' or f>=4: # add average std in axes legend
             axes[i,j].legend([r'$\sigma_{:s} = {:.2f}$'.format(people[0],mean_std['sigS']),'$\sigma_{:s} = {:.2f}$'.format(people[1],mean_std['sigI']),'$\sigma_{:s} = {:.2f}$'.format(people[2],mean_std['sigR'])],loc = 'upper left',fontsize = 14,ncol = 3, columnspacing = 0.5)
