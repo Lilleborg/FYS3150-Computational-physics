@@ -4,6 +4,9 @@ build
 datafiles
 datafiles_no_MPI
 build-mag_sys_no_MPI
+Projects/Project5/build-sicc/
+Projects/Project5/build-sicc-debug/
+
 
 # Mac
 .DS_Store
@@ -55,8 +58,3 @@ build-mag_sys_no_MPI
 *.bib
 TeXs__Reports
 
-Projects/Project5/build-sicc/
-
-Projects/Project5/build-sicc-debug/
-
-Projects/Project5/plots/
